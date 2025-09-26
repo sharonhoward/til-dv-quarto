@@ -1,0 +1,51 @@
+---
+title: "extract specific elements out of tei xml into a tibble."
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [xml, namespaces]
+slug: til-xml-extract-elements-with-ns-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  this can easily be functionified if you'll need to run it repeatedly 
+ 
+
+
+
+
+## Example
+
+```{r}
+library(xml2) 
+ 
+tei_judges_xml <- 
+  read_xml(here::here("outputs/tei-judges.xml"), options = "") 
+ 
+ns <- xml_ns_rename(xml_ns(tei_judges_xml), d1 = "tei") 
+ 
+tibble( 
+    id=xml_text(xml_find_all(tei_judges_xml, ".//tei:listPerson/tei:person/@xml:id", ns) ),  
+    name=xml_text(xml_find_all(tei_judges_xml, ".//tei:listPerson/tei:person/tei:persName[@type='label']", ns)), 
+    txt=xml_text(xml_find_all(tei_judges_xml, ".//tei:listPerson/tei:person", ns)) 
+  ) 
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb_writing/biblical/bibl-events-notes-20250602.Rmd:416:  
+
+# using local data
+```

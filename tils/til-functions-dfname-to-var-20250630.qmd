@@ -1,0 +1,59 @@
+---
+title: "function to use an object name as a variable (eg for bind_rows)"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [functions, naming things]
+slug: til-functions-dfname-to-var-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  deparse(substitute(.)) isn't pipable afaict... but it is if you put it in a function 
+-  NB object has to already exist! and may not work as expected if you use sthg like as_tibble before it 
+-  useful when you're making several DFs that you want to combine with bind_rows and add a "src" column 
+-  with this you don't have to name the src column manually, just use the source df name. 
+-  doesn't need mutate, that's already in the function. if piping, no args. if not piped, the df name. 
+ 
+
+
+## Function
+
+```{r} 
+obj_name_as_var <- function(d){ 
+  d_name <- deparse(substitute(d)) 
+  d |> 
+    mutate(src = d_name) 
+} 
+ 
+
+```
+
+## Example
+
+```{r}
+judges100 |> 
+  obj_name_as_var() 
+
+```
+
+
+## Resources
+
+* [http://adv-r.had.co.nz/Computing-on-the-language.html#capturing-expressions](http://adv-r.had.co.nz/Computing-on-the-language.html#capturing-expressions)
+
+```{r}
+#| include: false
+# beyond_notability/bn_notes/_R/shared.R:291:  
+# beyond_notability/bn_wikibase/themes/bn_excavations_networks.Rmd:194:  
+ 
+
+```

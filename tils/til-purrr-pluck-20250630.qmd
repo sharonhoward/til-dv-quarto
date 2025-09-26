@@ -1,0 +1,46 @@
+---
+title: "extract things with purrr pluck"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [wip, subset]
+slug: til-purrr-pluck-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  data and documentation https://github.com/Beyond-Notability/bn_r_doc 
+-  file https://github.com/Beyond-Notability/bn_r_doc/blob/main/loc/outputs/loc_bn_records.json 
+ 
+
+
+
+
+## Example
+
+```{r}
+bn_loc_readjson <- 
+  jsonlite::read_json(here::here("data/loc_bn_records.json")) 
+# unsimplified with read_json 
+ 
+ 
+pluck(bn_loc_readjson, 3) # all of the 3rd record, i think 
+pluck(bn_loc_readjson, 3, 2) # 3rd record, 2nd thing (title) 
+
+```
+
+
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/wrangling/bibliographical_deprecated/bn_jisc_loc_library_data.Rmd:1794:  
+
+```

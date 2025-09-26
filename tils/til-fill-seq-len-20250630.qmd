@@ -1,0 +1,59 @@
+---
+title: "fill in start-end sequences with seq() or seq_len() "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations, sequences]
+slug: til-fill-seq-len-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  if you just want a sequence from 1 by 1, like 1 2 3 4 5, seq_len is more concise 
+-  if you want a sequence incrementing by some other number than 1, seq might be more flexible 
+-  you can also do maths to seq() ! 
+-  > Note that [seq] dispatches on the class of the first argument irrespective of argument names. This can have unintended consequences if it is called with just one argument intending this to be taken as along.with: it is much better to use seq_along in that case.  
+
+-  see map2 and seq TIL for more of this 
+-  need to look at seq_along too 
+-  also full_seq! (see notes/ how to use complete) 
+-  https://tidyr.tidyverse.org/reference/full_seq.html 
+ 
+
+
+
+
+## Example
+
+```{r}
+c(seq_len(5) ^ 2) # [1]  1  4  9 16 25 
+ 
+seq_len(5) # [1] 1 2 3 4 5 
+ 
+seq(1,901,100) #  [1]   1 101 201 301 401 501 601 701 801 901 
+seq(1,901,100) +1 
+seq(1,901,100) *2 
+
+```
+
+
+## Resources
+
+* [https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html](https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html) 
+* [https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq) 
+* [https://tidyr.tidyverse.org/reference/full_seq.html](https://tidyr.tidyverse.org/reference/full_seq.html)
+
+```{r}
+#| include: false
+# play/twitterstorians/twitter_favs.Rmd:418:  
+ 
+
+```

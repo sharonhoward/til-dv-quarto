@@ -1,0 +1,55 @@
+---
+title: "fill out a list from a start to end number  "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations, sequences, map]
+slug: til-fill-map-seq-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  for data that has start and end columns of some sort, eg birth and death dates 
+-  see also full_seq and complete notes rmd 
+
+
+
+
+## Example
+
+```{r}
+judges100 |> 
+  select(judge_id, persname, birth_date, death_date, birthplace_state, death_state) |> 
+  # death NA probably means they're still alive so could make them 2025 or filter out.  
+  # (birth filter is just in case of any NAs) 
+  mutate(death_date = if_else(is.na(death_date), 2025, death_date)) |> 
+  filter(!is.na(death_date) & !is.na(birth_date)) |> 
+  head(10) |> 
+  # date will be a list column 
+  mutate(date = map2(birth_date, death_date, ~seq(.x, .y, by=1))) |> 
+  # unpack each increment onto its own row 
+  unnest(date) 
+
+```
+
+
+## Resources
+
+* [https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html](https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html) 
+* [https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq)
+
+```{r}
+#| include: false
+# beyond_notability/bn_observable/r_sandpit/education.Rmd:690: 
+# beyond_notability/bn_wikibase/_stuff/online-essay/education_academic.Rmd:404: 
+ 
+
+```

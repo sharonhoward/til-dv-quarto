@@ -1,0 +1,44 @@
+---
+title: "filter with not %in% handles NAs differently from != "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [filter, in, NAs]
+slug: til-filter-not-in-nas-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  not %in% doesn't drop NAs but != does  
+-  nb don't need c() if you only have a single value 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  filter(!petition_gender %in% "f") # 481 
+ 
+cheshire_petitions |> 
+  filter(petition_gender !="f") # 381 
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb/documentation/superseded/tags-books-220906.Rmd:96:  
+         
+```

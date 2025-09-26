@@ -1,0 +1,48 @@
+---
+title: "make and format a current date/datetime, eg for filenames"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [dates, current date]
+slug: til-dates-todays-date-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+
+
+
+## Example
+
+```{r}
+ 
+# today() is a lubridate function which just returns the date as yyyy-mm-dd 
+paste0("filename_", today(), ".txt") 
+# "filename_2025-06-28.txt" 
+ 
+# wrap in format() to tweak formatting 
+format(today(), "%Y%m%d") 
+ 
+# base R Sys.Date() works too.  
+format(Sys.Date(), "%Y%m%d")  
+ 
+# or if you wanted a full date-time timestamp 
+format(Sys.Date(), "%Y%m%d%H%M%S") 
+
+```
+
+
+
+```{r}
+#| include: false
+# small_bills/sb_explore/cleaning_updating_etc/sb_api_2021-01.Rmd:479:  
+ 
+
+```

@@ -1,0 +1,200 @@
+---
+title: "Heatmaps"
+date: "2025-09-12"
+categories: 
+  - correlation
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+I make ggplot heatmaps with geom_raster() quite often but can never remember how to do them. 
+
+Plus I could probably be doing them better... so this is WIP.
+
+
+```{r}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(glue)
+library(tidyverse)
+
+library(patchwork)
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(ggridges)
+
+library(mindseyedata)
+library(historydata)
+
+
+
+hp_cat_injury <-
+  sab_hp_injuries |> 
+  filter(!injury_category %in% c("other", "injury")) |>
+  select(-injury, -body_location) |>
+  mutate(collection="HP")
+
+
+dp_cat_injury <-
+sab_dp_injuries |> 
+  filter(!injury_category %in% c("other", "injury", "chronic")) |>
+  select(-injury, -body_location) |>
+  mutate(collection="DP")
+
+
+facial_injuries <-
+bind_rows(
+    hp_cat_injury,
+    dp_cat_injury
+  ) |>
+  filter(injury_region %in% "head") |>
+  mutate(facial_location = case_when(
+    injury_location=="head" ~ NA, 
+    injury_location %in% c("skull", "hair", "scalp", "cranium", "occiput", "temporal") ~ NA, 
+    str_detect(injury_location, "\\bcheek") ~ "cheek",
+    str_detect(injury_location, "^eye|eyebrow") ~ "eye",
+     str_detect(injury_location, "\\b(chin)\\b") ~ "chin", # ?
+     injury_location=="maxilla" ~ "jaw",
+     injury_location %in% c("temple", "forehead") ~ "forehead",
+     str_detect(injury_location, "^(nasal|nos)") ~ "nose",
+     str_detect(injury_location, "\\b(mouth|tongue)") ~ "mouth",
+     str_detect(injury_location, "\\b(lower lip|upper lip|top lip|under lip)\\b|^lip\\b") ~ "mouth",
+     str_detect(injury_location, "\\b(ear)\\b") ~ "ear",
+     str_detect(injury_location, "\\bfac") ~ "face",
+    .default = injury_location
+  )) |>
+  filter(!is.na(facial_location))
+```
+
+
+
+
+
+## Examples
+
+basic geom_raster with counts - nicely shows where most facial injuries are located in the DP collection of the Skin and Bone data.
+
+```{r}
+facial_injuries |>
+  filter(gender =="female") |>
+  filter(collection=="DP") |>
+  count(gender, facial_location) |>
+  ggplot(aes(x=facial_location, y="", fill=n)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "DP women", fill="count") 
+```
+
+
+But I want to compare DP and HP collections and there's a problem: DP data is much bigger than HP.
+
+```{r}
+facial_injuries |>
+  filter(gender =="female") |>
+  count(collection, facial_location) |>
+  ggplot(aes(x=facial_location, y=collection, fill=n)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "women", fill="count") 
+```
+
+
+I could use patchwork (and sometimes have) so the scales are independent. But I still can't compare them directly because there are a couple of categories not present in the HP data. I'd have to do some extra faffing to include the two missing categories.
+
+
+```{r}
+facial_injuries |>
+  filter(gender =="female") |>
+  filter(collection=="HP") |>
+  count(gender, facial_location) |>
+  ggplot(aes(x=facial_location, y="", fill=n)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "HP women", fill="count")  +
+  
+facial_injuries |>
+  filter(gender =="female") |>
+  filter(collection=="DP") |>
+  count(gender, facial_location) |>
+  ggplot(aes(x=facial_location, y="", fill=n)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "DP women", fill="count")  +
+  
+plot_layout(ncol = 1)
+```
+
+It's simpler and better to normalise the data.
+
+But looks like I've been doing it all wrong all this time. 
+(well maybe not *completely* wrong)
+
+My usual method: turn each count into a proportion of the total for the group with n/sum(n).
+
+```{r}
+facial_injuries |>
+  filter(gender =="female") |>
+  count(collection, facial_location) |>
+  group_by(collection) |>
+  mutate(p = n/sum(n)) |>
+  ungroup() |>
+  ggplot(aes(x=facial_location, y=collection, fill=p)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "women", fill="prop") 
+```
+
+
+
+But I've discovered the scales [rescale](https://scales.r-lib.org/reference/rescale.html) function.
+
+It rescales the counts from 0 to 1. If I were even slightly less rubbish at statistics I'd have realised this is much better.
+
+
+```{r}
+facial_injuries |>
+  filter(gender=="female") |>
+  count(collection, facial_location) |>
+  group_by(collection) |>
+  mutate(rescaled = rescale(n)) |>
+  ungroup() |>
+  ggplot(aes(x=facial_location, y=collection, fill=rescaled)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "women") 
+```
+
+The result in the first version isn't entirely wrong, but the n/sum(n) methods kind of flattens out the data and it's much harder to see.
+
+[nb: look up how to increase space between the legend and label, because when it goes all the way to 1 it looks very tight]
+
+An alternative is similar to my original but instead use n/*max*(n). It'll give slightly different numbers from rescale but the difference is unlikely to be noticeable in the heatmap.
+
+```{r}
+facial_injuries |>
+  filter(gender =="female") |>
+  count(collection, facial_location) |>
+  group_by(collection) |>
+  mutate(p = n/max(n)) |>
+  ungroup() |>
+  ggplot(aes(x=facial_location, y=collection, fill=p)) +
+  geom_raster() +
+  scale_fill_viridis_c() +
+  labs(y=NULL, x=NULL, title = "women", fill="prop") 
+```
+
+
+## Resources
+
+- [from data to vis](https://www.data-to-viz.com/graph/heatmap.html)
+- [r graph gallery](https://r-graph-gallery.com/heatmap.html)
+- [mockup blog](https://themockup.blog/posts/2020-08-28-heatmaps-in-ggplot2/)
+- [albert rapp correlation heatmap](https://albert-rapp.de/posts/ggplot2-tips/24_correlation_heat_map/24_correlation_heat_map.html)
+- [statology](https://www.statology.org/heatmap-r-ggplot2/)
+

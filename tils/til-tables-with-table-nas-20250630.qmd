@@ -1,0 +1,43 @@
+---
+title: "frequency tables - handle NAs in table()"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [frequency tables, NAs]
+slug: til-tables-with-table-nas-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  useNA="no" "ifany" or "always" 
+-  also learned about with/table   
+-  using with() you get the dimname names by default, but you can choose to name them with (name)= 
+
+
+
+
+## Example
+
+```{r}
+with(cheshire_petitions, 
+     table(type=petition_type, gender=petition_gender, useNA = "ifany")) 
+
+```
+
+
+
+```{r}
+#| include: false
+# small_bills/sb_explore/themes/sb_counties.Rmd:479:  
+# obo/obapi/api-play.qmd:254:  
+# (latter on dimnames) 
+
+```

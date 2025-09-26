@@ -1,0 +1,44 @@
+---
+title: "make a list column using list() inside summarise"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [lists, group, summarise]
+slug: til-lists-make-in-groupby-summarise-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+
+
+
+## Example
+
+```{r}
+judges100_appts |> 
+  group_by(judge_id) |> 
+  # if you want to ensure they're in date order 
+  arrange(nomination_date, .by_group = TRUE) |> 
+  summarise(nominations = list(nomination_date)) |> 
+  ungroup() 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/bn_instance_of.Rmd:1282: 
+# beyond_notability/bn_wikibase/themes/instance-of-2023-11-07/index.qmd:220:  
+# mindseye/preparation/fave-viz-series/sparks.qmd:249:  
+ 
+
+```

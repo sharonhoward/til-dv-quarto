@@ -1,0 +1,45 @@
+---
+title: "join with join_by instead of by and avoid need to quote"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [join]
+slug: til-joins-join-by-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  with by= you have to quote the y though (til!) don't need to quote the x. 
+-  eg 
+-  judges100 |> 
+-    inner_join(judges100_appts, by=(judge_id="judge_id")) 
+-  but with join_by you don't need to quote at all. not sure if it works with different named cols 
+
+
+
+
+## Example
+
+```{r}
+judges100 |> 
+  select(judge_id, name_first, name_last, birth_date) |> 
+  inner_join(judges100_appts, join_by(judge_id)) |> 
+  arrange(judge_id) 
+ 
+
+```
+
+
+## Resources
+
+* [https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/](https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/)
+
+

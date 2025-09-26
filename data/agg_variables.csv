@@ -1,0 +1,17 @@
+name,label,search
+offence_category,Offence category,offence
+offence_subcategory,Offence subcategory,offence
+plea,Plea,plea
+verdict_category,Verdict category,verdict
+verdict_subcategory,Verdict subcategory,verdict
+punishment_category,Punishment category,punishment
+punishment_subcategory,Punishment subcategory,punishment
+defendant_gender,Defendant gender,defendant
+defendant_age,Defendant age,defendant
+victim_gender,Victim gender,victim
+victim_age,Victim age,victim
+victim_hisco_class_1,Victim occupational group,victim
+victim_hisco_label,Victim occupational category,victim
+victim_institution,Institutional victim,victim
+decade,Decade,
+year,Year,

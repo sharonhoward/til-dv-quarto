@@ -1,0 +1,48 @@
+---
+title: "filter with .by (instead of group_by and then filter)"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, filter, by]
+slug: til-filter-grouping-by-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  eg  filter(n()>1, .by = grp)  should do same thing as add_count then filter n>1. 
+-  example using n()>X in the filter, ie greater than X. then .by to group by topic. 
+-  need to *use* this a lot more! 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  filter(n()>25, .by=topic) |> 
+  count(topic, sort = T) 
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/dplyr_by.html](https://dplyr.tidyverse.org/reference/dplyr_by.html)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/bn_excavations_networks.Rmd:315:  
+# beyond_notability/bn_wikibase/themes/ppa/bn_served_on_231105.Rmd:567:  (but i can't see the actual usage of this at the place where the TIL is.) 
+ 
+
+```

@@ -1,0 +1,40 @@
+---
+title: "convert unix timestamps to date with lubridate as_datetime"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [dates, unix timestamps]
+slug: til-dates-unixtime-to-date-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  as.numeric(posixct) makes a unix timestamp 
+
+
+
+
+## Example
+
+```{r}
+unixdate <- as.numeric(as.POSIXct("2013-09-16 2:13:46 EST")) 
+ 
+as_datetime(unixdate) 
+
+```
+
+
+
+```{r}
+#| include: false
+# tpop/tpop-github-io_pre_public_data/_data/data_code.Rmd:135:  
+
+```

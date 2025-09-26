@@ -1,0 +1,107 @@
+---
+title: "reordering faceted charts"
+date: "2025-08-02"
+categories: 
+  - faceted
+  - ggplot
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+Sometimes you want to reorder by counts of values in ggplot faceted charts (small multiples). In a single chart you could easily do this with something like fct_reorder. But that won't work with a faceted chart. The solution is the [reorder_within](https://juliasilge.github.io/tidytext/reference/reorder_within.html) functions in the [tidytext](https://juliasilge.github.io/tidytext/) package.
+
+Focus here on bar charts, but should work with any facet-able ggplot chart.
+
+## Examples
+
+using cheshire petitions
+
+```{r includes}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(tidytext)
+library(tidyverse)
+
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(mindseyedata)
+
+```
+
+### a single chart for comparison
+
+The ggplot default is alphabetical order. (For reasons best known to itself, in a horizontal bar chart it sorts descending Z-A, which always looks wrong to me... this can be fixed with fct_rev()).
+
+```{r}
+cheshire_petitions |>
+  count(topic) |>
+  mutate(topic = fct_rev(topic)) |>
+  ggplot(aes(n, topic)) +
+  geom_col()
+```
+
+but often you'd prefer to order the chart by counts. This is easy with a single chart.
+
+```{r}
+cheshire_petitions |>
+  count(topic) |>
+  mutate(topic = fct_reorder(topic, n)) |>
+  ggplot(aes(n, topic)) +
+  geom_col()
+```
+
+### the faceted chart
+
+OK, so I want to add an extra dimension and make a faceted chart. (NB fct_rev works fine.)
+
+```{r}
+cheshire_petitions |>
+  count(topic, petition_gender) |>
+  filter(petition_gender %in% c("f", "m")) |>
+  mutate(topic = fct_rev(topic)) |>
+  ggplot(aes(n, topic)) +
+  geom_col() +
+  facet_wrap(~petition_gender, scales="free")
+```
+
+But if I try to reorder with fct_reorder, weird things start to happen. The problem is that it sorts by the overall counts, not within each facet.
+
+```{r}
+cheshire_petitions |>
+  count(topic, petition_gender) |>
+  filter(petition_gender %in% c("f", "m")) |>
+  mutate(topic = fct_reorder(topic, n)) |>
+  ggplot(aes(n, topic)) +
+  geom_col() +
+  facet_wrap(~petition_gender, scales="free")
+```
+
+So instead, I need to use reorder_within() and scale_*_reordered()
+
+I always forget which order the variables should go in reorder_within; the *faceting* variable needs to go last.
+
+```{r}
+cheshire_petitions |>
+  count(topic, petition_gender) |>
+  filter(petition_gender %in% c("f", "m")) |>
+  mutate(topic = reorder_within(topic, n, petition_gender)) |>
+  ggplot(aes(n, topic)) +
+  geom_col() +
+  scale_y_reordered() +
+  facet_wrap(~petition_gender, scales="free")
+```
+
+It's possible to reorder_within *multiple variables*: check the docuemntation.
+
+
+## Resources
+
+- [documentation](https://juliasilge.github.io/tidytext/reference/reorder_within.html)
+- [Reordering and facetting for ggplot2](https://juliasilge.com/blog/reorder-within/)
+- [Ordering categories within ggplot2 facets](https://trinkerrstuff.wordpress.com/2016/12/23/ordering-categories-within-ggplot2-facets/)

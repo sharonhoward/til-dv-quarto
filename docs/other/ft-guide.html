@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-08-02">
+
+<title>FT visual vocabulary – TIL</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-434a87f1a65cf5564e22d224e5738d6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">TIL</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../tils.html"> 
+<span class="menu-text">Today I Learned Something</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../dv.html"> 
+<span class="menu-text">For Dataviz Inspiration</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#notes" id="toc-notes" class="nav-link active" data-scroll-target="#notes">Notes</a></li>
+  <li><a href="#designing-with-data" id="toc-designing-with-data" class="nav-link" data-scroll-target="#designing-with-data">Designing with data</a></li>
+  <li><a href="#deviation" id="toc-deviation" class="nav-link" data-scroll-target="#deviation">Deviation</a>
+  <ul class="collapse">
+  <li><a href="#diverging-bar" id="toc-diverging-bar" class="nav-link" data-scroll-target="#diverging-bar">Diverging bar</a></li>
+  <li><a href="#diverging-stacked-bar" id="toc-diverging-stacked-bar" class="nav-link" data-scroll-target="#diverging-stacked-bar">Diverging stacked bar</a></li>
+  <li><a href="#spine-chart" id="toc-spine-chart" class="nav-link" data-scroll-target="#spine-chart">Spine chart</a></li>
+  <li><a href="#surplusdeficit-filled-line" id="toc-surplusdeficit-filled-line" class="nav-link" data-scroll-target="#surplusdeficit-filled-line">Surplus/deficit filled line</a></li>
+  </ul></li>
+  <li><a href="#deviation-correlation" id="toc-deviation-correlation" class="nav-link" data-scroll-target="#deviation-correlation"><em>deviation / correlation</em></a></li>
+  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation">Correlation</a>
+  <ul class="collapse">
+  <li><a href="#scatterplot" id="toc-scatterplot" class="nav-link" data-scroll-target="#scatterplot">Scatterplot</a></li>
+  <li><a href="#line-column" id="toc-line-column" class="nav-link" data-scroll-target="#line-column">Line + Column</a></li>
+  <li><a href="#connected-scatterplot" id="toc-connected-scatterplot" class="nav-link" data-scroll-target="#connected-scatterplot">Connected scatterplot</a></li>
+  <li><a href="#bubble" id="toc-bubble" class="nav-link" data-scroll-target="#bubble">Bubble</a></li>
+  <li><a href="#xy-heatmap" id="toc-xy-heatmap" class="nav-link" data-scroll-target="#xy-heatmap">XY heatmap</a></li>
+  <li><a href="#see-also-correlogram" id="toc-see-also-correlogram" class="nav-link" data-scroll-target="#see-also-correlogram">see also: Correlogram</a></li>
+  </ul></li>
+  <li><a href="#ranking" id="toc-ranking" class="nav-link" data-scroll-target="#ranking">Ranking</a>
+  <ul class="collapse">
+  <li><a href="#ordered-bar" id="toc-ordered-bar" class="nav-link" data-scroll-target="#ordered-bar">Ordered bar</a></li>
+  <li><a href="#ordered-column" id="toc-ordered-column" class="nav-link" data-scroll-target="#ordered-column">Ordered column</a></li>
+  <li><a href="#ordered-proportional-symbol" id="toc-ordered-proportional-symbol" class="nav-link" data-scroll-target="#ordered-proportional-symbol">Ordered proportional symbol</a></li>
+  <li><a href="#dot-strip-plot" id="toc-dot-strip-plot" class="nav-link" data-scroll-target="#dot-strip-plot">Dot strip plot</a></li>
+  <li><a href="#slope" id="toc-slope" class="nav-link" data-scroll-target="#slope">Slope</a></li>
+  <li><a href="#lollipop-chart" id="toc-lollipop-chart" class="nav-link" data-scroll-target="#lollipop-chart">Lollipop chart</a></li>
+  </ul></li>
+  <li><a href="#ranking-distribution" id="toc-ranking-distribution" class="nav-link" data-scroll-target="#ranking-distribution"><em>ranking / distribution</em></a></li>
+  <li><a href="#distribution" id="toc-distribution" class="nav-link" data-scroll-target="#distribution">Distribution</a>
+  <ul class="collapse">
+  <li><a href="#histogram" id="toc-histogram" class="nav-link" data-scroll-target="#histogram">Histogram</a></li>
+  <li><a href="#boxplot" id="toc-boxplot" class="nav-link" data-scroll-target="#boxplot">Boxplot</a></li>
+  <li><a href="#violin-plot" id="toc-violin-plot" class="nav-link" data-scroll-target="#violin-plot">Violin plot</a></li>
+  <li><a href="#population-pyramid" id="toc-population-pyramid" class="nav-link" data-scroll-target="#population-pyramid">Population pyramid</a></li>
+  <li><a href="#dot-strip-plot-1" id="toc-dot-strip-plot-1" class="nav-link" data-scroll-target="#dot-strip-plot-1">Dot strip plot</a></li>
+  <li><a href="#dot-plot" id="toc-dot-plot" class="nav-link" data-scroll-target="#dot-plot">Dot plot</a></li>
+  <li><a href="#barcode-plot" id="toc-barcode-plot" class="nav-link" data-scroll-target="#barcode-plot">Barcode plot</a></li>
+  <li><a href="#cumulative-curve" id="toc-cumulative-curve" class="nav-link" data-scroll-target="#cumulative-curve">Cumulative curve</a></li>
+  <li><a href="#see-also-ridgeline-plot" id="toc-see-also-ridgeline-plot" class="nav-link" data-scroll-target="#see-also-ridgeline-plot">see also: ridgeline plot</a></li>
+  </ul></li>
+  <li><a href="#change-over-time" id="toc-change-over-time" class="nav-link" data-scroll-target="#change-over-time">Change over Time</a>
+  <ul class="collapse">
+  <li><a href="#line" id="toc-line" class="nav-link" data-scroll-target="#line">Line</a></li>
+  <li><a href="#column" id="toc-column" class="nav-link" data-scroll-target="#column">Column</a></li>
+  <li><a href="#line-column-1" id="toc-line-column-1" class="nav-link" data-scroll-target="#line-column-1">Line + column</a></li>
+  <li><a href="#stock-price" id="toc-stock-price" class="nav-link" data-scroll-target="#stock-price">Stock price</a></li>
+  <li><a href="#slope-1" id="toc-slope-1" class="nav-link" data-scroll-target="#slope-1">Slope</a></li>
+  <li><a href="#area-chart" id="toc-area-chart" class="nav-link" data-scroll-target="#area-chart">Area chart</a></li>
+  <li><a href="#fan-chart-projection" id="toc-fan-chart-projection" class="nav-link" data-scroll-target="#fan-chart-projection">Fan chart (projection)</a></li>
+  <li><a href="#connected-scatterplot-1" id="toc-connected-scatterplot-1" class="nav-link" data-scroll-target="#connected-scatterplot-1">Connected scatterplot</a></li>
+  <li><a href="#calendar-heatmap" id="toc-calendar-heatmap" class="nav-link" data-scroll-target="#calendar-heatmap">Calendar heatmap</a></li>
+  <li><a href="#priestley-timeline" id="toc-priestley-timeline" class="nav-link" data-scroll-target="#priestley-timeline">Priestley timeline</a></li>
+  <li><a href="#circle-timeline" id="toc-circle-timeline" class="nav-link" data-scroll-target="#circle-timeline">Circle timeline</a></li>
+  <li><a href="#seismogram" id="toc-seismogram" class="nav-link" data-scroll-target="#seismogram">Seismogram</a></li>
+  </ul></li>
+  <li><a href="#change-over-time-part-to-whole" id="toc-change-over-time-part-to-whole" class="nav-link" data-scroll-target="#change-over-time-part-to-whole"><em>change over time / part-to-whole</em></a></li>
+  <li><a href="#part-to-whole" id="toc-part-to-whole" class="nav-link" data-scroll-target="#part-to-whole">Part-to-whole</a>
+  <ul class="collapse">
+  <li><a href="#stacked-column" id="toc-stacked-column" class="nav-link" data-scroll-target="#stacked-column">Stacked column</a></li>
+  <li><a href="#proportional-stacked-bar" id="toc-proportional-stacked-bar" class="nav-link" data-scroll-target="#proportional-stacked-bar">Proportional stacked bar</a></li>
+  <li><a href="#pie" id="toc-pie" class="nav-link" data-scroll-target="#pie">Pie</a></li>
+  <li><a href="#donut" id="toc-donut" class="nav-link" data-scroll-target="#donut">Donut</a></li>
+  <li><a href="#treemap" id="toc-treemap" class="nav-link" data-scroll-target="#treemap">Treemap</a></li>
+  <li><a href="#voronoi" id="toc-voronoi" class="nav-link" data-scroll-target="#voronoi">Voronoi</a></li>
+  <li><a href="#arc" id="toc-arc" class="nav-link" data-scroll-target="#arc">Arc</a></li>
+  <li><a href="#gridplot-waffle" id="toc-gridplot-waffle" class="nav-link" data-scroll-target="#gridplot-waffle">Gridplot [waffle]</a></li>
+  <li><a href="#venn" id="toc-venn" class="nav-link" data-scroll-target="#venn">Venn</a></li>
+  <li><a href="#waterfall" id="toc-waterfall" class="nav-link" data-scroll-target="#waterfall">Waterfall</a></li>
+  </ul></li>
+  <li><a href="#magnitude" id="toc-magnitude" class="nav-link" data-scroll-target="#magnitude">Magnitude</a>
+  <ul class="collapse">
+  <li><a href="#column-1" id="toc-column-1" class="nav-link" data-scroll-target="#column-1">Column</a></li>
+  <li><a href="#bar" id="toc-bar" class="nav-link" data-scroll-target="#bar">Bar</a></li>
+  <li><a href="#paired-column" id="toc-paired-column" class="nav-link" data-scroll-target="#paired-column">Paired column</a></li>
+  <li><a href="#paired-bar" id="toc-paired-bar" class="nav-link" data-scroll-target="#paired-bar">Paired bar</a></li>
+  <li><a href="#proportional-stacked-bar-1" id="toc-proportional-stacked-bar-1" class="nav-link" data-scroll-target="#proportional-stacked-bar-1">Proportional stacked bar</a></li>
+  <li><a href="#proportional-symbol" id="toc-proportional-symbol" class="nav-link" data-scroll-target="#proportional-symbol">Proportional symbol</a></li>
+  <li><a href="#isotype-pictogram" id="toc-isotype-pictogram" class="nav-link" data-scroll-target="#isotype-pictogram">Isotype (pictogram)</a></li>
+  <li><a href="#lollipop-chart-1" id="toc-lollipop-chart-1" class="nav-link" data-scroll-target="#lollipop-chart-1">Lollipop chart</a></li>
+  <li><a href="#radar-chart" id="toc-radar-chart" class="nav-link" data-scroll-target="#radar-chart">Radar chart</a></li>
+  <li><a href="#parallel-coordinates" id="toc-parallel-coordinates" class="nav-link" data-scroll-target="#parallel-coordinates">Parallel coordinates</a></li>
+  </ul></li>
+  <li><a href="#magnitude-spatial" id="toc-magnitude-spatial" class="nav-link" data-scroll-target="#magnitude-spatial"><em>magnitude / spatial</em></a></li>
+  <li><a href="#spatial" id="toc-spatial" class="nav-link" data-scroll-target="#spatial">Spatial</a>
+  <ul class="collapse">
+  <li><a href="#basic-choropleth-rateratio" id="toc-basic-choropleth-rateratio" class="nav-link" data-scroll-target="#basic-choropleth-rateratio">Basic choropleth (rate/ratio)</a></li>
+  <li><a href="#proportional-symbol-countmagnitde" id="toc-proportional-symbol-countmagnitde" class="nav-link" data-scroll-target="#proportional-symbol-countmagnitde">Proportional symbol (count/magnitde)</a></li>
+  <li><a href="#flow-map" id="toc-flow-map" class="nav-link" data-scroll-target="#flow-map">Flow map</a></li>
+  <li><a href="#contour-map" id="toc-contour-map" class="nav-link" data-scroll-target="#contour-map">Contour map</a></li>
+  <li><a href="#equalised-cartogram" id="toc-equalised-cartogram" class="nav-link" data-scroll-target="#equalised-cartogram">Equalised cartogram</a></li>
+  <li><a href="#scaled-cartogram-value" id="toc-scaled-cartogram-value" class="nav-link" data-scroll-target="#scaled-cartogram-value">Scaled cartogram (value)</a></li>
+  <li><a href="#dot-density" id="toc-dot-density" class="nav-link" data-scroll-target="#dot-density">Dot density</a></li>
+  <li><a href="#heat-map" id="toc-heat-map" class="nav-link" data-scroll-target="#heat-map">Heat map</a></li>
+  </ul></li>
+  <li><a href="#flow" id="toc-flow" class="nav-link" data-scroll-target="#flow">Flow</a>
+  <ul class="collapse">
+  <li><a href="#sankey-aka-river-plot" id="toc-sankey-aka-river-plot" class="nav-link" data-scroll-target="#sankey-aka-river-plot">Sankey (aka river plot)</a></li>
+  <li><a href="#waterfall-1" id="toc-waterfall-1" class="nav-link" data-scroll-target="#waterfall-1">Waterfall</a></li>
+  <li><a href="#chord" id="toc-chord" class="nav-link" data-scroll-target="#chord">Chord</a></li>
+  <li><a href="#network" id="toc-network" class="nav-link" data-scroll-target="#network">Network</a></li>
+  </ul></li>
+  <li><a href="#flow-1" id="toc-flow-1" class="nav-link" data-scroll-target="#flow-1"><em>flow</em></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">FT visual vocabulary</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">overview</div>
+    <div class="quarto-category">resources</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2 August 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<p>A remash of the FT’s poster to be easier to use in this context.</p>
+<p><a href="https://github.com/Financial-Times/chart-doctor/blob/main/visual-vocabulary/README.md">Github repo</a> also has lots of links that I’ve taken out here.</p>
+<p><a href="https://github.com/Financial-Times/chart-doctor/blob/main/visual-vocabulary/Visual-vocabulary-en.pdf">pdf of poster</a></p>
+<p><a href="https://www.data-to-viz.com/">From Data to Viz</a> also has (among other ways in) a similar listing by graph type. added a couple as see also:</p>
+</section>
+<section id="designing-with-data" class="level2">
+<h2 class="anchored" data-anchor-id="designing-with-data">Designing with data</h2>
+<p>There are so many ways to visualise data - how do we know which one to pick? Use the categories across the top to decide which data relationship is most important in your story, then look at the different types of chart within the category to form some initial ideas about what might work best. This list is not meant to be exhaustive, nor a wizard, but is a useful starting point for making informative and meaningful data visualisations.</p>
+</section>
+<section id="deviation" class="level2">
+<h2 class="anchored" data-anchor-id="deviation">Deviation</h2>
+<p>Emphasise variations +/- from a fixed reference point (typically zero, but can also be a target or long-term average). Also used to show sentiment (pos/neg/neutral)</p>
+<section id="diverging-bar" class="level3">
+<h3 class="anchored" data-anchor-id="diverging-bar">Diverging bar</h3>
+<p>A simple standard bar chart that can handle both negative and positive magnitude values.</p>
+</section>
+<section id="diverging-stacked-bar" class="level3">
+<h3 class="anchored" data-anchor-id="diverging-stacked-bar">Diverging stacked bar</h3>
+<p>Perfect for presenting survey results which involve sentiment (eg disagree/neutral/agree).</p>
+</section>
+<section id="spine-chart" class="level3">
+<h3 class="anchored" data-anchor-id="spine-chart">Spine chart</h3>
+<p>Splits a single value into 2 contrasting components (eg Male/Female)</p>
+</section>
+<section id="surplusdeficit-filled-line" class="level3">
+<h3 class="anchored" data-anchor-id="surplusdeficit-filled-line">Surplus/deficit filled line</h3>
+<p>The shaded area of these charts allows a balance to be shown – either against a baseline or between two series.</p>
+</section>
+</section>
+<section id="deviation-correlation" class="level2">
+<h2 class="anchored" data-anchor-id="deviation-correlation"><em>deviation / correlation</em></h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-deviation.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-correlation.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="correlation" class="level2">
+<h2 class="anchored" data-anchor-id="correlation">Correlation</h2>
+<p>Show the relationship between two or more variables. Be mindful that many readers will assume the relationships are causal unless told otherwise.</p>
+<section id="scatterplot" class="level3">
+<h3 class="anchored" data-anchor-id="scatterplot">Scatterplot</h3>
+<p>The standard way to show the relationship between two continuous variables, each of which has its own axis.</p>
+</section>
+<section id="line-column" class="level3">
+<h3 class="anchored" data-anchor-id="line-column">Line + Column</h3>
+<p>A good way of showing the relationship between an amount (columns) and a rate (line)</p>
+</section>
+<section id="connected-scatterplot" class="level3">
+<h3 class="anchored" data-anchor-id="connected-scatterplot">Connected scatterplot</h3>
+<p>Usually used to show how the relationship between two variables has changed over time.</p>
+</section>
+<section id="bubble" class="level3">
+<h3 class="anchored" data-anchor-id="bubble">Bubble</h3>
+<p>Like a scatterplot, but adds additional detail by sizing the circles according to a third variable</p>
+</section>
+<section id="xy-heatmap" class="level3">
+<h3 class="anchored" data-anchor-id="xy-heatmap">XY heatmap</h3>
+<p>A good way of showing the patterns between 2 categories of data, less good at showing fine differences in amounts.</p>
+</section>
+<section id="see-also-correlogram" class="level3">
+<h3 class="anchored" data-anchor-id="see-also-correlogram">see also: Correlogram</h3>
+<p>in data-to-viz <a href="https://www.data-to-viz.com/graph/correlogram.html">https://www.data-to-viz.com/graph/correlogram.html</a></p>
+</section>
+</section>
+<section id="ranking" class="level2">
+<h2 class="anchored" data-anchor-id="ranking">Ranking</h2>
+<p>Use where an item’s position in an ordered list is more important than its absolute or relative value. Don’t be afraid to highlight the points of interest.</p>
+<section id="ordered-bar" class="level3">
+<h3 class="anchored" data-anchor-id="ordered-bar">Ordered bar</h3>
+<p>Standard bar charts display the ranks of values much more easily when sorted into order</p>
+</section>
+<section id="ordered-column" class="level3">
+<h3 class="anchored" data-anchor-id="ordered-column">Ordered column</h3>
+<p>See above.</p>
+</section>
+<section id="ordered-proportional-symbol" class="level3">
+<h3 class="anchored" data-anchor-id="ordered-proportional-symbol">Ordered proportional symbol</h3>
+<p>Use when there are big variations between values and/or seeing fine differences between data is not so important.</p>
+</section>
+<section id="dot-strip-plot" class="level3">
+<h3 class="anchored" data-anchor-id="dot-strip-plot">Dot strip plot</h3>
+<p>Dots placed in order on a strip are a space-efficient method of laying out ranks across multiple categories.</p>
+</section>
+<section id="slope" class="level3">
+<h3 class="anchored" data-anchor-id="slope">Slope</h3>
+<p>Perfect for showing how ranks have changed over time or vary between categories.</p>
+</section>
+<section id="lollipop-chart" class="level3">
+<h3 class="anchored" data-anchor-id="lollipop-chart">Lollipop chart</h3>
+<p>Lollipops draw more attention to the data value than standard bar/column and can also show rank and value effectively.</p>
+</section>
+</section>
+<section id="ranking-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="ranking-distribution"><em>ranking / distribution</em></h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-ranking.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-distribution.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="distribution" class="level2">
+<h2 class="anchored" data-anchor-id="distribution">Distribution</h2>
+<p>Show values in a dataset and how often they occur. The shape (or ‘skew’) of a distribution can be a memorable way of highlighting the lack of uniformity or equality in the data. (age/sex) distribution</p>
+<section id="histogram" class="level3">
+<h3 class="anchored" data-anchor-id="histogram">Histogram</h3>
+<p>The standard way to show a statistical distribution - keep the gaps between columns small to highlight the ‘shape’ of the data</p>
+</section>
+<section id="boxplot" class="level3">
+<h3 class="anchored" data-anchor-id="boxplot">Boxplot</h3>
+<p>Summarise multiple distributions by showing the median (centre) and range of the data</p>
+</section>
+<section id="violin-plot" class="level3">
+<h3 class="anchored" data-anchor-id="violin-plot">Violin plot</h3>
+<p>Similar to a box plot but more effective with complex distributions (data that cannot be summarised with simple average).</p>
+</section>
+<section id="population-pyramid" class="level3">
+<h3 class="anchored" data-anchor-id="population-pyramid">Population pyramid</h3>
+<p>A standard way for showing the age and sex breakdown of a population distribution; effectively, back to back histograms.</p>
+</section>
+<section id="dot-strip-plot-1" class="level3">
+<h3 class="anchored" data-anchor-id="dot-strip-plot-1">Dot strip plot</h3>
+<p>Good for showing individual values in a distribution, can be a problem when too many dots have the same value.</p>
+</section>
+<section id="dot-plot" class="level3">
+<h3 class="anchored" data-anchor-id="dot-plot">Dot plot</h3>
+<p>A simple way of showing the change or range (min/max) of data across multiple categories.</p>
+</section>
+<section id="barcode-plot" class="level3">
+<h3 class="anchored" data-anchor-id="barcode-plot">Barcode plot</h3>
+<p>Like dot strip plots, good for displaying all the data in a table,they work best when highlighting individual values.</p>
+</section>
+<section id="cumulative-curve" class="level3">
+<h3 class="anchored" data-anchor-id="cumulative-curve">Cumulative curve</h3>
+<p>A good way of showing how unequal a distribution is: y axis is always cumulative frequency, x axis is always a measure.</p>
+</section>
+<section id="see-also-ridgeline-plot" class="level3">
+<h3 class="anchored" data-anchor-id="see-also-ridgeline-plot">see also: ridgeline plot</h3>
+<p>not in FT list but in data-to-viz <a href="https://www.data-to-viz.com/graph/ridgeline.html">https://www.data-to-viz.com/graph/ridgeline.html</a></p>
+</section>
+</section>
+<section id="change-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="change-over-time">Change over Time</h2>
+<p>Give emphasis to changing trends. These can be short (intra-day) movements or extended series traversing decades or centuries. Choosing the correct time period is important to provide suitable context for the reader.</p>
+<section id="line" class="level3">
+<h3 class="anchored" data-anchor-id="line">Line</h3>
+<p>The standard way to show a changing time series. If data are irregular, consider markers to represent data points</p>
+</section>
+<section id="column" class="level3">
+<h3 class="anchored" data-anchor-id="column">Column</h3>
+<p>Columns work well for showing change over time - but usually best with only one series of data at a time.</p>
+</section>
+<section id="line-column-1" class="level3">
+<h3 class="anchored" data-anchor-id="line-column-1">Line + column</h3>
+<p>A good way of showing the relationship over time between an amount (columns) and a rate (line)</p>
+</section>
+<section id="stock-price" class="level3">
+<h3 class="anchored" data-anchor-id="stock-price">Stock price</h3>
+<p>Usually focused on day-to-day activity, these charts show opening/closing and hi/low points of each day</p>
+</section>
+<section id="slope-1" class="level3">
+<h3 class="anchored" data-anchor-id="slope-1">Slope</h3>
+<p>Good for showing changing data as long as the data can be simplified into 2 or 3 points without missing a key part of story</p>
+</section>
+<section id="area-chart" class="level3">
+<h3 class="anchored" data-anchor-id="area-chart">Area chart</h3>
+<p>Use with care – these are good at showing changes to total, but seeing change in components can be very difficult</p>
+</section>
+<section id="fan-chart-projection" class="level3">
+<h3 class="anchored" data-anchor-id="fan-chart-projection">Fan chart (projection)</h3>
+<p>Use to show the uncertainty in future projections - usually this grows the further forward to projection</p>
+</section>
+<section id="connected-scatterplot-1" class="level3">
+<h3 class="anchored" data-anchor-id="connected-scatterplot-1">Connected scatterplot</h3>
+<p>A good way of showing changing data for two variables whenever there is a relatively clear pattern of progression.</p>
+</section>
+<section id="calendar-heatmap" class="level3">
+<h3 class="anchored" data-anchor-id="calendar-heatmap">Calendar heatmap</h3>
+<p>A great way of showing temporal patterns (daily, weekly, monthly) – at the expense of showing precision in quantity.</p>
+</section>
+<section id="priestley-timeline" class="level3">
+<h3 class="anchored" data-anchor-id="priestley-timeline">Priestley timeline</h3>
+<p>Great when date and duration are key elements of the story in the data.</p>
+</section>
+<section id="circle-timeline" class="level3">
+<h3 class="anchored" data-anchor-id="circle-timeline">Circle timeline</h3>
+<p>Good for showing discrete values of varying size across multiple categories (eg earthquakes by contintent).</p>
+</section>
+<section id="seismogram" class="level3">
+<h3 class="anchored" data-anchor-id="seismogram">Seismogram</h3>
+<p>Another alternative to the circle timeline for showing series where there are big variations in the data.</p>
+</section>
+</section>
+<section id="change-over-time-part-to-whole" class="level2">
+<h2 class="anchored" data-anchor-id="change-over-time-part-to-whole"><em>change over time / part-to-whole</em></h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-change.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-partwhole.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="part-to-whole" class="level2">
+<h2 class="anchored" data-anchor-id="part-to-whole">Part-to-whole</h2>
+<p>Show how a single entity can bebroken down into its component elements. If the reader’s interest issolely in the size of the components,consider a magnitude-type chartinstead.</p>
+<section id="stacked-column" class="level3">
+<h3 class="anchored" data-anchor-id="stacked-column">Stacked column</h3>
+<p>A simple way of showing part-to-whole relationships but can be difficult to read with more than a few components.</p>
+</section>
+<section id="proportional-stacked-bar" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-stacked-bar">Proportional stacked bar</h3>
+<p>A good way of showing the size and proportion of data at the same time – as long as the data are not too complicated.</p>
+</section>
+<section id="pie" class="level3">
+<h3 class="anchored" data-anchor-id="pie">Pie</h3>
+<p>A common way of showing part-to-whole data – but be aware that it’s difficult to accurately compare the size of the segments.</p>
+</section>
+<section id="donut" class="level3">
+<h3 class="anchored" data-anchor-id="donut">Donut</h3>
+<p>Similar to a pie chart – but the centre can be a good way of making space to include more information about the data (eg. total)</p>
+</section>
+<section id="treemap" class="level3">
+<h3 class="anchored" data-anchor-id="treemap">Treemap</h3>
+<p>Use for hierarchical part-to-whole relationships; can be difficult to read when there are many small segments.</p>
+</section>
+<section id="voronoi" class="level3">
+<h3 class="anchored" data-anchor-id="voronoi">Voronoi</h3>
+<p>A way of turning points into areas – any point within each area is closer to the central point than any other centroid.</p>
+</section>
+<section id="arc" class="level3">
+<h3 class="anchored" data-anchor-id="arc">Arc</h3>
+<p>A hemicycle, often used for visualising political results in parliaments.</p>
+</section>
+<section id="gridplot-waffle" class="level3">
+<h3 class="anchored" data-anchor-id="gridplot-waffle">Gridplot [waffle]</h3>
+<p>Good for showing % information, they work best when used on whole numbers and work well in multiple layout form.</p>
+</section>
+<section id="venn" class="level3">
+<h3 class="anchored" data-anchor-id="venn">Venn</h3>
+<p>Generally only used for schematic representation</p>
+</section>
+<section id="waterfall" class="level3">
+<h3 class="anchored" data-anchor-id="waterfall">Waterfall</h3>
+<p>Can be useful for showing part-to-whole relationships where some of the components are negative.</p>
+</section>
+</section>
+<section id="magnitude" class="level2">
+<h2 class="anchored" data-anchor-id="magnitude">Magnitude</h2>
+<p>Show size comparisons. These can be relative (just being able to see larger/bigger) or absolute (need to see fine differences). Usually these show a ‘counted’ number (for example, barrels, dollars or people) rather thana calculated rate or per cent.</p>
+<section id="column-1" class="level3">
+<h3 class="anchored" data-anchor-id="column-1">Column</h3>
+<p>The standard way to compare the size of things. Must always start at 0 on the axis</p>
+</section>
+<section id="bar" class="level3">
+<h3 class="anchored" data-anchor-id="bar">Bar</h3>
+<p>See above. Good when the data are not time series and labels have long category names.</p>
+</section>
+<section id="paired-column" class="level3">
+<h3 class="anchored" data-anchor-id="paired-column">Paired column</h3>
+<p>As per standard column but allows for multiple series. Can become tricky to read with more than 2 series.</p>
+</section>
+<section id="paired-bar" class="level3">
+<h3 class="anchored" data-anchor-id="paired-bar">Paired bar</h3>
+<p>See above.</p>
+</section>
+<section id="proportional-stacked-bar-1" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-stacked-bar-1">Proportional stacked bar</h3>
+<p>A good way of showing the size and proportion of data at the same time – as long as the data are not too complicated.</p>
+</section>
+<section id="proportional-symbol" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-symbol">Proportional symbol</h3>
+<p>Use when there are big variations between values and/or seeing fine differences between data is not so important.</p>
+</section>
+<section id="isotype-pictogram" class="level3">
+<h3 class="anchored" data-anchor-id="isotype-pictogram">Isotype (pictogram)</h3>
+<p>Excellent solution in some instances – use only with whole numbers (do not slice off an arm to represent a decimal).</p>
+</section>
+<section id="lollipop-chart-1" class="level3">
+<h3 class="anchored" data-anchor-id="lollipop-chart-1">Lollipop chart</h3>
+<p>Lollipop charts draw more attention to the data value than standard bar/column – does not HAVE to start at zero (but preferable).</p>
+</section>
+<section id="radar-chart" class="level3">
+<h3 class="anchored" data-anchor-id="radar-chart">Radar chart</h3>
+<p>A space-efficient way of showing value pf multiple variables– but make sure they are organised in a way that makes sense to reader.</p>
+</section>
+<section id="parallel-coordinates" class="level3">
+<h3 class="anchored" data-anchor-id="parallel-coordinates">Parallel coordinates</h3>
+<p>An alternative to radar charts – again, the arrngement of the variables is important. Usually benefits from highlighting values.</p>
+</section>
+</section>
+<section id="magnitude-spatial" class="level2">
+<h2 class="anchored" data-anchor-id="magnitude-spatial"><em>magnitude / spatial</em></h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-magnitude.png" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-spatial.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="spatial" class="level2">
+<h2 class="anchored" data-anchor-id="spatial">Spatial</h2>
+<p>Used only when precise locations orgeographical patterns in data aremore important to the reader thananything else.</p>
+<section id="basic-choropleth-rateratio" class="level3">
+<h3 class="anchored" data-anchor-id="basic-choropleth-rateratio">Basic choropleth (rate/ratio)</h3>
+<p>The standard approach for putting data on a map – should always be rates rather than totals and use a sensible base geography</p>
+</section>
+<section id="proportional-symbol-countmagnitde" class="level3">
+<h3 class="anchored" data-anchor-id="proportional-symbol-countmagnitde">Proportional symbol (count/magnitde)</h3>
+<p>Use for totals rather than rates – be wary that small differences in data will be hard to see.</p>
+</section>
+<section id="flow-map" class="level3">
+<h3 class="anchored" data-anchor-id="flow-map">Flow map</h3>
+<p>For showing unambiguous movement across a map.</p>
+</section>
+<section id="contour-map" class="level3">
+<h3 class="anchored" data-anchor-id="contour-map">Contour map</h3>
+<p>For showing areas of equal value on a map. Can use deviation colour schemes for showing +/- values</p>
+</section>
+<section id="equalised-cartogram" class="level3">
+<h3 class="anchored" data-anchor-id="equalised-cartogram">Equalised cartogram</h3>
+<p>Converting each unit on a map to a regular and equally-sized shape – good for representing voting regions with equal value.</p>
+</section>
+<section id="scaled-cartogram-value" class="level3">
+<h3 class="anchored" data-anchor-id="scaled-cartogram-value">Scaled cartogram (value)</h3>
+<p>Stretching and shrinking a map so that each area is sized according to a particular value.</p>
+</section>
+<section id="dot-density" class="level3">
+<h3 class="anchored" data-anchor-id="dot-density">Dot density</h3>
+<p>Used to show the location of individual events/locations – make sure to annotate any patterns the reader should see.</p>
+</section>
+<section id="heat-map" class="level3">
+<h3 class="anchored" data-anchor-id="heat-map">Heat map</h3>
+<p>Grid-based data values mapped with an intensity colour scale. As choropleth map – but not snapped to an admin/political unit.</p>
+</section>
+</section>
+<section id="flow" class="level2">
+<h2 class="anchored" data-anchor-id="flow">Flow</h2>
+<p>Show the reader volumes or intensity of movement between two or more states or conditions. These might be logical sequences or geographical locations.</p>
+<section id="sankey-aka-river-plot" class="level3">
+<h3 class="anchored" data-anchor-id="sankey-aka-river-plot">Sankey (aka river plot)</h3>
+<p>Shows changes in flows from one condition to at least one other; good for tracing the eventual outcome of a complex process.</p>
+</section>
+<section id="waterfall-1" class="level3">
+<h3 class="anchored" data-anchor-id="waterfall-1">Waterfall</h3>
+<p>Designed to show the sequencing of data through a flow process, typically budgets. Can include +/- components.</p>
+</section>
+<section id="chord" class="level3">
+<h3 class="anchored" data-anchor-id="chord">Chord</h3>
+<p>A complex but powerful diagram which can illustrate 2-way flows (and net winner) in a matrix.</p>
+</section>
+<section id="network" class="level3">
+<h3 class="anchored" data-anchor-id="network">Network</h3>
+<p>Used for showing the strength and inter-connectedness of relationships of varying types.</p>
+</section>
+</section>
+<section id="flow-1" class="level2">
+<h2 class="anchored" data-anchor-id="flow-1"><em>flow</em></h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="./ft/ft-poster-flow.png" class="img-fluid"></p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Site by <a href="https://sharonhoward.org">Sharon Howard</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

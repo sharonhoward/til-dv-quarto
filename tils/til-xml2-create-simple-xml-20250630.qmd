@@ -1,0 +1,94 @@
+---
+title: "create a simple XML file from a data frame with xml2"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [xml, make xml]
+slug: til-xml2-create-simple-xml-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  SO reply with the for() loop on SO using XML package rather than xml2 
+-  https://stackoverflow.com/a/57639226/7281022 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_sample <- 
+# really small set of petitions, just get one per topic 
+  cheshire_petitions |> 
+  group_by(topic) |> 
+  slice_min(n=1, row_number()) |> 
+  ungroup() 
+ 
+library(xml2) 
+ 
+#first create the xml doc that will contain all xml structure 
+petitions_doc <- xml_new_root("list_elements")  
+ 
+# this just adds empty test_element containers, same number as rows in df.  
+# for loop will do for now, but should work out how to use purrr::map maybe see jennybc tutorial?  
+# the name test_nodes is only for convenience at this point i *think*; it'll get overwritten next line. 
+ 
+for (test_nodes in 1:nrow(cheshire_sample)) { 
+  xml_add_child(petitions_doc, "test_element") 
+} 
+ 
+# > add the elements in each person node. No loop is required as xml_add_child function is vectorized. 
+ 
+# before you can add a child element you have to do this.  
+# you only have to do it once though, not for every child. 
+test_nodes <- xml_find_all(petitions_doc, "//test_element") 
+ 
+# add an attribute to test_element called id. 
+xml_attr(test_nodes, "id") <- cheshire_sample$petition_id 
+ 
+# then you can add child elements to test_nodes. but you can only add single values. 
+# NB doesn't work with cols that are factors, have to convert to chr first. 
+# none of these examples should have any NAs, but they need specific handling (see TEI XML TIL) 
+xml_add_child(test_nodes, "topic", cheshire_sample$topic) 
+xml_add_child(test_nodes, "year", cheshire_sample$year)  
+xml_add_child(test_nodes, "type", cheshire_sample$petition_type)  
+ 
+# etc etc until you've added all children of test_element that you want 
+ 
+# to insert empty element called test 
+xml_add_child(test_nodes, "test")  
+ 
+# save the xml tree into a file [done] 
+# write_xml(petitions_doc, file = here::here("outputs/petitions-topics.xml"), options =c("format")) 
+ 
+# show the content of the file 
+# cat(as.character(petitions_doc)) 
+ 
+
+```
+
+
+## Resources
+
+* [https://stackoverflow.com/questions/57624678/generate-xml-document-in-r](https://stackoverflow.com/questions/57624678/generate-xml-document-in-r) 
+* [https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html](https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html) 
+* [https://stackoverflow.com/a/57639226/7281022](https://stackoverflow.com/a/57639226/7281022)
+
+```{r}
+#| include: false
+# atb/atb/make-xml/make-tei-xml.Rmd and other newer Rmds in atb.  
+# atb/atb/_stuff/bor_biographies_sample_2204.Rmd:315: (i think this was the original) 
+ 
+ 
+
+```

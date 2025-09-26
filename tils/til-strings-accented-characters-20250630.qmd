@@ -1,0 +1,71 @@
+---
+title: "function to replace accented characters with non-accented"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [strings]
+slug: til-strings-accented-characters-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  to filter/process/match strings containing (inconsistently) accented characters, replacing them using str_trans_general is effective 
+-  stringi::stri_trans_general(x, id="Latin-ASCII")  
+-  keep a copy of the original string 
+-  there are quite a few stri_trans_* functions. should probably investigate further! 
+ 
+-  I also learned that rgx to match accented characters is hard and weird...! 
+-  you really want to avoid trying to match accents with regex! 
+-  some accented characters work and some that look identical don't... 
+-  and letters added via the keyboard behave really strangely. i wonder if this is rstudio? 
+-  pasted in from loc_name_cln are a bit odd too but they do work. 
+-  (more wtf in the bn rmd) 
+-  data and documentation https://github.com/Beyond-Notability/bn_r_doc 
+-  file https://github.com/Beyond-Notability/bn_r_doc/blob/main/loc/outputs/loc_bn_records.json 
+ 
+
+
+
+
+## Example
+
+```{r}
+bn_loc_fromjson <- 
+  jsonlite::fromJSON(here::here("data/loc_bn_records.json")) 
+# fromJSON simplifies the json (cf read_json) 
+ 
+# unpack to one row per creator per work including bn_id etc. 
+loc_creators_works <- 
+bn_loc_fromjson |> 
+  select(-creators, -keywords, -permalink, -publisher) |> 
+  bind_cols( 
+    bn_loc_fromjson$creators |> 
+      enframe(name="row", value = "names")  
+  ) |> 
+  unnest(names) 
+ 
+# accents in titles as well as names 
+loc_creators_works |> 
+  mutate(name_cln = stringi::stri_trans_general(name, id = "Latin-ASCII"), 
+         title_cln = stringi::stri_trans_general(title, id="Latin-ASCII")) |> 
+  select(name, name_cln, title, title_cln) |> 
+  filter(name != name_cln | title != title_cln) 
+
+```
+
+
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/wrangling/bibliographical_deprecated/bn_loc_xml.Rmd:1520: 
+# beyond_notability/bn_wikibase/wrangling/bibliographical_deprecated/bn_loc_xml.Rmd:1521:  
+
+```

@@ -1,0 +1,310 @@
+---
+title: "Sparklines"
+date: "2025-08-02"
+categories: 
+  - change over time
+  - faceted
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+[Sparklines](https://en.wikipedia.org/wiki/Sparkline) are miniature visualisations with very minimal contextual info: features like axis labels and gridlines are usually stripped out. Sometimes you'll see a single sparkline, but they're often used in multiples, or embedded in tables. 
+
+
+### strengths
+
+- Probably the most common use is to show and/or compare trends over time
+- The examples here don't have very many lines, but they can be scaled up to show dozens of categories at once.
+- can be very effective using a single sparkline inline next to text, or inside tables
+
+### limitations
+
+- lose sense of scale
+- loss of precision
+
+### variations
+
+the most common form is (as the name suggests) the line chart, but other types of chart like bar charts are sometimes used.
+
+## Examples
+
+Using [Old Bailey Online](https://www.oldbaileyonline.org/) data I've extracted using the [OBO API](https://sharonhoward.github.io/obo/notes/statistics-terms.html). 
+
+
+```{r}
+#| code-fold: true
+
+library(snakecase)
+library(readr)
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# annual counts of offence categories (counted by trial)
+year_offence_category_csv <-
+  read_csv(here::here("data/year-offence_category-bytrial-20250531.csv"))
+                       
+# the data from the API is in wide format; make it long format for ggplot
+year_offence_category_long <-
+year_offence_category_csv |>
+  rename(year=key) |>
+  select(-doc_count) |>
+  pivot_longer(-year, names_to = "offence", values_to = "count") |>
+  # some filtering (early years are often incomplete)
+  filter(between(year, 1720, 1899) & offence !="miscellaneous") |>
+  # make camelCase category names look better as labels
+  mutate(offence = to_snake_case(offence, sep_out = " "))
+
+```
+
+
+### basic method in ggplot2
+
+make a faceted chart and then strip out all or most of the usual annotation. 
+
+
+caveat - there are big differences in scale, so that needs to be handled with care! 
+
+```{r}
+year_offence_category_long |>
+  ggplot(aes(year, count)) +
+  geom_line() +
+  # strip.position moves labels to right
+  facet_wrap(~offence, ncol=1, scales="free", strip.position="right") +
+  # expand to reduce/remove margin between the line and strip label
+  scale_x_continuous(expand = c(0,2)) +
+  # theme_void is a blank theme - removes axis text, gridlines etc.
+  theme_void() +
+  # tweak positioning of labels
+  theme(strip.text.y = element_text(angle = 0, vjust=0.4, hjust=0)) +
+  # add a little space below plot title; default feels cramped. 
+  theme(plot.title = element_text(margin = margin(0,0,13,0))) +
+  # a cheat to give more of a miniaturised effect
+  theme(aspect.ratio = 1/6) +
+  labs(title="OBO offence categories per year 1720-1899")
+```
+
+
+some tweaks to the appearance of the plot using ggplot theme() functionality.
+
+```{r}
+year_offence_category_long |>
+  ggplot(aes(year, count)) +
+  geom_line() +
+  facet_wrap(~offence, ncol=1, scales="free", strip.position="right") +
+  scale_x_continuous(expand = c(0,1)) +
+  # more selective removal of unwanted text, lines etc for more control
+  # theme_minimal is a lightweight theme
+  theme_minimal() +
+  # remove text and title from both axes
+  theme(axis.text = element_blank(),
+        axis.title = element_blank()
+        ) +
+  # remove grid lines
+  theme(panel.grid = element_blank()) +
+  # remove tick marks.
+  theme(axis.ticks  = element_blank())  +
+  # facets background (fill) / border (colour) 
+  # a light border gives a bit of definition.
+  theme(panel.background = element_rect(colour = "#f0f0f0")) + 
+  # ditto for strip labels background/border
+  theme(strip.background = element_rect(fill = "#f0f0f0", colour = "#f0f0f0")) + 
+  theme(strip.text.y = element_text(angle = 0, vjust=0.5, hjust=0)) +
+  theme(plot.title = element_text(margin = margin(0,0,13,0))) +
+  theme(aspect.ratio = 1/6) +
+  labs(title="OBO offence categories per year 1720-1899")
+```
+
+Example using data from the historydata package, for a change.
+
+```{r}
+historydata::us_state_populations |>  
+  filter(str_detect(state, "^A")) |>  
+  ggplot(aes(year, population)) + 
+  geom_line() + 
+  # strip.position=right rotates the label 90 deg. fix angle in theme. 
+  facet_wrap(~state, ncol=1, scales="free", strip.position="right") + 
+  # expand to reduce/remove margin between the sparkline and panel label 
+  scale_x_continuous(expand = c(0,0)) + 
+# strip out unwanted text, lines etc 
+# theme_void strips everything.  
+#  theme_void() + 
+# or do components separately. 
+  theme_minimal() + 
+  # Remove text and title from both axes 
+  theme(axis.text = element_blank()) + 
+  theme(axis.title = element_blank()) + 
+  # remove grid lines 
+  theme(panel.grid = element_blank()) + 
+  # Remove tick marks. 
+  theme(axis.ticks  = element_blank())  + 
+# end of removing stuff 
+  # facets 
+  # background (fill) and border (colour) for each facet. a light border gives a bit of definition 
+  theme(panel.background = element_rect(colour = "#f0f0f0")) +  
+  # ditto for strip labels background/border 
+  # is there a way to get rid of the border line *between* facet and strip i wonder? 
+  theme(strip.background = element_rect(colour = "#f0f0f0")) +  
+  # makes the labels horizontal when they're on the side 
+  theme(strip.text.y = element_text(angle = 0, vjust=0.5, hjust=0)) + 
+  # use this to see exactly where panel borders are...  how is it different from panel.background above? not the whole thing 
+  #theme(panel.border = element_rect(linetype = "dashed", fill = NA)) + # if you use fill covers the line, v odd... 
+  # nb this is per facet! useful with 1 col, prob not with 2 col 
+  theme(aspect.ratio = 1/10) +  
+  # add a tiny bit of space below the title  
+  theme(plot.title = element_text(margin = margin(0,0,15,0))) + 
+  labs(title="US states population 1820-2020") 
+
+```
+
+
+
+Another highlighting option is to add background to area beneath the line (with ggplot::geom_area()). 
+
+```{r}
+year_offence_category_long |>
+  ggplot(aes(year, count)) +
+  geom_line() +
+  geom_area(alpha=0.1, fill="purple") + 
+  facet_wrap(~offence, ncol=1, scales="free", strip.position="right") +
+  scale_x_continuous(expand = c(0,1)) +
+  theme_void() +
+  theme(strip.text.y = element_text(angle = 0, vjust=0.4, hjust=0)) +
+  theme(plot.title = element_text(margin = margin(0,0,13,0))) +
+  theme(aspect.ratio = 1/6) +
+  labs(title="OBO offence categories per year 1720-1899") 
+```
+
+
+### ggspark
+
+[ggspark](https://cran.r-project.org/package=ggspark) adds some visual statistical enhancements.
+
+
+```{r}
+library(ggspark)
+```
+
+> the package has two main functions: stat_interquartilerange() that draws a geom_ribbon() between the 1st and 3rd quartile of the variable in the y axis, and stat_sparklabels() that draws points or text labels in the beginning, min, max, and end points of the variable in the y axis.
+
+I didn't find the ribbon particularly illuminating so I've left it out, but the text labels reintroduce some useful context. 
+
+But it's a bit cluttered and would get worse with more categories. 0 is the min for most of the categories, so is it that useful anyway? It might be more helpful to have just the starting and max count for each line (I'm not sure how to use geom_text in facets, so that'll be something to investigate.)
+
+```{r}
+year_offence_category_long |>
+  ggplot(aes(year, count, group=offence)) +
+  # stat_interquartilerange(geom = "ribbon",
+  #                         show.legend = FALSE) +
+  geom_line() +
+  stat_sparklabels(geom = "text",
+                   show.legend = FALSE) +
+  scale_colour_manual("", values = c("grey8", '#BB5566',  "#0072B2" )) +
+  # expand also stops the text from being clipped
+  scale_y_continuous(expand = c(0.2,1)) +
+  facet_grid(offence~., scales="free") +
+  theme_minimal() + 
+  theme(strip.text.y = element_text(angle = 0, vjust=0.5, hjust=0)) +
+  theme(panel.grid = element_blank(),
+        axis.ticks = element_blank(),
+        axis.title = element_blank(),
+        axis.text = element_blank()) +
+  theme(aspect.ratio = 1/10) +
+  labs(title = "OBO offence categories per year 1720-1899")
+```
+
+
+
+### reactable + sparkline
+
+Another common use of sparklines is to have them embedded in a table. Here, I'll use the more interactive options available with the [reactable](https://glin.github.io/reactable/index.html) and [sparkline](https://cran.r-project.org/web/packages/sparkline/index.html) packages. 
+
+
+This time the counts data needs to be summarised in a list column.
+
+```{r}
+year_offence_category_group <-
+year_offence_category_long |>
+  group_by(offence) |>
+  # make absolutely sure they're in the right order
+  arrange(year, .by_group = TRUE) |>
+  summarise(offence_count = list(count)) |>
+  ungroup() 
+```
+
+A nice feature with this is that the annual counts are in tooltips on hovering over the chart. But the defaults are not quite what I'm after...
+
+```{r}
+library(reactable)
+library(sparkline)
+
+reactable(
+  year_offence_category_group,
+  columns = list(
+    offence_count = colDef(name = "annual trend 1720-1899",
+      cell = function(value, index){
+        sparkline(year_offence_category_group$offence_count[[index]] )
+       })
+  )
+)
+```
+&nbsp;
+
+However, like many R htmlwidgets packages, the underlying javascript library has *loads* of customisation [options](https://omnipotent.net/jquery.sparkline/). I'm not wild about the format for the tooltips either, and there are probably options for those as well. But I'll leave it at that for now.
+
+
+```{r}
+reactable(
+  year_offence_category_group,
+  columns = list(
+    offence = colDef(maxWidth = 150),
+    offence_count = colDef(name = "annual trend 1720-1899",
+      cell = function(value, index){
+        sparkline(year_offence_category_group$offence_count[[index]], 
+               width=300, 
+               height = 40,
+               fillColor = "#DDAA33",
+               lineColor = "black" 
+               )
+       })
+  )
+)
+```
+&nbsp;
+
+The sparkline package can also be used independently of reactable, so for example, single sparklines can be embedded in text.
+
+```{r}
+theft <- year_offence_category_long |> filter(offence=="theft")
+
+killing <- year_offence_category_long |> filter(offence=="kill")
+```
+
+Here's a sparkline of theft cases `r sparkline(theft$count, fillColor = "#DDAA33", width=100)` and here's one for killing `r sparkline(killing$count, fillColor = "lightblue", width=100)` in the text.
+
+
+### gt
+
+The [gt](https://gt.rstudio.com/index.html) package offers an alternative, though I think it's less customisable. 
+
+
+As with the reactable/sparkline version, the defaults are meh, and some twiddling is needed. I'm not sure if there are additional options for [the sparkline function](https://jthomasmock.github.io/gtExtras/reference/gt_plt_sparkline.html), and it doesn't have tooltips.
+
+```{r}
+library(gt)
+library(gtExtras) # for the sparkline function
+
+year_offence_category_group |>
+  gt() |>
+  gt_plt_sparkline(offence_count, fig_dim = c(10,100), same_limit = FALSE, type = "shaded", label=FALSE) |>
+  cols_label(offence_count = "annual trends 1720-1899") |>
+  cols_width(offence ~ px(150))
+```
+
+
+## Resources?
+

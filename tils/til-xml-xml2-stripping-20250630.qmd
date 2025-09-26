@@ -1,0 +1,36 @@
+---
+title: "read_xml needs options=blank to stop it stripping out blank text nodes"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, xml, warning]
+slug: til-xml-xml2-stripping-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+
+
+
+## Example
+
+```{r}
+# xml2::read_xml("filename.xml", options = "") 
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb_writing/atb-making-text.Rmd:201:  
+ 
+
+```

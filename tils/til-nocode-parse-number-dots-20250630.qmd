@@ -1,0 +1,34 @@
+---
+title: "import numerical data - parse_number quirks"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, numbers, import]
+slug: til-nocode-parse-number-dots-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  eg seems fine with letters and things but doesn't like dots 
+-  it can parse nd (early 1680s) but not n.d. (c. 1610). 
+
+
+
+
+
+
+
+
+```{r}
+#| include: false
+# petitions/case_study/cheshire_link_names.Rmd:771:  
+
+```

@@ -1,0 +1,53 @@
+---
+title: "For Dataviz Inspiration"
+listing:
+  - id: dv-table
+    contents:
+    - "dv/*.qmd"
+    sort: 
+      - "title"
+    type: table
+    fields: [title, categories]
+    #field-display-names:
+    #  file-modified: "Updated"
+    categories: true
+    sort-ui: false
+    filter-ui: false
+    date-format: "D MMM YYYY"
+    page-size: 99
+  - id: dv-til-table
+    contents:
+    - "dv/dv-til/*.qmd"
+    sort: 
+      - "title"
+    type: table
+    fields: [title, categories]
+    #field-display-names:
+    #  file-modified: "Updated"
+    categories: true
+    sort-ui: false
+    filter-ui: false
+    date-format: "D MMM YYYY"
+    page-size: 99
+toc: false
+page-layout: full
+title-block-banner: false
+execute: 
+  warning: false
+  message: false
+  #echo: false 
+search: false
+---
+
+
+## how-to charts
+
+:::{#dv-table}
+:::
+
+
+
+## ggplot TILs
+
+:::{#dv-til-table}
+:::

@@ -1,0 +1,47 @@
+---
+title: "give a numerical ID to each group in a grouped DF"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, IDs]
+slug: til-grouping-cur-group-id-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  cf dense_rank TIL, this is an id for a group, gives a *grouped* variable a shared id 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  select(petition_id, topic, response) |> 
+  group_by(topic) |> 
+  #arrange(-nn, .by_group = T) |> # again, this doesn't make any difference to numbering 
+  mutate(grp_id = cur_group_id(), n_topic=n()) |> 
+  ungroup() |> 
+  count(topic, response, grp_id, n_topic)  
+
+```
+
+
+
+```{r}
+#| include: false
+# beyond_notability/bn_notes/posts/suffrage-2024-03-18/index.qmd:315:  
+# beyond_notability/bn_wikibase/finishing-up/bn_notes/index.R:256:  
+# beyond_notability/bn_wikibase/wrangling/one-woman-2309.Rmd:277:  
+
+```

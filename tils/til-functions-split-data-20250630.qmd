@@ -1,0 +1,61 @@
+---
+title: "functions use a column name as an arg and convert to a string"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [functions, naming things, group, reshape]
+slug: til-functions-split-data-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  this was used in a workflow with patchwork wrap_plots. related functions in the qmd. 
+ 
+
+
+## Function
+
+```{r} 
+split_data <- function(data, grp){ 
+ 
+grp_character <- deparse(substitute(grp)) 
+ 
+data_names <- 
+  # sort should put in the same order as the group_split (though idk why group_split reorders them) 
+  sort(unique(data[[grp_character]])) 
+ 
+  data_split <- 
+  data |> 
+  group_split({{grp}}) 
+ 
+  names(data_split) <- data_names 
+   
+  data_split  
+   
+} 
+ 
+
+```
+
+## Example
+
+```{r}
+split_data(cheshire_petitions, topic) 
+
+```
+
+
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/hospitals-explore-time.qmd:532:  
+
+```

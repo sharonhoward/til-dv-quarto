@@ -1,0 +1,47 @@
+---
+title: "frequency tables 3-way or more with vcd structable "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [frequency tables]
+slug: til-tables-vcd-structable-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  you can do stuff to the DF *inside* structable, though for more than a quick filter it's probably better to make new DF beforehand and use that. 
+-  (I don't think structable is pipable) 
+-  vcd_diff_size_val_tab_inst <- structable(same_dmy_all ~ item_size + mean_pay_val,  
+-                                           sb_items_inst_nk |> filter(inst_type=="kw")) 
+
+
+
+
+## Example
+
+```{r}
+vcd::structable(petition_type ~ topic + petition_gender, cheshire_petitions) 
+# need to check what this does with NAs? looks like it drops them. check NA options 
+ 
+
+```
+
+
+## Resources
+
+* [https://friendly.github.io/vcdExtra/articles/a1-creating.html](https://friendly.github.io/vcdExtra/articles/a1-creating.html)
+
+```{r}
+#| include: false
+# small_bills/sb_explore/themes/sb_beneficiaries_20210119.Rmd:986:  
+ 
+
+```

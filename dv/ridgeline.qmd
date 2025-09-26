@@ -1,0 +1,130 @@
+---
+title: "Ridgeline plots"
+date: "2025-08-03"
+categories: 
+  - distribution
+execute: 
+  warning: false
+  message: false
+---
+
+[ggridges](https://wilkelab.org/ggridges/index.html)
+
+
+```{r}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(glue)
+library(tidyverse)
+
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(ggridges)
+
+library(mindseyedata)
+library(historydata)
+
+
+inquests <-
+coroners |>
+  select(rowid, doc_year, doc_month, parish, gender, verdict) |>
+  filter(verdict!="undetermined")
+```
+
+
+```{r}
+cheshire_petitions |>
+  # filter out small topics and keep only 17th century
+  filter(n()>20, .by = topic) |>
+  filter(between(year, 1600, 1700)) |>
+  # reverse topics order because ggplot is annoying
+  mutate(topic = fct_rev(topic)) |>
+  # not sure if height makes any difference at all
+  ggplot(aes(x=year, y=topic, group=topic, fill=topic, height=after_stat(density))) + 
+  # stat=binline for squared effect
+  geom_density_ridges(stat = "binline", bins = 10, scale = 0.95, 
+                      draw_baseline = FALSE, show.legend = FALSE) +
+  # `expand` option for both axes to remove unneeded padding 
+  scale_y_discrete(expand = c(0, 0)) +     
+  scale_x_continuous(expand = c(0, 0), breaks = seq(1600, 1700, 10) ) +  
+  scale_fill_tableau(direction = -1) +
+  #clip = "off" to avoid clipping of the very top of the top ridgeline
+  coord_cartesian(clip = "off") +  
+  theme_ridges(font_size=12) +
+  theme(axis.text.y = element_text(vjust = 0), legend.position = "none", 
+        panel.grid.minor.x=element_blank(),
+        panel.grid.major.x=element_blank()
+        ) +
+  labs(y=NULL, x="decade", title = "Petition topics 1608-1698")
+```
+
+
+```{r}
+inquests |>
+  mutate(verdict = fct_rev(verdict)) |>
+  ggplot(aes(x=doc_year, y=verdict, group=verdict, fill=verdict, height = after_stat(density))) +   
+  geom_density_ridges(stat = "binline", bins = 9, scale = 0.95, 
+                      draw_baseline = FALSE, show.legend = FALSE) +
+  # `expand` option for both axes to remove unneeded padding 
+  scale_y_discrete(expand = c(0, 0)) +     
+  scale_x_continuous(expand = c(0, 0), breaks = seq(1760, 1800, 5) ) +  
+  scale_fill_tableau(direction = -1) +
+  #clip = "off" to avoid clipping of the very top of the top ridgeline
+  coord_cartesian(clip = "off") +  
+  theme_ridges(font_size=12) +
+  theme(axis.text.y = element_text(vjust = 0), legend.position = "none", 
+        panel.grid.minor.x=element_blank(),
+        panel.grid.major.x=element_blank()
+        ) +
+  labs(y=NULL, x="year", title = "Inquest verdicts 1760-1799")
+```
+
+
+months instead of time series
+
+```{r}
+inquests |>
+  mutate(verdict = fct_rev(verdict)) |>
+  ggplot(aes(x=doc_month, y=verdict, group=verdict, fill=verdict, height = after_stat(density))) +   
+  geom_density_ridges(stat = "binline", bins = 12, scale = 0.95, 
+                      draw_baseline = FALSE, show.legend = FALSE) +
+  # `expand` option for both axes to remove unneeded padding 
+  scale_y_discrete(expand = c(0, 0)) +     
+  #scale_x_continuous(expand = c(0, 0), breaks = seq(1760, 1800, 5) ) +  
+  scale_fill_tableau(direction = -1) +
+  #clip = "off" to avoid clipping of the very top of the top ridgeline
+  coord_cartesian(clip = "off") +  
+  theme_ridges(font_size=12) +
+  theme(axis.text.y = element_text(vjust = 0), legend.position = "none", 
+        panel.grid.minor.x=element_blank(),
+        panel.grid.major.x=element_blank()
+        ) +
+  labs(y=NULL, x="month", title = "Inquest verdicts by month")
+```
+
+
+This ridgeline shows a smoothed trend line, but adds the actual distribution of dates as points, more like a beeswarm.
+
+```{r}
+inquests |>
+  mutate(verdict = fct_rev(verdict)) |>
+  ggplot(aes(x=doc_year, y=verdict, group=verdict, fill=verdict, height=after_stat(density))) +   
+  geom_density_ridges(jittered_points = TRUE, position = "points_sina", 
+                      scale = 0.95, alpha=0.6, point_size=.5, bandwidth=4) +
+  # `expand` option for both axes to remove unneeded padding 
+  scale_y_discrete(expand = c(0, 0)) +     
+  scale_x_continuous(expand = c(0, 0), breaks = seq(1760, 1800, 5) ) +  
+  scale_fill_tableau(direction = -1) +
+  #clip = "off" to avoid clipping of the very top of the top ridgeline
+  coord_cartesian(clip = "off") +  
+  theme_ridges(font_size=12) +
+  theme(axis.text.y = element_text(vjust = 0), legend.position = "none", 
+        panel.grid.minor.x=element_blank(),
+        panel.grid.major.x=element_blank()
+        ) +
+  labs(y=NULL, x="decade", title = "Inquest verdicts 1760-1799")
+```
+

@@ -1,0 +1,84 @@
+---
+title: "pretty() breaks"
+date: "2025-09-09"
+categories: 
+  - scales
+  - ggplot
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+- pretty() is a base R function to "compute a sequence of about n+1 equally spaced ‘round’ values which cover the range of the values in x". 
+- handy to tweak breaks inside ggplot scale_*_ functions if you don't like the ggplot defaults, without having to work anything out for yourself
+
+[helpful SO comment](https://stackoverflow.com/a/62496287/7281022) (my emphasis)
+
+> the way pretty works is not easily predictable. I usually remind myself that it was implemented to create **reasonable** tick marks for charts. In a chart you usually need *a good first and last value and equal steps in between*...
+
+
+```{r}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(glue)
+library(tidyverse)
+
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(ggridges)
+
+library(mindseyedata)
+library(historydata)
+
+```
+
+
+## Examples
+
+```{r}
+# count of topic for the scale
+petitions_topic <-
+  cheshire_petitions |> 
+  count(topic)
+
+(pet_pretty_break <-
+  pretty(petitions_topic$n, n=10))
+```
+
+
+```{r}
+cheshire_petitions |>
+  mutate(petition_type = str_remove(petition_type, " *on behalf")) |>
+  count(topic, petition_type) |>
+  mutate(topic = fct_rev(topic)) |>
+  ggplot(aes(n, topic, fill = petition_type)) +
+  geom_col() +
+  scale_x_continuous(breaks = pet_pretty_break) +
+  scale_fill_tableau()
+```
+
+```{r}
+methodists |>
+  ggplot(aes(year, members_total)) +
+  geom_point() +
+  scale_y_continuous(breaks = pretty(methodists$members_total, n=10)) +
+  scale_x_continuous(breaks = pretty(methodists$year, n=10))
+```
+
+Uses outside ggplot? 
+
+
+
+## More
+
+The scales package has some fancier [axis breaks functions](https://scales.r-lib.org/reference/index.html#axis-breaks) including eg for log scales and date/time scales. To try out some time!
+
+
+## Resources
+
+[rdocumentation](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/pretty)

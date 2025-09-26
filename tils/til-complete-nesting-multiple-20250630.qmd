@@ -1,0 +1,55 @@
+---
+title: "fill in gaps with complete() and nesting() "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations]
+slug: til-complete-nesting-multiple-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  what does nesting do? it groups variables together, so complete doesn't try to make every single combination, only the possible combinations of each group.  
+-  YOU CAN USE NESTING MORE THAN ONCE 
+ 
+
+
+
+
+## Example
+
+```{r}
+judges100 |> 
+# every possible court(name+type) for every name/id combo. (6100 rows) if not on a court nomination_date = NA. 
+  select(judge_id, persname) |> 
+  inner_join(judges100_appts |> select(court_name, court_type, judge_id, nomination_date), by="judge_id") |> 
+  complete(nesting(judge_id, persname), nesting(court_name, court_type)) 
+ 
+judges100 |> 
+# just completing court_type 511 rows. (5 court types). date NA if not actually on that court type. 
+  select(judge_id, persname) |> 
+  inner_join(judges100_appts |> select(court_type, judge_id, nomination_date), by="judge_id") |> 
+  complete(nesting(judge_id, persname), court_type) 
+
+```
+
+
+## Resources
+
+* [https://tidyr.tidyverse.org/reference/complete.html](https://tidyr.tidyverse.org/reference/complete.html) 
+* [https://tidyr.tidyverse.org/reference/expand.html](https://tidyr.tidyverse.org/reference/expand.html)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/wrangling/dates/bn_dates_230818.Rmd:422:  
+ 
+
+```

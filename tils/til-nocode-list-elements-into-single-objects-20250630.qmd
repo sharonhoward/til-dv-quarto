@@ -1,0 +1,45 @@
+---
+title: "list2env() puts elements of a list into global environment "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, environment, lists]
+slug: til-nocode-list-elements-into-single-objects-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  be wary of using this - not regarded as good practice? 
+-  if you rerun the chunk, I think it just replaces them with the new versions cf. attach.  
+-  and you need to be sure the names aren't already being used! 
+
+
+
+
+## Example
+
+```{r}
+# list2env(named_list_of_dfs, envir = .GlobalEnv) 
+ 
+
+```
+
+
+## Resources
+
+* [https://stackoverflow.com/questions/59169631/split-a-list-into-separate-data-frame-in-r](https://stackoverflow.com/questions/59169631/split-a-list-into-separate-data-frame-in-r)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/ppa/bn_work_queries.Rmd:43:  
+ 
+
+```

@@ -1,0 +1,48 @@
+---
+title: "add regex comments to your R code"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, strings, regex, comments]
+slug: til-nocode-regex-comments-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+
+
+
+## Example
+
+```{r}
+# find_link <- regex(" 
+#   \\[   # Grab opening square bracket 
+#   .+?   # Find smallest internal text as possible 
+#   \\]   # Closing square bracket 
+#   \\(   # Opening parenthesis 
+#   .+?   # Link text, again as small as possible 
+#   \\)   # Closing parenthesis 
+#   ", 
+#  comments = TRUE) 
+#  
+# BUT NB:  
+# >  	If TRUE, white space and comments beginning with # are ignored. Escape literal spaces with \\ . 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# small_bills/sb_explore/snippets.Rmd:101:  
+# also: in gists 
+ 
+```

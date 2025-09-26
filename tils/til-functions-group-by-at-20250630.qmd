@@ -1,0 +1,64 @@
+---
+title: "group_by_at() can take a string, useful in functions"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [functions, naming things, group, reshape, wip]
+slug: til-functions-group-by-at-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  > we can make use of the group_by_at that can take string as input avoiding the syms and evaluation (!!!) 
+-  example in SO 
+-  MEAN_OUT2 <- function(VARS) { 
+-                  DF %>%  
+-                       group_by_at(VARS) %>%  
+-                       summarise(Mean = mean(Output)) %>%  
+-                       as.data.frame() 
+-      } 
+-  caveat: not entirely sure about my example... 
+ 
+
+
+## Function
+
+```{r} 
+transpose_agg_data <- function(data, key=key, rows){ 
+  data |> 
+    # drop existing doc_count.  
+    select(-doc_count) |> 
+    pivot_longer(-{{key}}, names_to = rows, values_to = "n") |> 
+    # make new doc_count for rows. nb use of group_by_at. 
+    # don't really need this?   
+    group_by_at(rows) |> 
+    mutate(doc_count = sum(n)) |> 
+    ungroup() |> 
+    pivot_wider(names_from = {{key}}, values_from = n)  
+} 
+ 
+
+```
+
+
+
+
+## Resources
+
+* [https://stackoverflow.com/a/52437493/7281022](https://stackoverflow.com/a/52437493/7281022)
+
+```{r}
+#| include: false
+# obo/obapi/terms.qmd:123:  
+# (not originally a til) 
+ 
+
+```

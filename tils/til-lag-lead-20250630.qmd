@@ -1,0 +1,49 @@
+---
+title: "previous or next values in a vector"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [previous/next values]
+slug: til-lag-lead-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  wanted to do this more than once and had no idea these existed... 
+-  > Find the "previous" (lag()) or "next" (lead()) values in a vector. Useful for comparing values behind of or ahead of the current values. 
+
+
+
+
+## Example
+
+```{r}
+judges100 |> 
+  filter(!is.na(birth_date)) |> # just in case 
+  select(birth_date) |> 
+  head(10) |> 
+  mutate(birth_lag = lag(birth_date), birth_lead=lead(birth_date)) 
+ 
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/lead-lag.html](https://dplyr.tidyverse.org/reference/lead-lag.html)
+
+```{r}
+#| include: false
+# beyond_notability/bn_observable/r_sandpit/residence.qmd:1324:    
+# petitions/case_study/find_names_texts.Rmd:1329:  
+ 
+
+```

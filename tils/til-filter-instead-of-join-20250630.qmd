@@ -1,0 +1,43 @@
+---
+title: "filter is sometimes simpler (and more flexible) than joins"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [filter, join]
+slug: til-filter-instead-of-join-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  you could potentially have multiple conditions in the filter, which you can't easily do with joins 
+
+
+
+
+## Example
+
+```{r}
+cheshire_select <- 
+  cheshire_petitions[3,] 
+ 
+cheshire_petitions |> 
+  filter(topic %in% cheshire_select$topic) 
+
+```
+
+
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/bn_instance_of_2024.Rmd:718:   
+# beyond_notability/bn_wikibase/themes/bn_instance_of.Rmd:1597:   
+
+```

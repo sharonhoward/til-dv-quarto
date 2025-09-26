@@ -1,0 +1,147 @@
+---
+title: "Colour Notes"
+date: "2025-08-02"
+categories: 
+  - accessibility
+  - resources
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+adapted from mindseye post.
+
+## swatchplot()
+
+```{r}
+library(colorspace)
+```
+
+[colorspace](https://colorspace.r-forge.r-project.org/index.html) swatchplot() function - useful to quickly check palettes, especially custom palettes in ggplot's scale_*_manual functions. 
+
+
+handy with named palettes too; here's the [viridis palette](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html) (specifying 8 colours), with simulation of all three of the main colour blindness types to facilitate comparison:
+
+```{r}
+swatchplot(sequential_hcl(8, "Viridis"), cvd = TRUE)
+```
+
+for a diverging palette ([ColorBrewer](https://colorbrewer2.org/#type=diverging&scheme=PRGn&n=9)):
+
+
+```{r}
+swatchplot(diverging_hcl(7, "Purple-Green"), cvd = TRUE)
+```
+
+But really comes into its own if you want to test and tweak a custom palette. You can just give it a vector of colours. 
+
+This is a red-green-blue combination. It's... not good.
+
+```{r}
+swatchplot(c("#F8766D", "#00BA38", "#619CFF"), cvd=TRUE)
+```
+
+Something better (colours from Paul Tol's light qualitative scheme).
+
+```{r}
+swatchplot(c("#EE8866", "#EEDD88", "#99DDFF", "#44BB99", "#BBCC33"), cvd=TRUE)
+```
+
+If you need a three colour scheme, these are the colours in Paul Tol's high-contrast palette:
+
+```{r}
+swatchplot(c('#DDAA33', '#BB5566',  "#0072B2"), cvd=T)
+```
+
+## cvd_grid()
+
+With [colorblindr](https://github.com/clauswilke/colorblindr) you can go a step further than the swatchplot and simulate actual visualisations; this may be particularly useful for line graphs and scatterplots where you can get rather different effects than the blocks of colour in bar charts and the like.
+
+```{r}
+# install colorblindr from github
+# remotes::install_github("clauswilke/colorblindr")
+
+library(ggthemes)
+library(colorblindr)
+library(ggplot2)
+library(palmerpenguins)
+```
+
+Scatterplot of the Palmers Penguins dat, using the default ggplot colour palette (as a general rule: don't do this; it's ugly as well as being abysmal for the colourblind).
+
+```{r}
+pp <-
+penguins |>
+  dplyr::filter(!is.na(sex) ) |>
+  ggplot(aes(bill_length_mm, bill_depth_mm, colour = species)) +
+  geom_point()
+
+pp
+```
+
+Simulations:
+
+- R default colours
+
+```{r}
+cvd_grid(pp)
+```
+
+
+- the Okabe-Ito colorblind palette in ggthemes
+
+```{r}
+cvd_grid(pp + scale_colour_colorblind())
+```
+
+- the Paul Tol palette in ggthemes:
+
+```{r}
+cvd_grid(pp + scale_colour_ptol())
+```
+
+
+## more resources
+
+Useful tools:
+
+- [Viz Palette](https://projects.susielu.com/viz-palette)
+- [An interactive guide to color and contrast](https://colorandcontrast.com/#/)
+- [Coblis color blindness simulator](https://www.color-blindness.com/coblis-color-blindness-simulator/)
+
+Blog posts etc:
+
+- Datawrapper blog has a great ongoing series of posts, including several specifically on color blindness
+  - [Color in data vis category](https://www.datawrapper.de/blog/category/color-in-data-vis)
+  - [Color blindness: Part 1](https://www.datawrapper.de/blog/colorblindness-part1)
+  - [Color blindness: Part 2](https://www.datawrapper.de/blog/colorblindness-part2)
+  - [Color blindness: Part 3](https://www.datawrapper.de/blog/colorblindness-part3)
+
+- [Quickly assessing colour palettes](https://www.njtierney.com/post/2020/10/15/assess-colour/)
+- [Crafting an effective data visualization color palette (Observable)](https://observablehq.com/blog/crafting-data-colors)
+- [Coloring in R's blind spot](https://www.zeileis.org/news/coloring/)
+- [Working with colours in R](https://nrennie.rbind.io/blog/colours-in-r/)
+
+Some R packages:
+
+- [prismatic](https://emilhvitfeldt.github.io/prismatic/) - "The goal of prismatic is to provide color manipulation tools in R, in an intuitive, low-dependency and functional way"
+- [paleteer](https://emilhvitfeldt.github.io/paletteer/) - "The goal of paletteer is to be a comprehensive collection of color palettes in R using a common interface"
+- [khroma](https://packages.tesselle.org/khroma/) - "an implementation of Okabe and Ito, Tol and Crameri color schemes"
+- [Colors for all](https://cols4all.github.io/cols4all-R/) - "palettes from several popular and lesser known color palette series... scored on several aspects"
+
+
+Okabe and Ito:
+
+- [Color universal design: How to make figures and presentations that are friendly to Colorblind people](https://jfly.uni-koeln.de/color/)
+- also: [the Okabe and Ito palette as hex values](https://mikemol.github.io/technique/colorblind/2018/02/11/color-safe-palette.html)
+
+Paul Tol:
+
+- [Paul Tol's notes](https://sronpersonalpages.nl/~pault/)
+
+Beyond colour blindness, I've been reading Jonathan Godfrey's work for blind R users:
+
+- [BrailleR](https://ajrgodfrey.github.io/BrailleR/) [R package]
+- [Statistical software and blind users](https://r-resources.massey.ac.nz/StatSoftware/) [resource]

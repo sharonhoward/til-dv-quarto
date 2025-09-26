@@ -1,0 +1,66 @@
+---
+title: "subsetting in base R - notes and gotchas"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [wip, needs data, subset]
+slug: til-subsetting-101-gotchas-to-understand-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  penguins will work but would prefer history data! 
+-  > The [ operator always returns an object of the same class as the original. It can be used to select multiple elements of an object 
+-  > The [[ operator is used to extract elements of a list or a data frame. It can only be used to extract a single element and the class of the returned object will not necessarily be a list or data frame. 
+-  > The $ operator is used to extract elements of a list or data frame by literal name. Its semantics are similar to that of [[. 
+ 
+-  Q: commas. what is the , doing in this example [src?]?? removing it doens't seem to make any difference 
+-  mtcars[, c("mpg", "cyl", "wt")]  
+-  mtcars[c("mpg", "cyl", "wt")] 
+ 
+
+
+
+
+## Example
+
+```{r}
+penguins[["bill_len"]] # bill_len col as a vector of values. 
+penguins$bill_len # same again  
+penguins[[3]]  # same again 
+ 
+penguins[,3]  # depends...! this is interesting. with a DF I got a vector of values again, but after changing to a tibble it's a tibble with single column.  
+penguins[3] # df/tibble with single col  
+penguins[3,] # a df with all columns for the third row 
+penguins[3,3] # third col in third row, as a vector or single cell tibble 
+ 
+names(penguins[1]) # [1] "species" - name of the first col  
+names(penguins["species"]) # [1] "species" [this seems a very silly thing to do...?] 
+# names(penguins[species]) # error object species not found 
+# names(penguins[[species]]) # ditto 
+names(penguins[["species"]]) # NULL 
+ 
+ 
+
+```
+
+
+## Resources
+
+* [https://adv-r.hadley.nz/subsetting.html](https://adv-r.hadley.nz/subsetting.html)
+
+```{r}
+#| include: false
+# atb/atb/_stuff/bor_biographies_sample_2204.Rmd:291:  
+# small_bills/sb_explore/themes/sb_counties.Rmd:304:  
+ 
+
+```

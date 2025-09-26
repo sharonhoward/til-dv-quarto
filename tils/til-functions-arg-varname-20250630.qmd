@@ -1,0 +1,71 @@
+---
+title: "function argument used as variable name with !! and := "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [functions, naming things]
+slug: til-functions-arg-varname-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  i've used this in the context of making a y/n "is" or "has" column. 
+-  the point was that you might have several possible data2 to compare and it's a single line each time 
+-  (originally data1 = named DF) 
+-  the id column for joining has to be called "id" in both DFs 
+-  x has to be quoted ... if i used deparse(substitute) could I change that? not sure. 
+ 
+
+
+## Function
+
+```{r} 
+make_yn <- function(data1, data2, x){ 
+   
+  # make the variable name 
+  v = paste0("is_", x) 
+   
+  data1 |> 
+  left_join(data2 |> select(id) |> mutate(is_x="yes"), by="id") |> 
+  mutate(!! v := if_else(is.na(is_x), "no", "yes")) |> 
+    select(-is_x) 
+} 
+ 
+
+```
+
+## Example
+
+```{r}
+judges100_ussc <- 
+  judges100_appts |> 
+  filter(court_type=="USSC") |> 
+  mutate(id=paste0("judge_", judge_id)) |> 
+  distinct(id, court_type) 
+ 
+make_yn(judges100, judges100_ussc, "USSC") |> 
+  count(is_USSC, gender) 
+
+```
+
+
+## Resources
+
+* [https://stackoverflow.com/questions/69276207/how-to-assign-function-argument-to-variable-name/69276257#69276257](https://stackoverflow.com/questions/69276207/how-to-assign-function-argument-to-variable-name/69276257#69276257)
+
+```{r}
+#| include: false
+# beyond_notability/bn_notes/posts/proxies-2024-12-10/index.qmd:52:  
+# beyond_notability/bn_wikibase/finishing-up/bn_notes/posts/proxies-2024-12-10/index.R:25: 
+# beyond_notability/bn_wikibase/themes/bn_proxies.Rmd:74: 
+ 
+
+```

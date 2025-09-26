@@ -1,0 +1,45 @@
+---
+title: "frequency tables with xtabs() for counted data"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [frequency tables, count]
+slug: til-tables-xtabs-count-data-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  xtabs is handy anyway because you have a data= option, and it does names 
+-  use of ~ and + 
+-  can also be used for uncounted data 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions_topic_type_counted <- 
+cheshire_petitions |> 
+  count(topic, petition_type) 
+ 
+# with counted data 
+xtabs(n~topic+petition_type, data=cheshire_petitions_topic_type_counted) 
+ 
+# cf. with uncounted data. 
+# xtabs(~topic+petition_type, data=cheshire_petitions) 
+ 
+
+```
+
+
+
+

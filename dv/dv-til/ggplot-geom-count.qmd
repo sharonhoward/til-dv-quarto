@@ -1,0 +1,44 @@
+---
+title: "ggplot geom_count()"
+author: "Sharon Howard"
+date: "2025-07-15"
+categories: [ggplot, correlation]
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+- a really neat, quick chart for visualising the relationship between two categorical variables in a dataset.
+- works best with small numbers of variables, not too extreme differences
+- [imported from mindseye TILs]
+
+
+```{r}
+library(mindseyedata)
+library(ggplot2)
+```
+
+## Examples
+
+
+```{r}
+coroners |>
+  ggplot(aes(x=verdict, y=gender)) +
+  geom_count()
+```
+
+
+```{r}
+cheshire_petitions |>
+  ggplot(aes(x=topic, y=petition_type)) +
+  geom_count()
+```
+
+
+
+## resources
+
+- [R for Data Science](https://r4ds.hadley.nz/EDA.html#two-categorical-variables) 
+- [ggplot doc for geom_count()](https://ggplot2.tidyverse.org/reference/geom_count.html)

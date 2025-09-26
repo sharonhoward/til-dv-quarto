@@ -1,0 +1,74 @@
+---
+title: "functions rename variables with !! and :="
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [functions, naming things]
+slug: til-functions-rename-var-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  step 1 embracing and name injection [dplyr vignette] 
+-  step 2 reuse new name [SO] 
+-  this is a function to std surnames, adapted from loc xml (kept some stuff commented out for reference...) 
+-  col *doesn't* need to be quoted 
+-  useful SO explanation: 
+-  > Use {{var}} when using the column names directly. 
+-  > I am not sure if "cont_chg_{{ var }}" works, I prefer to use .data pronoun there. 
+-  > To assign column names use !!name := to create new columns. 
+ 
+
+
+## Function
+
+```{r} 
+std_surnames <- function(df, col){ 
+ 
+  val <- deparse(substitute(col)) 
+  col_std <- paste0(val, "_std") 
+   
+  df |> 
+    # lowercase 
+    mutate(!!col_std := str_to_lower({{col}})) |> 
+    # replace space with hyphen 
+    mutate(!!col_std := str_replace_all(.data[[col_std]], " +", "-"))   
+    # remove other punct 
+    #mutate(!!col_std := str_replace_all(.data[[col_std]], "[:punct:]", ""))  |> 
+    # in case it's created any extra spaces anywhere  
+    # mutate(!!col_std := str_replace_all(.data[[col_std]], "  +", " ")) 
+} 
+ 
+
+```
+
+## Example
+
+```{r}
+judges100 |> 
+  select(persname) |> 
+  std_surnames(persname) 
+
+```
+
+
+## Resources
+
+* [https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html ](https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html ) 
+* [https://stackoverflow.com/questions/67142718/embracing-operator-inside-mutate-function](https://stackoverflow.com/questions/67142718/embracing-operator-inside-mutate-function)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/finishing-up/_superseded/narratives-glue_v0-5.Rmd:245:  
+# beyond_notability/bn_wikibase/wrangling/sentences/sentences.Rmd:62:  
+ 
+
+```

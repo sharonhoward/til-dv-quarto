@@ -1,0 +1,164 @@
+---
+title: "Beeswarms"
+date: "2025-08-03"
+categories: 
+  - distribution
+execute: 
+  warning: false
+  message: false
+---
+
+[ggbeeswarm](https://github.com/eclarke/ggbeeswarm) package
+
+see [BN ppa post for a variety of beeswarms](https://beyond-notability.github.io/bn_notes/posts/ppa-2023-12-08/index.html#beeswarms)!
+
+so far I think only used this with at least one numerical variable (eg dates, ages, heights would probably work too); could experiment with categorical though?
+
+using coroners data
+
+```{r}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(glue)
+library(tidyverse)
+
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(ggbeeswarm)
+
+library(mindseyedata)
+
+
+inquests <-
+coroners |>
+  select(rowid, doc_year, doc_month, parish, gender, verdict) |>
+  filter(verdict!="undetermined")
+```
+
+
+i can't remember what cex does exactly, but it seems to narrow things slightly if a lot of points?
+
+can also use corral/corral.width 
+
+```{r}
+inquests |>
+  arrange(doc_year, verdict) |>
+  ggplot(aes(y=doc_year, x=verdict)) +
+  geom_beeswarm(size=0.4, cex = 0.8) +
+  scale_y_reverse()
+```
+
+try different methods
+
+```{r}
+inquests |>
+  arrange(doc_year, verdict) |>
+  ggplot(aes(y=doc_year, x=verdict)) +
+  geom_beeswarm(size=0.5, method = "hex", cex=0.8) +
+  scale_y_reverse()
+```
+
+
+filter male only for a closer look
+
+```{r}
+inquests |>
+  filter(gender=="male") |>
+  arrange(doc_year, verdict) |>
+  ggplot(aes(y=doc_year, x=verdict)) +
+  geom_beeswarm(size=0.5, method = "swarm", cex = 0.9) +
+  scale_y_reverse()
+```
+
+
+filter to one verdict type and use gender as variable
+
+```{r}
+inquests |>
+  filter(verdict=="accidental") |>
+  arrange(doc_year, gender) |>
+  ggplot(aes(y=doc_year, x=gender)) +
+  geom_beeswarm(size=0.6, method = "swarm") +
+  scale_y_reverse()
+```
+
+with faceting. 
+
+divide months into four seasons. don't think this is very illuminating but you get the drift.
+
+```{r}
+inquests |>
+  mutate(season = case_match(
+    doc_month,
+    c("Jan", "Feb", "Dec") ~ "winter",
+    c("Apr", "May", "Mar") ~ "spring",
+    c("Jun", "Jul", "Aug") ~ "summer",
+    c("Sep", "Oct", "Nov") ~ "autumn"
+  )) |>
+  ggplot(aes(y=doc_year, x=verdict, colour=verdict)) +
+  ggbeeswarm::geom_beeswarm(size=0.2,  method = "swarm") + #, cex=0.8
+  scale_y_reverse() +
+  scale_colour_ptol() +
+  facet_wrap(~season) +
+  guides(colour = guide_legend(override.aes = list(size=2))) +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = element_blank()) +
+  labs(y=NULL, x=NULL, colour=NULL)
+```
+
+
+```{r}
+inquests |>
+  mutate(season = case_match(
+    doc_month,
+    c("Jan", "Feb", "Dec") ~ "winter",
+    c("Apr", "May", "Mar") ~ "spring",
+    c("Jun", "Jul", "Aug") ~ "summer",
+    c("Sep", "Oct", "Nov") ~ "autumn"
+  )) |>
+  ggplot(aes(y=doc_year, x=season, colour=season)) +
+  ggbeeswarm::geom_beeswarm(size=0.2,  method = "swarm") + #, cex=0.8
+  scale_y_reverse() +
+  scale_colour_colorblind() +
+  facet_wrap(~verdict) +
+  guides(colour = guide_legend(override.aes = list(size=2))) +
+  theme(legend.position = "bottom") +
+  theme(axis.text.x = element_blank()) +
+  labs(y=NULL, x=NULL, colour=NULL)
+```
+
+
+what if you use a different chart option? the package also has geom_quasirandom (which has a number of method options)
+
+
+
+```{r}
+inquests |>
+  arrange(doc_year, verdict) |>
+  ggplot(aes(y=doc_year, x=verdict)) +
+  geom_quasirandom(size=0.5) +
+  scale_y_reverse()
+```
+
+that's interesting!
+
+```{r}
+inquests |>
+  arrange(doc_year, verdict) |>
+  ggplot(aes(y=doc_year, x=verdict)) +
+  geom_quasirandom(size=0.5, method = "tukey") +
+  scale_y_reverse()
+```
+
+
+
+
+
+
+
+
+
+

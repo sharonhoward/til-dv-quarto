@@ -1,0 +1,85 @@
+---
+title: "change legend ordering in geom_waffle for fill"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [wip, ggplot, legends]
+slug: til-ggplot-waffle-order-legend-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  in scale_fill_* use guide = guide_legend(reverse = TRUE) 
+-  legend order doesn't actually seem to be a problem any more? 
+-  then again I'm not keen on the order inside the waffle. but this doesn't fix that.  
+ 
+
+
+
+
+## Example
+
+```{r}
+library(waffle) 
+library(ggthemes) 
+ 
+ 
+cheshire_petitions |> 
+  count(petition_gender, response) |> 
+  ggplot(aes(fill=response, values=n)) + 
+  geom_waffle(colour="white", make_proportional = TRUE, n_rows = 10) + 
+  coord_equal() + 
+  facet_wrap(~petition_gender) + 
+  theme_minimal() + 
+  theme_enhance_waffle() + 
+  # it does reverse the legend, *without* changing order in waffles. 
+  scale_fill_tableau(guide = guide_legend(reverse = TRUE)) 
+ 
+ 
+ 
+# what happens if you use fct_rev on response_cat ? order in waffles is unchanged but legend is in reverse order 
+# cheshire_petitions |> 
+#   count(petition_gender, response) |> 
+#   mutate(response_cat=fct_rev(response)) |> 
+#   ggplot(aes(fill=response_cat, values=n)) + 
+#   geom_waffle(colour="white", flip = TRUE, make_proportional = TRUE, n_rows = 10) + 
+#   coord_equal() + 
+#   facet_wrap(~petition_gender) + 
+#   theme_minimal() + 
+#   theme_enhance_waffle() + 
+#   scale_fill_tableau() 
+ 
+ 
+# response_cat order in waffles unchanged. legend same order, but colours different! 
+# cheshire_petitions |> 
+#   count(petition_gender, response) |> 
+#   mutate(response_cat = fct_reorder(response, n)) |> 
+#   ggplot(aes(fill=response_cat, values=n)) + 
+#   geom_waffle(colour="white", flip = TRUE, make_proportional = TRUE, n_rows = 10) + 
+#   coord_equal() + 
+#   facet_wrap(~petition_gender) + 
+#   theme_minimal() + 
+#   theme_enhance_waffle() + 
+#   scale_fill_tableau() 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# petitions/petitioners.Rmd:707:  
+# tpop/case_study/tpop_blog/petitioners.Rmd:1417:  
+# tpop/The-Power-of-Petitioning.github.io/petitioners.Rmd:529:  
+# tpop/tpop-github-io_pre_public_data/petitioners.Rmd:757:  
+
+```

@@ -1,0 +1,48 @@
+---
+title: "group using .by more concisely than group_by"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, by]
+slug: til-grouping-dot-by-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  i should use .by more often instead of group_by...! 
+-  much more concise than group_by mutate/summarise ungroup if you only want to do a single action 
+ 
+
+
+
+
+## Example
+
+```{r}
+judges100_appts |> 
+# make a unique judge-appointment ID based on judge_id + row_number 
+  mutate(judge_appt_id = paste(judge_id, row_number(), sep="_"), .by = judge_id) |> 
+  arrange(judge_appt_id) |> 
+  relocate(judge_appt_id) 
+
+```
+
+
+## Resources
+
+* [https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/](https://www.tidyverse.org/blog/2023/02/dplyr-1-1-0-per-operation-grouping/)
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/tests-checks/dp_data_202305.qmd:2049: 
+ 
+
+```

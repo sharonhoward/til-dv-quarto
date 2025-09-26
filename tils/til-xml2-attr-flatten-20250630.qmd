@@ -1,0 +1,50 @@
+---
+title: "extract an attribute out of XML docs and flatten into a vector"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [xml, attributes]
+slug: til-xml2-attr-flatten-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  example needs a folder containing at least two TEI xml files. 
+
+
+
+
+## Example
+
+```{r}
+library(xml2) 
+ 
+tei_list <- list.files(here::here("data/xml/prep_for_txt"), full.names = TRUE) 
+ 
+# don't need options="" in this case because you're only getting attributes. 
+test_xml <-  map(tei_list, read_xml) 
+ 
+# nb this is simple because the root node TEI has xml:id you want. might not always be that easy! 
+test_xml |> 
+   map(~xml_attr(., "id")) |> 
+   unlist() 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# petitions/tpop_other/tpop_tcp_vep_revisit_202505.Rmd:232:  
+
+# using local data
+```

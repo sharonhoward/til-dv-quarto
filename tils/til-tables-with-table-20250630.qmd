@@ -1,0 +1,42 @@
+---
+title: "frequency tables with table() (and add dimnames)"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [frequency tables, naming things]
+slug: til-tables-with-table-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  not sure if there's a way to use this with already counted data. but see xtabs TIL 
+-  you can add names with = or dnn 
+-  see https://www.spsanderson.com/steveondata/posts/2025-07-14/ on use of with() 
+
+
+
+
+## Example
+
+```{r}
+table(type=cheshire_petitions$petition_type, gender=cheshire_petitions$petition_gender) 
+ 
+# table(cheshire_petitions$petition_type, cheshire_petitions$petition_gender, dnn=c("type", "gender")) 
+
+```
+
+
+
+```{r}
+#| include: false
+# obo/obapi/api-play.qmd:250:  
+
+```

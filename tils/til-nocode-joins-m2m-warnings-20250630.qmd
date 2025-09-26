@@ -1,0 +1,38 @@
+---
+title: "dplyr join warnings for many to many matches"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, join]
+slug: til-nocode-joins-m2m-warnings-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  > If multiple matches are expected, set `multiple = "all"` to silence this  warning. 
+-  would be helpful if it told you *which* rows have multiple matches - and the blogpost has it doing that? 
+
+
+
+
+
+
+
+## Resources
+
+* [https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/](https://www.tidyverse.org/blog/2023/01/dplyr-1-1-0-joins/)
+
+```{r}
+#| include: false
+# atb/atb/documentation/eav-beti_elem-att-values-to-share-xlsx_230207.Rmd:239:  
+ 
+
+```

@@ -1,0 +1,132 @@
+---
+title: "Visualising residuals with scatterplots"
+date: "2025-09-25"
+categories: 
+  - correlation
+  - statistics
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+I've seen this type of scatterplot used to visualise residuals; came across [a tutorial for making them](https://drsimonj.svbtle.com/visualising-residuals).
+
+It's also a bit of practice for statistical modelling using `lm()`.
+
+Using [Playfair's Data on Wages and the Price of Wheat](https://friendly.github.io/HistData/reference/Wheat.html) from the HistData package. (lm() might not be the best model for this...)
+
+
+```{r}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(glue)
+library(tidyverse)
+
+library(patchwork)
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(mindseyedata)
+library(HistData)
+
+
+playfair_wheat <-
+Wheat |>
+  clean_names("snake") |>
+  filter(if_all(everything(), ~ !is.na(.x)))
+```
+
+
+## Examples
+
+The data (after dropping a few NAs).
+
+```{r}
+head(playfair_wheat)
+```
+
+What does a simple scatterplot look like?
+
+```{r}
+playfair_wheat |>
+  ggplot(aes(wages, wheat)) +
+  geom_point()
+```
+
+Steps to make the residuals plot:
+
+1. Fit a regression model to predict variable (Y).
+2. Obtain the predicted and residual values associated with each observation on (Y).
+3. Plot the actual and predicted values of (Y) so that they are distinguishable, but connected.
+4. Use the residuals to make an aesthetic adjustment to highlight points which are poorly predicted by the model.
+
+
+I'll treat wheat prices as the response variable (could easily be the other way round with this data).
+
+```{r}
+# lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)
+
+fit <- lm(wheat ~ wages, data = playfair_wheat)  # Fit the model
+
+# find a way to do this in a tidy pipeline...
+playfair_wheat$predicted <- predict(fit)   # Save the predicted values
+playfair_wheat$residuals <- residuals(fit) # Save the residual values
+
+summary(fit) 
+```
+With the predicted/residual values added.
+
+```{r}
+head(playfair_wheat)
+```
+
+The tutorial shows various ways to adjust a scatterplot to highlight the residuals. 
+
+Steps:
+
+1. plot the actual data 
+2. plot the predicted values in a way that makes them distinguishable from the actual values (eg by shape)
+3. connect the actual data points with their corresponding predicted value using geom_segment():
+4. make adjustments: eg 
+  - fade out connection lines with alpha; 
+  - add best fit line with geom_smooth()
+5. final adjustments (to actual or predicted) to highlight the size of the residual. 
+
+At step 4:
+
+```{r}
+playfair_wheat |>
+  # set up with outcome variable on y-axis
+ggplot(aes(x = wages, y = wheat)) +  
+  # (3) connect actual and predicted; (4) use alpha to fade lines
+  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) +  
+  # (1) plot the actual points
+  geom_point() + 
+  # (2) add the predicted values as open circles.
+  geom_point(aes(y = predicted), shape=1) + 
+  # (4) add the regression line
+  geom_smooth(method = "lm", se = FALSE, color = "lightgrey") 
+```
+
+Step 5 examples
+
+- change alpha, colour, size of actual values based on absolute value of residuals
+- change colour according to whether difference is plus or minus and/or by how much.
+
+(the example colours are terrible though, find somethng nicer)
+
+```{r}
+playfair_wheat |>
+ggplot(aes(x = wages, y = wheat)) + 
+  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) + 
+  geom_point(aes(colour=residuals, size=abs(residuals)), show.legend = F) + 
+  geom_point(aes(y = predicted), shape = 1) + 
+  geom_smooth(method = "lm", se = FALSE, color = "lightgrey") + 
+  scale_color_gradient2(low = "blue", mid = "white", high = "red")  
+```
+
+The tutorial also shows how to do faceted versions to compare regressions on different variables if you have more than two. I'll need different data for that!

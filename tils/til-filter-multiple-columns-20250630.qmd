@@ -1,0 +1,55 @@
+---
+title: "filter rows on multiple columns using if_any() or if_all()"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [filter]
+slug: til-filter-multiple-columns-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  can use any sort of tidy-select thing 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+# only get rows that contain NAs somewhere 
+  filter(if_any(everything(), ~is.na(.x))) # 100 
+ 
+cheshire_petitions |> 
+# the opposite - get rid of rows that have any NAs at all 
+  filter(if_all(everything(), ~ !is.na(.x))) # s/b 513 (613-100) 
+ 
+judges100 |> 
+# look in any columns that contain the string "city" (contains() would also work in this case) 
+  filter(if_any(matches("city"), ~str_detect(., "Miami")))  
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/across.html](https://dplyr.tidyverse.org/reference/across.html) 
+* [https://stackoverflow.com/a/66908277/7281022](https://stackoverflow.com/a/66908277/7281022)
+
+```{r}
+#| include: false
+# atb/atb/text/teidytext_230529.Rmd:703:  
+# atb/atb/text/teidytext_230529.Rmd:1031:  
+ 
+
+```

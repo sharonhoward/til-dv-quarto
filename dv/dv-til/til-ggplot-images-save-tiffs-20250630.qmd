@@ -1,0 +1,54 @@
+---
+title: "function using ggsave to make TIFF image with specific properties"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [ggplot, images]
+slug: til-ggplot-images-save-tiffs-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  use in the same way as ggsave, immediately after the ggplot 
+-  this was to make hi quality images for an article 
+-  then added a download link in the text pointing to the saved file, for the article authors 
+-  updated: no longer needs type 
+ 
+
+
+## Function
+
+```{r} 
+ggsave_tif <- function(f, w=10, h=7){ 
+  ggsave( 
+    f, 
+    path = here::here("pub_fig"), # obvsly this folder needs to exist! 
+    device = "tiff", 
+    width = w, 
+    height = h, 
+    units = "in", 
+    dpi = 300, 
+    #type="cairo", 
+    compression="lzw" 
+  ) 
+} 
+
+```
+
+
+
+
+
+```{r}
+#| include: false
+# tattoos/experimental/for_articles/ba_article_1_202110_revisions.Rmd:106:  
+
+```

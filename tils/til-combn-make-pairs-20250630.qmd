@@ -1,0 +1,62 @@
+---
+title: "make unique pairs from a list of values"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations, naming things]
+slug: til-combn-make-pairs-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  > If x is a positive integer, returns all combinations of the elements of seq(x) taken m at a time. 
+-  completely unique pairs - eg you don't get a+b and b+a. if you want that, use expand_grid() TIL 
+-  combn makes a matrix, so then you have to turn it into a tibble.  
+-  as_tibble .name_repair can be used to create column names, nb need to prefix c(a,b, etc) with tilde. 
+-  needs public data if moved to gh.io? 
+
+
+
+
+## Example
+
+```{r}
+agg_variables_csv <- 
+  read_csv(here::here("data/agg_variables.csv"), show_col_types = FALSE) 
+ 
+agg_variables_names <- 
+agg_variables_csv$name 
+ 
+new_col_names <- c("rows", "series") 
+ 
+ 
+combn(agg_variables_names, m=2 ) |>  
+  # transpose the matrix else you get stupidly wide df. 
+  t() |> 
+  as_tibble(.name_repair = ~new_col_names) 
+  #as_tibble(.name_repair = ~c("rows", "series")) # either way works but nb placing of ~ 
+ 
+
+```
+
+
+## Resources
+
+* [https://stackoverflow.com/a/1710387/7281022](https://stackoverflow.com/a/1710387/7281022) 
+* [https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn)
+
+```{r}
+#| include: false
+# obo/obapi/terms.qmd:163:  
+# obo/obapi/terms.qmd:674:  
+ 
+# using local data
+```

@@ -1,0 +1,95 @@
+---
+title: "filter missing values flexibly with na.omit or drop_na"
+author: "Sharon Howard"
+date: "2025-07-21"
+categories: [NAs, filter]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+- sometimes you want to get rid of rows that have *any* missing values 
+- usual caveats would apply about blanket dropping NAs though!
+
+
+## Examples
+
+### filter() limitations
+
+filter and !is.na - simple but only one variable at a time.
+
+```{r}
+judges100 |> 
+  filter(!is.na(name_suffix)) 
+```
+
+can use filter with if_all to remove rows with any NAs, but it's quite fiddly - needs if_all, everything, tilde and !is.na(.x)
+
+```{r}
+judges100 |> 
+  filter(if_all(everything(), ~ !is.na(.x))) 
+```
+
+### na.omit()
+
+much simpler to just na.omit() !
+
+```{r}
+judges100 |>
+  na.omit()
+```
+
+you can also use it like this to filter on a single column, but idk why you'd want to.
+
+```{r}
+judges100[!is.na(judges100$name_suffix), ]
+```
+
+
+### tidyr::drop_na() 
+
+- much easier for a subset of variables
+
+though it's simple for everything too
+
+```{r}
+judges100 |>
+  drop_na()
+```
+
+for a selection, any tidy-select thing should work
+
+(but you don't need c() to select multiple variables)
+
+```{r}
+judges100 |>
+  drop_na(name_suffix, death_date)
+```
+
+```{r}
+judges100 |>
+  drop_na(-name_suffix)
+```
+
+
+```{r}
+judges100 |>
+  drop_na(where(is.numeric))
+```
+
+
+
+## Resources
+
+* [Exclude observations with missing data](https://bookdown.org/rwnahhas/IntroToR/exclude-observations-with-missing-data.html)
+* [RDocumentation](https://www.rdocumentation.org/packages/photobiology/versions/0.13.1/topics/na.omit)
+* [How to Use na.omit in R: A Comprehensive Guide to Handling Missing Values](https://www.spsanderson.com/steveondata/posts/2024-12-16/)

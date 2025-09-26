@@ -1,0 +1,70 @@
+---
+title: "summarise() and across()"
+author: "Sharon Howard"
+date: "2025-08-04"
+categories: [across, summarise, NAs]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+## Notes
+
+- I've been using across() with mutate() since forever but didn't twig I could use it with summarise() as well!
+
+
+## Examples
+
+- count NAs in multiple columns.
+
+bear in mind this won't handle 0s (named_petrs) as NAs.
+
+```{r}
+cheshire_petitions |>
+  summarise(across(everything(), ~sum(is.na(.)) )) |>
+  # result will be very wide; use pivot_longer to make it more readable and sortable.
+  pivot_longer(everything(), names_to = "var", values_to = "n") |>
+  arrange(-n)
+# I'm not sure there should be so many NAs in repository!
+```
+
+
+- multiple columns *and* multiple functions (using list())
+
+```{r}
+# dataset in historydata
+paulist_missions |>
+  # there are some NAs hiding somewhere, get rid. 
+  drop_na(confessions, converts) |>
+  summarise(across(c(duration_days, confessions, converts), 
+                   list(mean = mean, med = median)))
+```
+
+
+
+- and add group_by
+
+```{r}
+paulist_missions |>
+  drop_na(confessions, converts) |>
+  group_by(order) |>
+  summarise(across(c(duration_days, confessions, converts), 
+                   list(mean = mean, med = median))) |>
+  ungroup()
+```
+
+
+
+
+## Resources
+
+- [across doc](https://dplyr.tidyverse.org/reference/across.html)
+- [why I love across](https://willhipson.netlify.app/post/dplyr_across/dplyr_across/)

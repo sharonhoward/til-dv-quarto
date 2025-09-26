@@ -1,0 +1,49 @@
+---
+title: "de-select multiple columns with all_of() or any_of() "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [select]
+slug: til-select-not-all-any-of-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  neater than using minus sign? though less concise. and perhaps more usable inside functions? 
+-  [got this from Kieran Healy, but i'm not sure where] 
+-  > all_of() is for strict selection. If any of the variables in the character vector is missing, an error is thrown. 
+-  > any_of() doesn't check for missing variables. It is especially useful with negative selections, when you would like to make sure a variable is removed. 
+ 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+ select(!all_of(c("petition_gender", "year"))) 
+
+```
+
+
+## Resources
+
+* [https://tidyselect.r-lib.org/reference/all_of.html](https://tidyselect.r-lib.org/reference/all_of.html)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/snippets.Rmd:20:  
+# beyond_notability/bn_wikibase/themes/bn_more_networks.Rmd:326:  
+ 
+
+```

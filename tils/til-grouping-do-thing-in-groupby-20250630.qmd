@@ -1,0 +1,48 @@
+---
+title: "create a new grouping column within group_by  "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group]
+slug: til-grouping-do-thing-in-groupby-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  Q: can you group by (eg) x=="something or other"? 
+-  i think epi handbook is clearer than the dplyr offishul explanation...  
+-  > You can also create *a new grouping column* within the group_by() statement. This is equivalent to calling mutate() before the group_by(). For a quick tabulation this style can be handy, but for more clarity in your code consider creating this column in its own mutate() step and then piping to group_by(). 
+-  so then you can do stuff based on whether a col has some feature or other, if you don't want to make a column to keep. 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  group_by(topic_grp = if_else(topic=="litigation", "litigation", "other")) |> 
+  tally() 
+
+```
+
+
+## Resources
+
+* [https://epirhandbook.com/en/new_pages/grouping.html#new-columns](https://epirhandbook.com/en/new_pages/grouping.html#new-columns)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/bn_excavations_mess.Rmd:4188:  
+ 
+
+```

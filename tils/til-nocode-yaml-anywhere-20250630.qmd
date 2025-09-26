@@ -1,0 +1,42 @@
+---
+title: "yaml doesn't have to be at the start of a rmd document! "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, yaml]
+slug: til-nocode-yaml-anywhere-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  You can use inline R code (see Section 3.1) anywhere in an Rmd document, including the YAML metadata section. This means some YAML metadata can be dynamically generated with inline R code, such as the document title. 
+-  If your title depends on an R variable created later in the document, you may add the title field in a later YAML section,  
+-  The title works in this case because Pandoc can read any number of YAML sections in a document (and merge them). 
+ 
+ 
+ 
+
+
+
+
+
+
+
+## Resources
+
+* [https://bookdown.org/yihui/rmarkdown-cookbook/dynamic-yaml.html](https://bookdown.org/yihui/rmarkdown-cookbook/dynamic-yaml.html)
+
+```{r}
+#| include: false
+# atb/atb/documentation/earlier-experimental-might-still-be-useful/atb_att_values-to-pdf.Rmd:146:  
+ 
+
+```

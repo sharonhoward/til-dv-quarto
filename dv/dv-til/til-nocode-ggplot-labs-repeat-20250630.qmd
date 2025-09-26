@@ -1,0 +1,31 @@
+---
+title: "multiple labs() are allowed in a ggplot"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, ggplot, labels]
+slug: til-nocode-ggplot-labs-repeat-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  you can even replace previously specified labels. might be handy for overriding function defaults? 
+ 
+
+
+```{r}
+#| include: false
+# petitions/petitioners.Rmd:553:  
+# tpop/case_study/tpop_blog/petitioners.Rmd:1183:  
+# tpop/The-Power-of-Petitioning.github.io/petitioners.Rmd:375:  
+# tpop/tpop-github-io_pre_public_data/petitioners.Rmd:585:  
+
+```

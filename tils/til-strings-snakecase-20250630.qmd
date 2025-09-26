@@ -1,0 +1,44 @@
+---
+title: "convert strings between case formats with snakecase package"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [strings, case]
+slug: til-strings-snakecase-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  cf janitor::clean_names for column names 
+-  to use hyphens instead of underscores just use sep_out 
+-  snakecase::to_snake_case("Help Me OutHere", sep_out = "-") 
+
+
+
+
+## Example
+
+```{r}
+judges100_appts |> 
+  mutate(court_name = snakecase::to_snake_case(court_name)) |> 
+  relocate(court_name) 
+
+```
+
+
+
+```{r}
+#| include: false
+# obo/locatinglondon/llwiki_2207.Rmd:124:  
+# obo/obll_2022/llwiki_2206.Rmd:16:  
+# also: i've done a til post for this 
+
+```

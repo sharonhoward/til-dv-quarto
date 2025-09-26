@@ -1,0 +1,82 @@
+---
+title: "anonymous functions"
+author: "Sharon Howard"
+date: "2025-09-06"
+categories: [functions, wip]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+I have been very very rubbish at understanding these. making this as a wip to help me get better
+
+a helpful brief intro in Rodrigues book in [chapter 3](https://b-rodrigues.github.io/fput/fprog.html#basic-anonymous-functions)
+
+- an anonymous function can always be a regular named function - but "sometimes it is faster to simply use an anonymous function as long as it does not hurt clarity".
+
+*cool but useless* post on usefulness and constraints (and suggested alternatives, might follow up later)
+
+> An Anonymous Function (also known as a lambda expression) is a function definition that is not bound to an identifier. That is, it is a function that is created and used, but never assigned to a variable.
+
+Hadley Wickham in *adv-r*
+
+> [In R, functions] aren’t automatically bound to a name... R doesn’t have a special syntax for creating a named function: when you create a function, you use the regular assignment operator to give it a name. If you choose not to give the function a name, you get an anonymous function.
+>You use an anonymous function when it’s not worth the effort to give it a name:
+
+
+Likely to be most useful for v small functions that you won't need to reuse (but if you do it's easy to turn the anonymous function into a named one)
+
+
+## Examples
+
+a list of slightly varying datasets - want to map over them to make simple histograms
+
+RHC heights 
+
+```{r}
+# (need height filter because of an erroneous value lol)
+rhc_heights <-
+rhc |>
+  filter(between(height_inches, 50, 90) & gender %in% c("female", "male"))
+```
+
+a simple histogram with base hist()
+
+```{r}
+hist(rhc_heights$height_inches)
+```
+
+
+```{r}
+# use group_split to make list of DFs
+rhc_gender_heights <-
+rhc |>
+  filter(between(height_inches, 50, 80) & gender %in% c("female", "male")) |>
+  group_split(gender)
+```
+
+
+If you try something like `map(rhc_gender_heights, ~hist(height_inches))` it won't work.
+
+One solution is to use an anonymous function.
+
+```{r}
+map(rhc_gender_heights, (function(x) hist(x$height_inches)))
+```
+
+
+## Resources
+
+- [Rodrigues, chapter 3](https://b-rodrigues.github.io/fput/fprog.html#basic-anonymous-functions)
+- [adv-r](http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions)
+- [cool but useless](https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/)
+- [wikipedia](https://en.wikipedia.org/wiki/Anonymous_function)

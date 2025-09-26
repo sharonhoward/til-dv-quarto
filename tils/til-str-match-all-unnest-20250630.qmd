@@ -1,0 +1,54 @@
+---
+title: "unnest str_match_all with map and as_tibble"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [strings, map]
+slug: til-str-match-all-unnest-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  slightly silly example, couldn't think of anything more sensible :-)  
+-  get definite and indefinite articles 
+-  as_tibble needs .name_repair (= unique/universal) but if you just do it with "unique" you get repeated new names message, which is bad if you have a lot of results!  
+-  but it seems you can suppress the message by using make.names 
+-  i think it's always two cols, if so you can name them manually with ~c("a", "b") 
+
+
+
+
+## Example
+
+```{r}
+divs_txt_csv <- 
+  read_csv(here::here("data/csv/atb_bookrem_divs_text.csv")) 
+ 
+divs_txt_csv |> 
+  select(div_txt) |> 
+  slice(2:15) |> 
+  #mutate(s = str_match_all(div_txt, "\\b(an|a|the)\\b")) |> 
+  mutate(s = str_match_all(div_txt, regex("\\b(God|Lord)\\b", ignore_case = TRUE))) |> 
+  mutate(s = map(s, as_tibble, .name_repair= ~ c("a", "b"))) |>  
+  unnest(s, keep_empty = TRUE) |> 
+  relocate(div_txt, .after = last_col()) 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# petitions/case_study/cheshire_place_names.Rmd:414:  
+
+# using local data
+```

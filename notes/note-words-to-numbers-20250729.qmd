@@ -1,0 +1,221 @@
+---
+title: "function to convert words to numbers"
+author: "Sharon Howard"
+date: "2025-07-29"
+categories: [strings, numbers, functions]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+- function found on RStudio/Posit community forum by @nutterb
+- https://forum.posit.co/t/convert-written-numbers-to-integers/10302/2
+- his comments are the bit where I maybe learned something not just C&Ping a function...
+
+> Consider that numbers repeat themselves cyclically over the the range of 1 to 9, we really only need to know how to translate the text ranging from "one" to "ninety nine". Anything larger is just a matter of adding a scalar to the translation. For example:
+
+- 55 = 50 + 5
+- 155 = (1 * 100) + 50 + 5
+- 1155 = (1 * 1000) + (1 * 100) + 50 + 5
+- 155,155 = (100 + 50 + 5) * 1000 + (100 + 50 + 5)
+
+> The code below seems to behave reasonably well for translating text numbers to their numeric representations and is configured to work up to the quadrilions. By adding magnitudes to magnitude_reference, it could be extended further. But I suspect it will lose precision somewhere along the order of 4.5 quadrillion. 
+
+But don't use the code in the forum post (it doesn't work in a mutate) - use the github version below instead.
+
+> added a fully vectorized version of this to my playground package at https://github.com/nutterb/Bluegrass/blob/devel-main/R/word_to_number.R
+
+What about going the other way?
+
+- [xfun::numbers_to_words](https://search.r-project.org/CRAN/refmans/xfun/html/numbers_to_words.html)
+
+
+## Function
+
+```{r}
+word_to_number <- function(x){
+  # Remove punctuation and 'and'
+  x <- tolower(gsub("([[:punct:]]| and )", " ", x))
+  # separate into distinct words
+  x <- strsplit(x, "\\s+")
+  x <- lapply(X = x,
+              FUN = trimws)
+  
+  coll <- checkmate::makeAssertCollection()
+  
+  # verify that all words are found in the reference vectors.
+  bad_text_in_x <- 
+    vapply(X = x,
+           FUN = function(k) (!all(k %in% names(c(word_to_number_reference, magnitude_reference)))),
+           FUN.VALUE = logical(1))
+  
+  if (any(bad_text_in_x))
+    coll$push("Text found that is not compatible with conversion. Check your spelling?")
+  
+  checkmate::reportAssertions(coll)
+  
+  num <- vapply(X = x,
+                FUN = word_to_number_single,
+                FUN.VALUE = numeric(1))
+
+  if (any(is.na(num)))  
+    warning(sprintf("Unable to translate '%s'", 
+                    paste0(x[is.na(num)], collapse = ', ')))
+  
+  num
+}
+
+# UNEXPORTED --------------------------------------------------------
+
+word_to_number_single <- function(x){
+  # translate words to the numeric reference
+  num <- c(word_to_number_reference, magnitude_reference)[x]
+  
+  # Identify positions with a magnitude indicator
+  magnitude_at <- 
+    which(names(num) %in% 
+            c("quadrillion", "trillion", "billion",
+              "million", "thousand"))
+  
+  # Create an indexing vector for each magnitude class of the number
+  magnitude_index <- 
+    cut(seq_along(num), 
+        breaks = unique(c(0, magnitude_at, length(num))))
+  
+  # Make a list with each magnitude
+  num_component <- 
+    lapply(unique(magnitude_index),
+           FUN = function(i) num[magnitude_index == i])
+  
+  # Transate each component
+  num_component <- 
+    vapply(num_component,
+           FUN = word_to_number_translate_hundred,
+           FUN.VALUE = numeric(1))
+  
+  # Add the components together
+  sum(num_component)
+}
+
+# ROUTINE TO TRANSLATE HUNDREDS
+
+word_to_number_translate_hundred <- function(n){
+  # set a magnitude multiplier for thousands and greater
+  if (tail(names(n), 1) %in% names(magnitude_reference)){
+    magnitude <- tail(n, 1)
+    n <- head(n, -1)
+  } else {
+    magnitude <- 1
+  }
+  
+  # if hundred appears anywhere but the second position or of the
+  # value preceding hundred is greater than 9, handle with care
+  # (for instance, 1200)
+  if ( ("hundred" %in% names(n) && which(names(n) == "hundred") != 2) ||
+       ("hundred" %in% names(n) && n[1] > 1) )
+  {
+    which_hundred <- which(names(n) == "hundred")
+    (sum(n[seq_along(n) < which_hundred]) * 100 + 
+        sum(n[seq_along(n) > which_hundred])) * magnitude
+  } else {
+    op <- rep("+", length(n) - 1)
+    op[names(n)[-1] == "hundred"] <- "*"
+    op <- c(op, "")
+    eval(parse(text = paste(paste(n, op), collapse = " "))) * magnitude
+  }
+}
+
+# CORE REFERENCE NUMBERS
+
+word_to_number_reference <- 
+  c("zero" = 0,
+    "one" = 1,
+    "two" = 2,
+    "three" = 3,
+    "four" = 4,
+    "five" = 5,
+    "six" = 6,
+    "seven" = 7,
+    "eight" = 8,
+    "nine" = 9,
+    "ten" = 10,
+    "eleven" = 11,
+    "twelve" = 12,
+    "thirteen" = 13,
+    "fourteen" = 14,
+    "fifteen" = 15,
+    "sixteen" = 16,
+    "seventeen" = 17,
+    "eighteen" = 18,
+    "nineteen" = 19,
+    "twenty" = 20,
+    "thirty" = 30,
+    "forty" = 40,
+    "fifty" = 50,
+    "sixty" = 60,
+    "seventy" = 70,
+    "eighty" = 80,
+    "ninety" = 90,
+    "hundred" = 100)
+
+# MAGNITUDE REFERENCE NUMBERS
+
+magnitude_reference <- 
+  c("thousand" = 1000,
+    "million" =  1e6,
+    "billion" =  1e9,
+    "trillion" = 1e12,
+    "quadrillion" = 1e15)
+```
+
+
+## Examples
+
+words to numbers
+
+```{r}
+word_to_number("six hundred and fifty-three")
+word_to_number("seventy-four thousand, eight hundred and twenty-nine")
+```
+
+numbers to words
+
+```{r}
+xfun::numbers_to_words(25374, and = TRUE)
+```
+
+in a dataframe with mutate
+
+(I do have data somewhere with words, but let's just make it up for this)
+
+```{r}
+petitions_year_word <-
+cheshire_petitions |>
+  slice_sample(n=10) |>
+  select(year) |>
+  mutate(year_word = xfun::numbers_to_words(year, and = TRUE))
+
+petitions_year_word
+```
+
+
+```{r}
+petitions_year_word |>
+  mutate(year_num = word_to_number(year_word))
+```
+
+
+
+## Resources
+
+- [forum post](https://forum.posit.co/t/convert-written-numbers-to-integers/10302/2)
+- [word_to_number.R](https://github.com/nutterb/Bluegrass/blob/devel-main/R/word_to_number.R)

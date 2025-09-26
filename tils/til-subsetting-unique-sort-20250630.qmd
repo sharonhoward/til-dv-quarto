@@ -1,0 +1,44 @@
+---
+title: "make vector of labels from a df column with [["
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [vectors, subset, labels, naming things]
+slug: til-subsetting-unique-sort-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  see TIL using filenames to make labels 
+
+
+
+
+## Example
+
+```{r}
+unique(cheshire_petitions[["topic"]]) 
+ 
+# can add sort  
+sort(unique(cheshire_petitions[["topic"]])) 
+ 
+# and desc somewhere? hmm then you just get negative numbers. strange. 
+#desc(sort(unique(cheshire_petitions[["topic"]]))) 
+
+```
+
+
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/hospitals-explore-time.qmd:512:  
+
+```

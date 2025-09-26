@@ -1,0 +1,58 @@
+---
+title: "mutate across() with case_when()"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [wip, across]
+slug: til-mutate-across-conditional-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  this is not ideal but gives the idea; should make a better example 
+-  columns can be quite mixed, but needs some coherence. 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  select(petition_id, topic, subtopic, petition_gender) |> 
+  mutate(across(c(subtopic, petition_gender), 
+                ~case_when( 
+                  is.na(.) ~ "no", 
+                  .=="" ~ "no", 
+                  .== 0 ~ "no", 
+                  str_detect(., "unspecified|unknown") ~ "no", 
+                  .default = "yes" 
+                ), 
+                # make new cols instead of replace existing 
+                .names = "has_{.col}" 
+                )) |> 
+  count(has_subtopic, has_petition_gender) 
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/across.html](https://dplyr.tidyverse.org/reference/across.html)
+
+```{r}
+#| include: false
+# small_bills/sb_explore/snippets.Rmd:130:  
+# also: https://gist.github.com/sharonhoward/39f1547a93cab60beebe4e310f3e0ec9 
+ 
+
+```

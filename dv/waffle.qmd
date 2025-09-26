@@ -1,0 +1,283 @@
+---
+title: "Waffle charts"
+date: "2025-08-02"
+categories: 
+  - part-to-whole
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+[Waffle charts](https://r-graph-gallery.com/waffle.html) (aka "square pie charts") represent categorical data via a grid of small squares forming a larger square or rectangle, which resembles a waffle. 
+
+### strengths
+
+- visually pleasing alternative to pie charts or stacked bar charts for showing how parts relate to the whole
+- can be used for either amounts or proportions
+- easier to see/compare smaller amounts or percentages than with a stacked bar
+
+### limitations
+
+- maybe less good for showing fine differences in proportional version (all % are rounded to whole number)
+
+### variations
+
+- "parliament charts" in various shapes
+
+
+## Examples
+
+Using cheshire_petitions in mindseyedata and [Apprenticeship Disputes in the Lord Mayor’s Court of London 1573-1723](https://doi.org/10.5255/UKDA-SN-8490-1)
+
+
+```{r includes}
+#| code-fold: true
+
+library(scales) 
+library(janitor) 
+library(readxl)
+library(glue)
+library(tidyverse)
+
+library(ggthemes)
+theme_set(theme_minimal())  
+
+library(waffle)
+
+library(mindseyedata)
+
+apprentices_xlsx <-
+  read_excel(here::here("data/apprenticeship_disputes.xlsx"), 
+             sheet = "Main index") |>
+  clean_names("snake") 
+
+apprentices <-
+  apprentices_xlsx |>
+  rename(year_binding=x21, year_petition=x27) |>
+  # minor cleaning, some inconsistencies in data
+  mutate(across(
+    c(year_binding, year_petition, result_of_the_proceedings, reason_for_the_petition), 
+                ~str_remove_all(., "x|z"))) |>
+  mutate(across(
+    c(year_binding, year_petition, result_of_the_proceedings, reason_for_the_petition), 
+                ~na_if(., ""))) |>
+  
+  mutate(result_of_the_proceedings = str_to_upper(result_of_the_proceedings)) |>
+  mutate(reason_for_the_petition = case_when(
+    reason_for_the_petition %in% c("e", "p") ~ str_to_upper(reason_for_the_petition),
+    .default = reason_for_the_petition
+  )) |>
+  mutate(across(c(year_binding, year_petition), parse_number))  |>
+  mutate(reason = if_else(str_detect(reason_for_the_petition, "^U"), 
+                          "U", 
+                          reason_for_the_petition )) |>
+  mutate(reason = case_match(
+    reason,
+    "B" ~ "Not bound correctly",
+    "C" ~ "Unreasonable chastisement",
+    "E" ~ "Non-enrollment",
+    "F" ~ "Master a foreigner",
+    "I" ~ "Instruction not provided",
+    "N" ~ "Necessaries not provided",
+    "P" ~ "Expelled from service",
+    "S" ~ "Not in business in the city", 
+    "U" ~ "Bound under the age of 14"
+  ))  |>
+  mutate(result = case_match(
+    result_of_the_proceedings,
+    "A" ~ "agreement reached",
+    "D" ~ "apprentice discharged",
+    "N" ~ "no decision",
+    "W" ~ "jury decides for defendant"
+  )) |>
+  # remove 2 and 3 digit year of binding which are probably errors
+  mutate(year_binding=if_else(year_binding<1500, NA, year_binding)) |>
+  mutate(p_petition = case_when(
+    is.na(year_petition) ~ NA,
+    year_petition<1650 ~ "1569-1649",
+    year_petition<1675 ~ "1650-1674",
+    year_petition<1700 ~ "1675-1699",
+    .default = "1700-1722"
+  )) |>
+  mutate(p_binding = case_when(
+    is.na(year_binding) ~ NA,
+    year_binding<1650 ~ "1573-1649",
+    year_binding<1675 ~ "1650-1674",
+    year_binding<1700 ~ "1675-1699",
+    .default = "1700-1723"
+  )) |>
+  mutate(apprentice_years = if_else(
+    str_detect(number_of_years_of_the_apprenticeship, "[0-9]"), 
+    number_of_years_of_the_apprenticeship,
+    "")) |>
+  mutate(apprentice_years = parse_number(apprentice_years))  |>
+  select(id, number_of_petition, p_binding, p_petition, reason, result, apprentice_years)  
+
+
+cheshire_petitions <-
+  cheshire_petitions |>
+  select(petition_id, year, topic, petition_type, petition_gender, 
+         response, petitioner, reference) |>
+  mutate(petition_type = str_remove(petition_type, " *on behalf")) 
+
+```
+
+
+### waffle package
+
+A popular and easy to use ggplot-based package is [waffle](https://github.com/hrbrmstr/waffle), by Bob Rudis.
+
+For comparison though, let's start with a quick look at two more familiar types of chart that waffle charts are often used to replace, the stacked bar chart and pie chart (which is essentially a bar chart turned into a circle).
+
+There is a difficulty with the apprentices data: one category (`non-enrollment`) is much larger than all the rest put together, which is not an uncommon experience with history data.
+
+```{r}
+apprentices |>
+  count(reason) |>
+  # remove a few very small categories and NAs
+  filter(n>100) |>
+  ggplot(aes("", n, fill=reason)) +
+  geom_col(position = "fill") +
+  scale_fill_ptol() +
+  scale_y_continuous(labels = percent_format()) +
+  labs(fill="complaint", y="% of cases", x=NULL, 
+       title = "Apprentices' complaints")
+```
+
+The pie chart is prettier but has the same problem; adding percentage labels to the pie helps. I'd generally only use pie charts for a smaller number of categories. (Based on [code here](https://r-graph-gallery.com/piechart-ggplot2.html).)
+
+```{r}
+apprentices |>
+  count(reason) |>
+  filter(n>100) |>
+  mutate(prop = round(n / sum(n)*100),1) |>
+  mutate(prop_label = paste0(prop, "%")) |>
+  ggplot(aes(x="", y=prop, fill=reason)) +
+  geom_col(width = 1, color="white") +
+  geom_text(aes(label = prop_label), position = position_stack(vjust=0.5), 
+            color = "white", size=3) +
+  coord_polar("y", start=0) +
+  scale_fill_ptol() +
+  theme_void()  +
+  labs(title="Apprentices' complaints", fill="complaint")  
+```
+
+
+caveat: categories can get broken up over multiple rows, which might be less readable? Very tiny categories (less than 1%) are omitted. 
+
+
+```{r}
+apprentices |>
+  count(reason) |>
+  filter(n>100) |> 
+  ggplot(aes(fill=reason, values=n)) +
+  geom_waffle(colour="white", n_rows = 10, make_proportional = TRUE) +
+  coord_equal() +
+  scale_fill_ptol() +
+  theme_enhance_waffle() +
+  labs(title = "Apprentices' complaints", caption = "1 square=1% of cases", 
+       fill="complaint")
+
+```
+
+a non-proportional waffle chart, with one square per case for the top 6 topics of Cheshire TPOP petitions.
+
+```{r}
+cheshire_petitions  |>
+  count(topic) |>
+  filter(n>25) |> 
+  ggplot(aes(fill=topic, values=n)) +
+  geom_waffle(colour="white", n_rows = 20) +
+  coord_equal() +
+  scale_fill_colorblind() +
+  theme_enhance_waffle() +
+  theme(axis.ticks = element_blank()) +
+  labs(caption = "1 square=1 petition")
+```
+
+
+### add another dimension 
+
+As the waffles are based on {ggplot}, it's straightforward to incorporate faceting (aka small multiples or trellis charts) to add another variable to make comparisons.
+
+Here, the apprentices data is split up into four time periods.
+
+```{r}
+apprentices |>
+  filter(!is.na(p_petition)) |>
+  add_count(reason) |>
+  filter(n>100) |> 
+  count(p_petition, reason, name="nn") |>
+  ggplot(aes(fill=reason, values=nn)) +
+  geom_waffle(colour="white", n_rows = 10, make_proportional = TRUE) +
+  coord_equal() +
+  facet_wrap(~p_petition) +
+  scale_fill_ptol() +
+  theme_enhance_waffle() +
+    theme(axis.ticks = element_blank()) +
+  labs(caption = "1 square=1% of cases")  
+```
+
+Breakdown of Cheshire petitions by topic and petitioner type ("collective" petitions are from groups like "the inhabitants of Runcorn" rather than named individuals). 
+
+```{r}
+cheshire_petitions |>
+  add_count(topic, name="n_topic") |>
+  filter(n_topic>25) |> 
+  count(petition_type, topic, n_topic) |>
+  ggplot(aes(fill=petition_type, values=n)) +
+  geom_waffle(colour="white", n_rows = 10, make_proportional = TRUE) +
+  coord_equal() +
+  facet_wrap(~topic) +
+  scale_fill_colorblind() +
+  theme_enhance_waffle() +
+  theme(axis.ticks = element_blank()) +
+  labs(caption = "1 square=1% of petitions", fill="petitioner\ntype")
+```
+
+
+### parliament charts
+
+a semi-circular version of a waffle chart used to visualise party representation in legislatures. R package for making these (and other shapes), [ggparliament](https://zmeers.github.io/ggparliament/).
+
+This one's the Australian House of Representatives in 2010. 
+
+```{r}
+library(ggparliament)
+aus_rep <-
+election_data |> 
+  filter(country=="Australia" & house=="Representatives" & year==2010)
+
+aus_house <- parliament_data(election_data = aus_rep,
+                                       type = "horseshoe",
+                                       parl_rows = 4,
+                                       party_seats = aus_rep$seats)
+
+aus_house |>
+    ggplot(aes(x = x, y = y, colour = party_short)) +
+    geom_parliament_seats() + 
+    theme_ggparliament() +
+    labs(colour = NULL, 
+         title = "Australian Parliament 2010") +
+    scale_colour_manual(values = aus_house$colour, 
+                        limits = aus_house$party_short) 
+```
+
+
+```{r}
+#| include: false
+
+# colorspace::swatchplot(aus_rep$colour, cvd=TRUE)
+```
+
+
+## Resources
+
+- [R Graph Gallery](https://r-graph-gallery.com/waffle.html)
+
+R packages:
+
+- B Rudis (2023). *waffle*. R package version 1.0.2. https://github.com/hrbrmstr/waffle
+- R Hickman, Z Meers, T Leeper (2024). *ggparliament: Parliament Plots*. R package version 3.1.6. https://github.com/zmeers/ggparliament

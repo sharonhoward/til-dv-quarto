@@ -1,0 +1,69 @@
+---
+title: "frequency tables - multidimensional (base R)"
+author: "Sharon Howard"
+date: "2025-09-25"
+categories: [frequency tables]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+
+petitions <-
+  cheshire_petitions |>
+  mutate(petition_type = str_remove(petition_type, " *on behalf"))
+```
+
+
+## Notes
+
+- see also vcd::structable which does essentially the same thing as ftable (but a base R method may be useful if you don't want vcd)
+
+
+## Examples
+
+if you give `table()` three variables it will make a list of 2-way tables, breaking down by the last variable.
+
+```{r}
+(petitions_table <- 
+   table(petitions$topic, petitions$petition_gender, petitions$petition_type) )
+```
+
+`xtabs` does the same thing
+
+```{r}
+xtabs(~ topic + petition_gender + petition_type, data=petitions) 
+```
+
+
+
+`ftable()` makes a flattened 3-way table
+
+you can do it in one step (play around with order of variables...)
+
+```{r}
+ftable(petition_type ~ topic + petition_gender, petitions) 
+```
+
+or you can give it your list of 2-way tables and it will flatten them into a 3-way. (vcd::structable will do that as well)
+
+```{r}
+ftable(petitions_table)
+```
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,46 @@
+---
+title: "uncount - the opposite of count"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, count, wip]
+slug: til-grouping-uncount-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  this is a silly example but I can't think of a better way to do one right now! 
+-  maybe get s&b data? 
+ 
+
+
+
+
+## Example
+
+```{r}
+judges100_appts_counted <- 
+judges100_appts |> 
+  count(court_name)  
+ 
+judges100_appts_counted |> 
+  uncount(n) 
+
+```
+
+
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/starting/skin-bone-exploration.qmd:583:  
+# also: posted a mindseye til for this  
+
+```

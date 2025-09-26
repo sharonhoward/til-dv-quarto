@@ -1,0 +1,49 @@
+---
+title: "flatten a list of DFs into a single DF with bind_rows"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [files, lists, flatten]
+slug: til-lists-bind-rows-flatten-list-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  example needs a folder with 2+ CSV files in it, with the same structure 
+
+
+
+
+## Example
+
+```{r}
+# get list of files 
+div_csvs_files <- 
+  list.files(here::here("data/csv/"), pattern = "*.csv", full.names = T) 
+ 
+# use map() to read_csv a folder of CSV files (makes a list) 
+divs_list <- 
+  map(div_csvs_files, read_csv)  
+ 
+# nb this can be a bit slow. check if there are more efficient methods? 
+bind_rows(divs_list) 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb_writing/atb-books-divs-outlines-notes.Rmd:143:  
+
+# this uses local data
+```

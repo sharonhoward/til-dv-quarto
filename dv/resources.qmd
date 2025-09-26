@@ -1,0 +1,36 @@
+---
+title: "DV Resources"
+---
+
+(unsystematic; adding links as and when I find something or remember)
+
+## General inspiration
+
+- [From Data To Viz](https://www.data-to-viz.com/)
+- [R Graph Gallery](https://r-graph-gallery.com/)
+- [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
+- [Vizdex](https://vizdexproject.com/) - list of dataviz blogs
+- [Dataviz resources](https://nrennie.rbind.io/data-viz-resources/)
+
+## Charts I really want to make
+
+- [Braided ribbons](https://nsgrantham.github.io/ggbraid/)
+
+
+
+## Packages and tools
+
+- ggplot
+	- [docs](https://ggplot2.tidyverse.org/)
+	- [extensions](https://exts.ggplot2.tidyverse.org/gallery/)
+
+- [waffle](https://github.com/hrbrmstr/waffle)
+- [ggbeeswarm](https://github.com/eclarke/ggbeeswarm)
+
+(not tried yet)
+
+- [ggcorrheatmap](https://leod123.github.io/ggcorrheatmap/)
+- [ggplayfair](https://github.com/DerekStevens99/ggplayfair)
+
+
+## Other stuff

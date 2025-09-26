@@ -1,0 +1,45 @@
+---
+title: "fill in missing values with complete()"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations, NAs]
+slug: til-complete-counted-combinations-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  it's not exactly missing data, but sometimes you want something like this for ggplot 
+-  fill=list(n=0) will fill missings with 0 instead of NA 
+
+
+
+
+## Example
+
+```{r}
+judges100_appts |> 
+  count(judge_id, court_type) |> 
+  complete(judge_id, court_type, fill=list(n=0)) 
+
+```
+
+
+## Resources
+
+* [https://tidyr.tidyverse.org/reference/complete.html](https://tidyr.tidyverse.org/reference/complete.html)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/themes/ppa/bn_work_queries.Rmd:161:  
+ 
+
+```

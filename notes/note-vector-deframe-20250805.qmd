@@ -1,0 +1,108 @@
+---
+title: "make paired vectors from a DF with deframe()"
+author: "Sharon Howard"
+date: "2025-08-05"
+categories: [vectors, labels]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+library(scales)
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+- i've spent too much time making paired vectors by hand [ ie: c("key1"="value1", "key2"="value2") ]
+- often for use in ggplot scale_colour_manual but other uses eg in str_replace_all
+- an easier way to do this with two columns in a dataframe using [tibble::deframe()](https://tibble.tidyverse.org/reference/enframe.html)
+- then it's easy to use the data you're actually working with to create the vector
+
+## Examples
+
+add a vector of hand-picked colours  
+
+```{r}
+cheshire_petitions <-
+cheshire_petitions |>
+  mutate(petition_type = str_remove(petition_type, " *on behalf")) 
+
+type_colours <-
+  cheshire_petitions |>
+  count(petition_type) |>
+  # make sure you have things in the order you want
+  # and numbers of things need to match!
+  mutate(colour = c("#EE8866", "#EEDD88", "#99DDFF")) |>
+  # for deframe need two columns, `name` (key), `value` (value)
+  select(name=petition_type, value=colour) |>
+  deframe()
+
+type_colours
+```
+
+
+```{r}
+cheshire_petitions |>
+  count(petition_gender, petition_type) |>
+  filter(!is.na(petition_gender)) |>
+  ggplot(aes(petition_gender, n,  fill=petition_type)) +
+  geom_col() +
+  scale_fill_manual(values = type_colours)
+```
+
+You don't have to make the vector of colours by hand either; could use something like scales::colour_ramp()
+
+```{r}
+ramp <- scales::colour_ramp(c("orange",  "blue"))
+colours5 <- ramp(seq(0, 1, length = 5))
+
+colours5
+```
+
+```{r}
+verdict_colours <-
+coroners |>
+  count(verdict) |>
+  mutate(colours = colours5) |>
+  select(name=verdict, value=colours) |>
+  deframe()
+
+verdict_colours
+```
+
+
+```{r}
+coroners |>
+  count(verdict, gender) |>
+  ggplot(aes(gender, n, fill = verdict)) +
+  geom_col(position = "fill") +
+  scale_fill_manual(values = verdict_colours)
+```
+
+
+a slightly silly example for str_replace_all() - replace a string with an abbreviated version
+
+```{r}
+verdict_abbs <-
+coroners |>
+  count(verdict) |>
+  mutate(v = c("acc", "hom", "nat", "sui", "und")) |>
+  select(name=verdict, value=v) |>
+  deframe()
+
+verdict_abbs
+```
+
+
+```{r}
+coroners |>
+  mutate(abb = str_replace_all(verdict, verdict_abbs)) |>
+  count(abb)
+```
+
+

@@ -1,0 +1,81 @@
+---
+title: "move legend into an empty ggplot facet to save space"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [ggplot, faceted, legends]
+slug: til-ggplot-legend-empty-facet-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  adjust position in guides() and theme() 
+-  original TIL and SO is superseded to some extent 
+-  > Please use the `legend.position.inside` argument of `theme()` instead. 
+-  > legend.position.inside  A numeric vector of length two setting the placement of legends that have the "inside" position. 
+
+
+
+
+## Example
+
+```{r}
+library(waffle) 
+ 
+cheshire_petitions_responses <- 
+  cheshire_petitions |> 
+  filter(response!="uncertain") |> 
+  # slightly simplified responses - merge non-full grants and merge written rejections 
+  mutate(response_ss = case_when( 
+    response=="grant_cond" ~ "grant_part", 
+    response %in% c("nothing", "absent") ~ "rejected", 
+    TRUE ~ response 
+  )) |> 
+  # order of values  
+  mutate(response_ss = fct_relevel(response_ss, "granted", "grant_part", "referred", "rejected", "no_response")) |>  
+  mutate(period = case_when( 
+    year<1600 ~ "1500s", 
+    year<1630 ~ "1608-1628", 
+    year<1650 ~ "1638-1658", 
+    year<1700 ~ "1668-1698", 
+    year>1700 ~ "1700s" 
+  ))  
+ 
+cheshire_petitions_responses |> 
+  count(period, response_ss) |> 
+    ggplot(aes(fill=response_ss, values=n)) + 
+  geom_waffle(colour="white", n_rows = 10, make_proportional = TRUE) +  
+  # can't remember how to fix ordering in waffle... was it something to do with reordering when you make the df, not when doing the ggplot???? not sure. 
+  coord_equal() + 
+  facet_wrap(~period) + 
+    scale_fill_manual(values = c('#2166ac',  '#92c5de',  '#d1e5f0', '#f4a582','#d6604d')) + 
+  theme_minimal() + 
+  theme_enhance_waffle() + 
+  theme(legend.position.inside = c(0.9,0.3) ) + # pretty close, will do for now. 
+  # theme(legend.position = c(1,0), legend.justification = c(1,0)) + # correct place but warning 
+  guides(fill = guide_legend(title.position = "top" , position = "inside")) + 
+  labs(title="Changing responses to Cheshire QS petitions 1573-1798", fill="response", caption="1 square=1% of petitions")  
+ 
+
+```
+
+
+## Resources
+
+* [https://stackoverflow.com/questions/54438495/shift-legend-into-empty-facets-of-a-faceted-plot-in-ggplot2](https://stackoverflow.com/questions/54438495/shift-legend-into-empty-facets-of-a-faceted-plot-in-ggplot2) 
+* [https://www.tidyverse.org/blog/2024/02/ggplot2-3-5-0-legends/#placement](https://www.tidyverse.org/blog/2024/02/ggplot2-3-5-0-legends/#placement)
+
+```{r}
+#| include: false
+# tpop/case_study/4-responses.Rmd:389:  
+ 
+
+```

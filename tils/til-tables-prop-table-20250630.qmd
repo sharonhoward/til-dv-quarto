@@ -1,0 +1,39 @@
+---
+title: "frequency tables made proportional with proportions()"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [frequency tables]
+slug: til-tables-prop-table-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  proportion of what? looks like topic, ie the first var that goes in table. check when using it 
+-  but also! can use cor() to make a correlation matrix (-1 to +1) which might be better? 
+
+
+
+
+## Example
+
+```{r}
+proportions(table(topic=cheshire_petitions$topic, type=cheshire_petitions$petition_type)) 
+
+```
+
+
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/hospitals-explore-time.qmd:632: 
+
+```

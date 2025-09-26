@@ -1,0 +1,70 @@
+---
+title: "slice min/max with row_number, to replace top_n"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, slice]
+slug: til-grouping-dedup-topn-rownumber-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  previously done this with top_n; handy for quick deduping or a single row per group 
+-  but... 
+-  > top_n() has been superseded in favour of slice_min()/slice_max(). While it will not be deprecated in the near future, retirement means that we will only perform critical bug fixes, so we recommend moving to the newer alternatives. 
+ 
+-  what are the differences? 
+-  slice_min/max has to have explicit n=  
+-  different order? 
+ 
+-  original with top_n; 1 for the first row, -1 for the last 
+-  cheshire_petitions |> 
+-    group_by(topic) |> 
+-    top_n(1, row_number()) |> 
+-    ungroup() 
+-  cheshire_petitions |> 
+-    group_by(topic) |> 
+-    top_n(-1, row_number()) |> 
+-    ungroup() 
+ 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+# this = top_n(-1, rn) BUT sorts in reverse(?) order (I think, NAs confound things a bit) 
+  group_by(topic) |> 
+  slice_min(n=1, row_number()) |> 
+  ungroup() 
+ 
+cheshire_petitions |> 
+# this = top_n(1, rn), but reverse order. 
+  group_by(topic) |> 
+  slice_max(n=1, row_number()) |> 
+  ungroup() 
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/slice.html](https://dplyr.tidyverse.org/reference/slice.html)
+
+```{r}
+#| include: false
+# skin-and-bone/skin-bone-exploration/tests-checks/pl-database-data.qmd:451:  
+ 
+
+```

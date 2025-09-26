@@ -1,0 +1,44 @@
+---
+title: "reverse numerical scales in ggplot"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [ggplot, scales]
+slug: til-ggplot-scale-reverse-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  does the same thing as mutate fct_rev before ggplot, but with a numerical col 
+-  (could you also use it with a chr column? no, has to be num.) 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  count(topic) |> 
+  ggplot(aes(n, topic)) + 
+  geom_col() + 
+  scale_x_reverse() # yes very ridiculous 
+  #scale_y_reverse() # chr data: nope. 
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb_writing/biblical/bibl_stats_explore_20250403.Rmd:1047:  
+
+```

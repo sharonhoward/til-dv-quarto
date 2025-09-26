@@ -1,0 +1,61 @@
+---
+title: "add names to a list with a vector of filenames"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [vectors, labels, naming things, map]
+slug: til-lists-names-using-vectors-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  you don't actually need to have the vector of names from the same source 
+-  but it ensures they will match up... 
+
+
+
+
+## Example
+
+```{r}
+# get list of files 
+div_csvs_files <- list.files(here::here("data/csv/"), pattern = "*.csv", full.names = T) 
+ 
+# use map() to read_csv a folder of CSV files (makes a list) 
+divs_list <- 
+  map(div_csvs_files, read_csv)  
+ 
+# csv names include file extension which needs to be removed.  
+div_filenames <-  
+div_csvs_files |> 
+  # remove .csv (will be a list) 
+  map(tools::file_path_sans_ext) |> 
+  # get just the filename 
+  map(basename) |> 
+  # flatten list to a vector 
+  unlist() 
+ 
+ 
+names(divs_list) <- div_filenames 
+ 
+
+```
+
+
+
+```{r}
+#| include: false
+# mindseye/preparation/early-modern/early-modern-book-history-datasets.qmd:683:  
+# obo/obapi/terms.qmd:764:  
+
+
+# using local data
+```

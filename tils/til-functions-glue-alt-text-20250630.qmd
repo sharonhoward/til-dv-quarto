@@ -1,0 +1,54 @@
+---
+title: "function to make alt text for dataviz using glue() "
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [strings, glue, accessibility]
+slug: til-functions-glue-alt-text-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  formula "chart type of type of data where reason for including chart" 
+-  what was the source for this? bluesky/twitter? is it a quote? looks like one 
+-  > Playing around with @AmyCesal boiler plate example for writing alt text, but adapted to a #rstats function."chart type of type of data where reason for including chart" along with the data source. 
+-  but how is this added to output ??? 
+
+
+## Function
+
+```{r} 
+write_alt_text <- function( 
+  chart_type,  
+  type_of_data,  
+  reason,  
+  source 
+){ 
+  glue::glue( 
+    "{chart_type} of {type_of_data} where {reason}. \n\nData source from {source}" 
+    ) 
+} 
+
+```
+
+
+
+
+## Resources
+
+* [https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81](https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81)
+
+```{r}
+#| include: false
+# r_reference/dataviz/accessibility.Rmd:18:  
+ 
+
+```

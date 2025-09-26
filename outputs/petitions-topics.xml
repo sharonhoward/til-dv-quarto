@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list_elements>
+  <test_element id="1197">
+    <topic>alehouse</topic>
+    <year>1618</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1365">
+    <topic>charitable brief</topic>
+    <year>1648</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1121">
+    <topic>cottage</topic>
+    <year>1590</year>
+    <type>multiple</type>
+    <test/>
+  </test_element>
+  <test_element id="1711">
+    <topic>dissenting worship</topic>
+    <year>1758</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1236">
+    <topic>employment</topic>
+    <year>1628</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1714">
+    <topic>imprisoned debtors</topic>
+    <year>1778</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1116">
+    <topic>litigation</topic>
+    <year>1573</year>
+    <type>collective</type>
+    <test/>
+  </test_element>
+  <test_element id="1156">
+    <topic>military relief</topic>
+    <year>1608</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1123">
+    <topic>officeholding</topic>
+    <year>1592</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1131">
+    <topic>other</topic>
+    <year>1595</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1152">
+    <topic>paternity</topic>
+    <year>1608</year>
+    <type>collective</type>
+    <test/>
+  </test_element>
+  <test_element id="1129">
+    <topic>poor relief</topic>
+    <year>1594</year>
+    <type>single</type>
+    <test/>
+  </test_element>
+  <test_element id="1140">
+    <topic>rates</topic>
+    <year>1599</year>
+    <type>collective</type>
+    <test/>
+  </test_element>
+</list_elements>

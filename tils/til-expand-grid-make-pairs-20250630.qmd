@@ -1,0 +1,55 @@
+---
+title: "create a tibble from all combinations of inputs with expand_grid"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [combinations]
+slug: til-expand-grid-make-pairs-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  like complete() but for vectors 
+-  creates identical pairs (a+a) - filter out if unwanted  
+-  also repeated pairs (a+b and b+a). if you don't want that, use combn() TIL 
+
+
+
+
+## Example
+
+```{r}
+agg_variables_csv <- 
+  read_csv(here::here("data/agg_variables.csv"), show_col_types = FALSE) 
+ 
+agg_variables_names <- 
+agg_variables_csv$name 
+ 
+ 
+expand_grid(rows=agg_variables_names, series=agg_variables_names) |> 
+   # filter out a+a 
+   filter(rows != series) 
+ 
+
+```
+
+
+## Resources
+
+* [https://tidyr.tidyverse.org/reference/expand_grid.html](https://tidyr.tidyverse.org/reference/expand_grid.html)
+
+```{r}
+#| include: false
+# obo/obapi/terms.qmd:668:  
+# also: i've done a mindseye til post on this. 
+ 
+
+```

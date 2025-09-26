@@ -1,0 +1,52 @@
+---
+title: "filter rows on multiple columns with (x) instead of tilde"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [filter, wip]
+slug: til-filter-if-any-all-x-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  is the tilde syntax (cf using (x)) a purrr thing? find out more 
+-  \(x) seems to do the same thing as ~ but NB have to remove . from the .x as well. 
+-  this is an "anonymous function", isn't it? 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  filter(if_any(everything(), \(x) is.na(x))) # 100 
+ 
+# the opposite - get rid of rows that have any NAs at all 
+cheshire_petitions |> 
+  filter(if_all(everything(), \(x) !is.na(x))) # s/b 513 (613-100) 
+
+```
+
+
+## Resources
+
+* [https://dplyr.tidyverse.org/reference/across.html](https://dplyr.tidyverse.org/reference/across.html) 
+* [https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/](https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/)
+
+```{r}
+#| include: false
+# beyond_notability/bn_wikibase/snippets.Rmd:25:  
+# beyond_notability/bn_wikibase/themes/bn_more_networks.Rmd:331:  
+ 
+
+```

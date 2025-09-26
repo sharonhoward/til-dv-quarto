@@ -1,0 +1,52 @@
+---
+title: "pdf options"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [nocode, export, pdf]
+slug: til-nocode-export-pdf-options-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  NB making nice PDFs will drive you round the bend 
+-  NB that {tinytex} was installed to handle latex dependencies (might need reinstalling) 
+ 
+-  pdf options in yaml header 
+-  under pdf_document: 
+-    df_print: not sure if this is doing anything much for this stuff since you're using tables... 
+-    latex_engine: important to specify this as xelatex or lualatex (idk what diffs) to have a lot of the other options, esp font stuff 
+ 
+-  top level options: 
+-  mainfont: can use any system font; use quotes if more than one word 
+-  monofont: if you need it 
+-  linestretch: increases line spacing but *not* padding inside tables 
+-  documentclass: (eg) scrreprt  need to find out more about these 
+-  geometry: several page settings - paper size, orientation, margins 
+-    margin=xxcm for all margins; to set them separately: left=xx, right=xx, top=xx, bottom=xx 
+ 
+-  getting more advanced... header-includes and \usepackage - tinytex should hopefully handle anything not already installed. 
+-  header-includes: 
+-     - \usepackage[default]{sourcesanspro} 
+ 
+
+
+
+
+
+
+
+
+```{r}
+#| include: false
+# atb/atb/documentation/earlier-experimental-might-still-be-useful/more-tables.Rmd:25:  
+
+```

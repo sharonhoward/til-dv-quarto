@@ -1,0 +1,78 @@
+---
+title: "make numbers more readable with scales::number()"
+author: "Sharon Howard"
+date: "2025-09-01"
+categories: [numbers]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+library(scales)
+```
+
+## Notes
+
+The thing I learned: the scales `number()` function can be used outside ggplot!
+
+- [see this post by Cara Thompson](https://www.cararthompson.com/posts/2024-01-30-formatting-numbers-in-r/)
+
+why? sometimes precision isn't everything.
+
+> in creating visualisations where the main focus is summary statistics and comparisons between groups rather than on precision down to the closest 0.01, sometimes printing 1234567890 as “1,234.6M” is the most helpful thing to do for the end user.
+
+Note. in the online scales package docs it's not documented; in R docs it's described as
+
+> a low-level helper that powers many of the labelling functions. You should generally not need to call it directly unless you are creating your own labelling function.
+
+
+## Examples
+
+from Thompson post: abbreviating a long number using cut_long_scale (which is also not documented...)
+
+```{r}
+number(12345, scale_cut = scales::cut_long_scale())
+```
+
+
+negative number
+
+```{r}
+number(-12345, accuracy = 0.1, scale_cut = scales::cut_long_scale())
+```
+
+a really really really long number
+
+```{r}
+scales::number(
+  1234567890,
+  accuracy = 0.1,
+  drop0trailing = TRUE,
+  big.mark = ",",
+  scale_cut = scales::cut_long_scale()
+)
+```
+
+with mutate in a dataframe
+
+```{r}
+# accuracy: 0.01 for 2 decimal places, 0.1 for one, etc.
+sarna |>
+  filter(value > 1000000) |>
+  head(10) |>
+  mutate(value_commas = number(value, big.mark = ","),
+         value_abbr = number(value, accuracy = 0.01, scale_cut = cut_long_scale()))
+```
+
+
+There are probably lots more possibilities...
+
+
+## Resources
+
+- [package docs](https://scales.r-lib.org/)

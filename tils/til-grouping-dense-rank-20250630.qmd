@@ -1,0 +1,47 @@
+---
+title: "make numerical within-group IDs with dense_rank"
+author: "Sharon Howard"
+date: "2025-06-30"
+categories: [group, IDs]
+slug: til-grouping-dense-rank-20250630
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+-  NB not a real "ranking" of anything. looks like alphabetical order of the variable and can't be changed. so probably couldn't use it if (say) you wanted ids ordered by a count. 
+ 
+
+
+
+
+## Example
+
+```{r}
+cheshire_petitions |> 
+  select(petition_id, topic, response) |> 
+  # in_grp_id is *only* a unique id within the group (topic in this case) 
+  group_by(topic) |> 
+  #arrange(n_response, .by_group = T) |> # this doesn't seem to make any difference 
+  mutate(in_grp_id = dense_rank(response), n_topic=n()) |> 
+  ungroup() |> 
+  count(topic, response, in_grp_id, n_topic)  
+   
+
+```
+
+
+
+```{r}
+#| include: false
+# atb/atb_writing/biblical/bibl_stats_explore_20250403.Rmd:622:  
+
+```
