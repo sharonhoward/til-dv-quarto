@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Sharon Howard">
+<meta name="dcterms.date" content="2025-09-27">
 
-<title>For Dataviz Inspiration – TIL</title>
+<title>spreadsheets – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,29 +22,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./favicon.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-434a87f1a65cf5564e22d224e5738d6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-434a87f1a65cf5564e22d224e5738d6d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -70,95 +105,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-dv-table .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-dv-table'] = new List('listing-dv-table', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-dv-til-table .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-dv-til-table'] = new List('listing-dv-til-table', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../styles.css">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -168,7 +117,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">TIL</span>
     </a>
   </div>
@@ -179,11 +128,11 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./tils.html"> 
+    <a class="nav-link" href="../tils.html"> 
 <span class="menu-text">Today I Learned Something</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./dv.html" aria-current="page"> 
+    <a class="nav-link" href="../dv.html"> 
 <span class="menu-text">For Dataviz Inspiration</span></a>
   </li>  
 </ul>
@@ -194,24 +143,55 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(18)</span></div><div class="category" data-category="YWNjZXNzaWJpbGl0eQ==">accessibility <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y2hhbmdlJTIwb3ZlciUyMHRpbWU=">change over time <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29ycmVsYXRpb24=">correlation <span class="quarto-category-count">(4)</span></div><div class="category" data-category="ZGlzdHJpYnV0aW9u">distribution <span class="quarto-category-count">(2)</span></div><div class="category" data-category="ZmFjZXRlZA==">faceted <span class="quarto-category-count">(3)</span></div><div class="category" data-category="Z2dwbG90">ggplot <span class="quarto-category-count">(9)</span></div><div class="category" data-category="aW1hZ2Vz">images <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bGFiZWxz">labels <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bGVnZW5kcw==">legends <span class="quarto-category-count">(2)</span></div><div class="category" data-category="bm9jb2Rl">nocode <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cGFydC10by13aG9sZQ==">part-to-whole <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cmFua2luZw==">ranking <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cmVzb3VyY2Vz">resources <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2NhbGVz">scales <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c3RhdGlzdGljcw==">statistics <span class="quarto-category-count">(1)</span></div><div class="category" data-category="d2lw">wip <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#includes" id="toc-includes" class="nav-link active" data-scroll-target="#includes">Includes</a></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
+  <ul class="collapse">
+  <li><a href="#read-in-multiple-sheets-in-an-xlsx-selectively" id="toc-read-in-multiple-sheets-in-an-xlsx-selectively" class="nav-link" data-scroll-target="#read-in-multiple-sheets-in-an-xlsx-selectively">read in multiple sheets in an xlsx, selectively</a></li>
+  <li><a href="#same-for-ods-spreadsheets" id="toc-same-for-ods-spreadsheets" class="nav-link" data-scroll-target="#same-for-ods-spreadsheets">same for ODS spreadsheets</a></li>
+  <li><a href="#write-several-dfs-to-a-single-xlsx-as-separate-tabs" id="toc-write-several-dfs-to-a-single-xlsx-as-separate-tabs" class="nav-link" data-scroll-target="#write-several-dfs-to-a-single-xlsx-as-separate-tabs">write several DFs to a single xlsx as separate tabs</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">For Dataviz Inspiration</h1>
-</div>
+<h1 class="title">spreadsheets</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">readxl</div>
+    <div class="quarto-category">import</div>
+    <div class="quarto-category">wip</div>
+  </div>
+  </div>
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sharon Howard </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">27 September 2025</p>
+    </div>
+  </div>
   
     
   </div>
@@ -221,236 +201,91 @@ window.Quarto = {
 </header>
 
 
-<section id="how-to-charts" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-charts">how-to charts</h2>
-<div id="listing-dv-table" class="quarto-listing quarto-listing-container-table">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-
-<th>
-Title
-</th>
-
-<th>
-Categories
-</th>
-
-</tr>
-</thead>
-<tbody class="list">
-
-<tr data-index="0" data-categories="ZGlzdHJpYnV0aW9u" data-listing-date-sort="1754175600000" data-listing-file-modified-sort="1754226258895" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="416" data-listing-title-sort="Beeswarms" data-listing-filename-sort="beeswarm.qmd">
-<td>
-<a href="./dv/beeswarm.html" class="title listing-title">Beeswarms</a>
-</td>
-<td>
-<span class="listing-categories">distribution</span>
-</td>
-
-</tr>
-
-<tr data-index="1" data-categories="YWNjZXNzaWJpbGl0eSUyQ3Jlc291cmNlcw==" data-listing-date-sort="1754089200000" data-listing-file-modified-sort="1754141990013" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="441" data-listing-title-sort="Colour Notes" data-listing-filename-sort="colour-notes.qmd">
-<td>
-<a href="./dv/colour-notes.html" class="title listing-title">Colour Notes</a>
-</td>
-<td>
-<span class="listing-categories">accessibility, resources</span>
-</td>
-
-</tr>
-
-<tr data-index="2" data-listing-file-modified-sort="1758900470381" data-listing-reading-time-sort="1" data-listing-word-count-sort="52" data-listing-title-sort="DV Resources" data-listing-filename-sort="resources.qmd">
-<td>
-<a href="./dv/resources.html" class="title listing-title">DV Resources</a>
-</td>
-<td>
-<span class="listing-categories">&nbsp;</span>
-</td>
-
-</tr>
-
-<tr data-index="3" data-categories="Y29ycmVsYXRpb24=" data-listing-date-sort="1757631600000" data-listing-file-modified-sort="1757841094723" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="697" data-listing-title-sort="Heatmaps" data-listing-filename-sort="heatmaps.qmd">
-<td>
-<a href="./dv/heatmaps.html" class="title listing-title">Heatmaps</a>
-</td>
-<td>
-<span class="listing-categories">correlation</span>
-</td>
-
-</tr>
-
-<tr data-index="4" data-categories="ZGlzdHJpYnV0aW9u" data-listing-date-sort="1754175600000" data-listing-file-modified-sort="1754231842913" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="750" data-listing-title-sort="Ridgeline plots" data-listing-filename-sort="ridgeline.qmd">
-<td>
-<a href="./dv/ridgeline.html" class="title listing-title">Ridgeline plots</a>
-</td>
-<td>
-<span class="listing-categories">distribution</span>
-</td>
-
-</tr>
-
-<tr data-index="5" data-categories="cmFua2luZyUyQ2NvcnJlbGF0aW9u" data-listing-date-sort="1754089200000" data-listing-file-modified-sort="1754149512108" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1036" data-listing-title-sort="Slopegraphs" data-listing-filename-sort="slopegraph.qmd">
-<td>
-<a href="./dv/slopegraph.html" class="title listing-title">Slopegraphs</a>
-</td>
-<td>
-<span class="listing-categories">ranking, correlation</span>
-</td>
-
-</tr>
-
-<tr data-index="6" data-categories="Y2hhbmdlJTIwb3ZlciUyMHRpbWUlMkNmYWNldGVk" data-listing-date-sort="1754089200000" data-listing-file-modified-sort="1758902337541" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1695" data-listing-title-sort="Sparklines" data-listing-filename-sort="sparklines.qmd">
-<td>
-<a href="./dv/sparklines.html" class="title listing-title">Sparklines</a>
-</td>
-<td>
-<span class="listing-categories">change over time, faceted</span>
-</td>
-
-</tr>
-
-<tr data-index="7" data-categories="Y29ycmVsYXRpb24lMkNzdGF0aXN0aWNz" data-listing-date-sort="1758754800000" data-listing-file-modified-sort="1758966100538" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="497" data-listing-title-sort="Visualising residuals with scatterplots" data-listing-filename-sort="residuals-scatterplots.qmd">
-<td>
-<a href="./dv/residuals-scatterplots.html" class="title listing-title">Visualising residuals with scatterplots</a>
-</td>
-<td>
-<span class="listing-categories">correlation, statistics</span>
-</td>
-
-</tr>
-
-<tr data-index="8" data-categories="cGFydC10by13aG9sZQ==" data-listing-date-sort="1754089200000" data-listing-file-modified-sort="1758905690441" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1408" data-listing-title-sort="Waffle charts" data-listing-filename-sort="waffle.qmd">
-<td>
-<a href="./dv/waffle.html" class="title listing-title">Waffle charts</a>
-</td>
-<td>
-<span class="listing-categories">part-to-whole</span>
-</td>
-
-</tr>
-
-</tbody>
-</table>
-<div class="listing-no-matching d-none">No matching items</div>
+<section id="includes" class="level2">
+<h2 class="anchored" data-anchor-id="includes">Includes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'R/shared.R'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="ggplot-tils" class="level2">
-<h2 class="anchored" data-anchor-id="ggplot-tils">ggplot TILs</h2>
-<div id="listing-dv-til-table" class="quarto-listing quarto-listing-container-table">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-
-<th>
-Title
-</th>
-
-<th>
-Categories
-</th>
-
-</tr>
-</thead>
-<tbody class="list">
-
-<tr data-index="0" data-categories="d2lwJTJDZ2dwbG90JTJDbGVnZW5kcw==" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1758900900389" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="280" data-listing-title-sort="change legend ordering in geom_waffle for fill" data-listing-filename-sort="til-ggplot-waffle-order-legend-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-ggplot-waffle-order-legend-20250630.html" class="title listing-title">change legend ordering in geom_waffle for fill</a>
-</td>
-<td>
-<span class="listing-categories">wip, ggplot, legends</span>
-</td>
-
-</tr>
-
-<tr data-index="1" data-categories="Z2dwbG90JTJDaW1hZ2Vz" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1758900510177" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="137" data-listing-title-sort="function using ggsave to make TIFF image with specific properties" data-listing-filename-sort="til-ggplot-images-save-tiffs-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-ggplot-images-save-tiffs-20250630.html" class="title listing-title">function using ggsave to make TIFF image with specific properties</a>
-</td>
-<td>
-<span class="listing-categories">ggplot, images</span>
-</td>
-
-</tr>
-
-<tr data-index="2" data-categories="Z2dwbG90JTJDY29ycmVsYXRpb24=" data-listing-date-sort="1752534000000" data-listing-file-modified-sort="1758898456641" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="57" data-listing-title-sort="ggplot geom_count()" data-listing-filename-sort="ggplot-geom-count.qmd">
-<td>
-<a href="./dv/dv-til/ggplot-geom-count.html" class="title listing-title">ggplot geom_count()</a>
-</td>
-<td>
-<span class="listing-categories">ggplot, correlation</span>
-</td>
-
-</tr>
-
-<tr data-index="3" data-categories="Z2dwbG90JTJDZmFjZXRlZCUyQ2xlZ2VuZHM=" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1758900525666" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="328" data-listing-title-sort="move legend into an empty ggplot facet to save space" data-listing-filename-sort="til-ggplot-legend-empty-facet-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-ggplot-legend-empty-facet-20250630.html" class="title listing-title">move legend into an empty ggplot facet to save space</a>
-</td>
-<td>
-<span class="listing-categories">ggplot, faceted, legends</span>
-</td>
-
-</tr>
-
-<tr data-index="4" data-categories="bm9jb2RlJTJDZ2dwbG90JTJDbGFiZWxz" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1758900931327" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="33" data-listing-title-sort="multiple labs() are allowed in a ggplot" data-listing-filename-sort="til-nocode-ggplot-labs-repeat-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-nocode-ggplot-labs-repeat-20250630.html" class="title listing-title">multiple labs() are allowed in a ggplot</a>
-</td>
-<td>
-<span class="listing-categories">nocode, ggplot, labels</span>
-</td>
-
-</tr>
-
-<tr data-index="5" data-categories="Z2dwbG90JTJDc2NhbGVz" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1753775912072" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="227" data-listing-title-sort="multiple scales in a ggplot with ggnewscale" data-listing-filename-sort="til-ggplot-multiple-scales-ggnewscale-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html" class="title listing-title">multiple scales in a ggplot with ggnewscale</a>
-</td>
-<td>
-<span class="listing-categories">ggplot, scales</span>
-</td>
-
-</tr>
-
-<tr data-index="6" data-categories="c2NhbGVzJTJDZ2dwbG90" data-listing-date-sort="1757372400000" data-listing-file-modified-sort="1758903176279" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="199" data-listing-title-sort="pretty() breaks" data-listing-filename-sort="pretty-breaks.qmd">
-<td>
-<a href="./dv/dv-til/pretty-breaks.html" class="title listing-title">pretty() breaks</a>
-</td>
-<td>
-<span class="listing-categories">scales, ggplot</span>
-</td>
-
-</tr>
-
-<tr data-index="7" data-categories="ZmFjZXRlZCUyQ2dncGxvdA==" data-listing-date-sort="1754089200000" data-listing-file-modified-sort="1758903275980" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="327" data-listing-title-sort="reordering faceted charts" data-listing-filename-sort="reorder-within.qmd">
-<td>
-<a href="./dv/dv-til/reorder-within.html" class="title listing-title">reordering faceted charts</a>
-</td>
-<td>
-<span class="listing-categories">faceted, ggplot</span>
-</td>
-
-</tr>
-
-<tr data-index="8" data-categories="Z2dwbG90JTJDc2NhbGVz" data-listing-date-sort="1751238000000" data-listing-file-modified-sort="1753775912072" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="69" data-listing-title-sort="reverse numerical scales in ggplot" data-listing-filename-sort="til-ggplot-scale-reverse-20250630.qmd">
-<td>
-<a href="./dv/dv-til/til-ggplot-scale-reverse-20250630.html" class="title listing-title">reverse numerical scales in ggplot</a>
-</td>
-<td>
-<span class="listing-categories">ggplot, scales</span>
-</td>
-
-</tr>
-
-</tbody>
-</table>
-<div class="listing-no-matching d-none">No matching items</div>
+<section id="notes" class="level2">
+<h2 class="anchored" data-anchor-id="notes">Notes</h2>
+<p>I’ve accumulated many bits of code for working with spreadsheets (mainly Excel; sometimes ODS), and can never remember how to use them. So this is a page to bring them together.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#library(readxl) # loaded in shared</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(writexl)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readODS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>https://readxl.tidyverse.org/articles/articles/readxl-workflows.html</p>
+<section id="read-in-multiple-sheets-in-an-xlsx-selectively" class="level3">
+<h3 class="anchored" data-anchor-id="read-in-multiple-sheets-in-an-xlsx-selectively">read in multiple sheets in an xlsx, selectively</h3>
+<p>there are two functions to this</p>
+<ol type="1">
+<li>get a list of sheets in a spreadsheet (and name them)</li>
+<li>read in selected sheets one at a time from the list using sheets$sheetname</li>
+</ol>
+<p>nb:</p>
+<ul>
+<li>I’ve added guess to the second function because read_excel’s default is hardly ever generous enough to deal with the weirdness of historical spreadsheets</li>
+<li>janitor::clean_names() is used for much the same reason. The names of sheets and columns in sheets are frequently hideous.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>read_all_sheets <span class="ot">&lt;-</span> <span class="cf">function</span>(path){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  path <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">excel_sheets</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_names</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_names</span>(<span class="st">"snake"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>read_a_sheet <span class="ot">&lt;-</span> <span class="cf">function</span>(sheet, path, <span class="at">guess=</span><span class="dv">1000</span>) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  path <span class="sc">|&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_excel</span>(<span class="at">sheet =</span> sheet, <span class="at">guess_max =</span> guess) <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_names</span>(<span class="at">case=</span><span class="st">"snake"</span>) </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>apprentices_path <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/apprenticeship_disputes.xlsx"</span>) </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this will give a bunch of "New names" messages if not suppressed</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>apprentices_sheets <span class="ot">&lt;-</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  apprentices_path <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_all_sheets</span>() <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(read_a_sheet, <span class="at">path=</span>apprentices_path, <span class="at">guess=</span><span class="dv">10000</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>apprentices_main_index <span class="ot">&lt;-</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  apprentices_sheets<span class="sc">$</span>main_index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Occasionally there might be a lot of sheets that you want to get out of a spreadsheet, so the individual sheet$name method would get tedious.</p>
+<p>The function <code>list2env()</code> can be used to put <em>all of</em> the sheets from the list as separate DFs into your R environment, but use that function very carefully (eg if any of the sheet names are the same as existing objects it’ll overwrite them without any warning).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## list2env(apprentices_sheets, envir = .GlobalEnv)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="same-for-ods-spreadsheets" class="level3">
+<h3 class="anchored" data-anchor-id="same-for-ods-spreadsheets">same for ODS spreadsheets</h3>
+<p>TODO: this should work but I need to get an .ods file to test it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>read_ods_sheets <span class="ot">&lt;-</span> <span class="cf">function</span>(path){</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  path <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ods_sheets</span>() <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set_names</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>read_ods_sheet <span class="ot">&lt;-</span> <span class="cf">function</span>(sheet, path) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  path <span class="sc">|&gt;</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">read_ods</span>(<span class="at">sheet =</span> sheet) <span class="sc">|&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">clean_names</span>(<span class="at">case=</span><span class="st">"snake"</span>) </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="write-several-dfs-to-a-single-xlsx-as-separate-tabs" class="level3">
+<h3 class="anchored" data-anchor-id="write-several-dfs-to-a-single-xlsx-as-separate-tabs">write several DFs to a single xlsx as separate tabs</h3>
+<p>TODO.</p>
 
 
-
+</section>
 </section>
 
 </main> <!-- /main -->

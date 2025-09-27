@@ -252,39 +252,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p>I’ll treat wheat prices as the response variable (could easily be the other way round with this data).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(wheat <span class="sc">~</span> wages, <span class="at">data =</span> playfair_wheat)  <span class="co"># Fit the model</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>fit_wheat <span class="ot">&lt;-</span> <span class="fu">lm</span>(wheat <span class="sc">~</span> wages, <span class="at">data =</span> playfair_wheat)  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># find a way to do this in a tidy pipeline...</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>playfair_wheat<span class="sc">$</span>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(fit)   <span class="co"># Save the predicted values</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>playfair_wheat<span class="sc">$</span>residuals <span class="ot">&lt;-</span> <span class="fu">residuals</span>(fit) <span class="co"># Save the residual values</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fit_wheat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
 lm(formula = wheat ~ wages, data = playfair_wheat)
 
-Residuals:
-    Min      1Q  Median      3Q     Max 
--18.163  -8.895  -2.351   7.369  35.176 
-
 Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  28.5047     3.2587   8.747 1.67e-11 ***
-wages         1.1773     0.2384   4.939 9.92e-06 ***
----
-Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-
-Residual standard error: 12.24 on 48 degrees of freedom
-Multiple R-squared:  0.337, Adjusted R-squared:  0.3231 
-F-statistic: 24.39 on 1 and 48 DF,  p-value: 9.922e-06</code></pre>
+(Intercept)        wages  
+     28.505        1.177  </code></pre>
 </div>
 </div>
-<p>With the predicted/residual values added.</p>
+<p>add predicted and residuals to the original data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(playfair_wheat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>wheat_fitted <span class="ot">&lt;-</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>playfair_wheat <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">predicted =</span> <span class="fu">predict</span>(fit_wheat), <span class="at">residuals =</span> <span class="fu">residuals</span>(fit_wheat))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wheat_fitted)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  year wheat wages predicted residuals
 1 1565  41.0  5.00  34.39133  6.608674
@@ -295,24 +284,23 @@ F-statistic: 24.39 on 1 and 48 DF,  p-value: 9.922e-06</code></pre>
 6 1590  47.0  5.25  34.68566 12.314343</code></pre>
 </div>
 </div>
-<p>The tutorial shows various ways to adjust a scatterplot to highlight the residuals.</p>
-<p>Steps:</p>
+<p>Making and adjusting the scatterplot to highlight the residuals:</p>
 <ol type="1">
 <li>plot the actual data</li>
-<li>plot the predicted values in a way that makes them distinguishable from the actual values (eg by shape)</li>
-<li>connect the actual data points with their corresponding predicted value using geom_segment():</li>
-<li>make adjustments: eg</li>
+<li>plot the predicted values so they’re distinguishable from the actual values</li>
+<li>connect the actual data points with their corresponding predicted value</li>
+<li>aesthetic adjustments, eg</li>
 </ol>
 <ul>
-<li>fade out connection lines with alpha;</li>
+<li>fade out connection lines with alpha</li>
 <li>add best fit line with geom_smooth()</li>
 </ul>
 <ol start="5" type="1">
-<li>final adjustments (to actual or predicted) to highlight the size of the residual.</li>
+<li>final adjustments to highlight the size of the residual.</li>
 </ol>
-<p>At step 4:</p>
+<p>An example at step 4:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>playfair_wheat <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>wheat_fitted <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># set up with outcome variable on y-axis</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> wages, <span class="at">y =</span> wheat)) <span class="sc">+</span>  </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># (3) connect actual and predicted; (4) use alpha to fade lines</span></span>
@@ -331,14 +319,14 @@ F-statistic: 24.39 on 1 and 48 DF,  p-value: 9.922e-06</code></pre>
 </div>
 </div>
 </div>
-<p>Step 5 examples</p>
+<p>Step 5 options include</p>
 <ul>
 <li>change alpha, colour, size of actual values based on absolute value of residuals</li>
 <li>change colour according to whether difference is plus or minus and/or by how much.</li>
 </ul>
-<p>(the example colours are terrible though, find somethng nicer)</p>
+<p>(the example colours are terrible though)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>playfair_wheat <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>wheat_fitted <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> wages, <span class="at">y =</span> wheat)) <span class="sc">+</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> wages, <span class="at">yend =</span> predicted), <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">+</span> </span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour=</span>residuals, <span class="at">size=</span><span class="fu">abs</span>(residuals)), <span class="at">show.legend =</span> F) <span class="sc">+</span> </span>
@@ -353,7 +341,21 @@ F-statistic: 24.39 on 1 and 48 DF,  p-value: 9.922e-06</code></pre>
 </div>
 </div>
 </div>
-<p>The tutorial also shows how to do faceted versions to compare regressions on different variables if you have more than two. I’ll need different data for that!</p>
+<p>The tutorial also shows how to do faceted versions to compare regressions on multiple variables if you have more than two. I’ll need different data for that!</p>
+<p>NB that geom_smooth doesn’t think lm is actually the optimal model for this data…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>wheat_fitted <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(wages, wheat)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">se=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="residuals-scatterplots_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
 </section>

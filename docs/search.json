@@ -1075,7 +1075,7 @@
     "href": "dv/residuals-scatterplots.html#examples",
     "title": "Visualising residuals with scatterplots",
     "section": "Examples",
-    "text": "Examples\nThe data (after dropping a few NAs).\n\nhead(playfair_wheat)\n\n  year wheat wages\n1 1565  41.0  5.00\n2 1570  45.0  5.05\n3 1575  42.0  5.08\n4 1580  49.0  5.12\n5 1585  41.5  5.15\n6 1590  47.0  5.25\n\n\nWhat does a simple scatterplot look like?\n\nplayfair_wheat |&gt;\n  ggplot(aes(wages, wheat)) +\n  geom_point()\n\n\n\n\n\n\n\n\nSteps to make the residuals plot:\n\nFit a regression model to predict variable (Y).\nObtain the predicted and residual values associated with each observation on (Y).\nPlot the actual and predicted values of (Y) so that they are distinguishable, but connected.\nUse the residuals to make an aesthetic adjustment to highlight points which are poorly predicted by the model.\n\nI’ll treat wheat prices as the response variable (could easily be the other way round with this data).\n\n# lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)\n\nfit &lt;- lm(wheat ~ wages, data = playfair_wheat)  # Fit the model\n\n# find a way to do this in a tidy pipeline...\nplayfair_wheat$predicted &lt;- predict(fit)   # Save the predicted values\nplayfair_wheat$residuals &lt;- residuals(fit) # Save the residual values\n\nsummary(fit) \n\n\nCall:\nlm(formula = wheat ~ wages, data = playfair_wheat)\n\nResiduals:\n    Min      1Q  Median      3Q     Max \n-18.163  -8.895  -2.351   7.369  35.176 \n\nCoefficients:\n            Estimate Std. Error t value Pr(&gt;|t|)    \n(Intercept)  28.5047     3.2587   8.747 1.67e-11 ***\nwages         1.1773     0.2384   4.939 9.92e-06 ***\n---\nSignif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\n\nResidual standard error: 12.24 on 48 degrees of freedom\nMultiple R-squared:  0.337, Adjusted R-squared:  0.3231 \nF-statistic: 24.39 on 1 and 48 DF,  p-value: 9.922e-06\n\n\nWith the predicted/residual values added.\n\nhead(playfair_wheat)\n\n  year wheat wages predicted residuals\n1 1565  41.0  5.00  34.39133  6.608674\n2 1570  45.0  5.05  34.45019 10.549808\n3 1575  42.0  5.08  34.48551  7.514488\n4 1580  49.0  5.12  34.53260 14.467395\n5 1585  41.5  5.15  34.56792  6.932075\n6 1590  47.0  5.25  34.68566 12.314343\n\n\nThe tutorial shows various ways to adjust a scatterplot to highlight the residuals.\nSteps:\n\nplot the actual data\nplot the predicted values in a way that makes them distinguishable from the actual values (eg by shape)\nconnect the actual data points with their corresponding predicted value using geom_segment():\nmake adjustments: eg\n\n\nfade out connection lines with alpha;\nadd best fit line with geom_smooth()\n\n\nfinal adjustments (to actual or predicted) to highlight the size of the residual.\n\nAt step 4:\n\nplayfair_wheat |&gt;\n  # set up with outcome variable on y-axis\nggplot(aes(x = wages, y = wheat)) +  \n  # (3) connect actual and predicted; (4) use alpha to fade lines\n  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) +  \n  # (1) plot the actual points\n  geom_point() + \n  # (2) add the predicted values as open circles.\n  geom_point(aes(y = predicted), shape=1) + \n  # (4) add the regression line\n  geom_smooth(method = \"lm\", se = FALSE, color = \"lightgrey\") \n\n\n\n\n\n\n\n\nStep 5 examples\n\nchange alpha, colour, size of actual values based on absolute value of residuals\nchange colour according to whether difference is plus or minus and/or by how much.\n\n(the example colours are terrible though, find somethng nicer)\n\nplayfair_wheat |&gt;\nggplot(aes(x = wages, y = wheat)) + \n  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) + \n  geom_point(aes(colour=residuals, size=abs(residuals)), show.legend = F) + \n  geom_point(aes(y = predicted), shape = 1) + \n  geom_smooth(method = \"lm\", se = FALSE, color = \"lightgrey\") + \n  scale_color_gradient2(low = \"blue\", mid = \"white\", high = \"red\")  \n\n\n\n\n\n\n\n\nThe tutorial also shows how to do faceted versions to compare regressions on different variables if you have more than two. I’ll need different data for that!"
+    "text": "Examples\nThe data (after dropping a few NAs).\n\nhead(playfair_wheat)\n\n  year wheat wages\n1 1565  41.0  5.00\n2 1570  45.0  5.05\n3 1575  42.0  5.08\n4 1580  49.0  5.12\n5 1585  41.5  5.15\n6 1590  47.0  5.25\n\n\nWhat does a simple scatterplot look like?\n\nplayfair_wheat |&gt;\n  ggplot(aes(wages, wheat)) +\n  geom_point()\n\n\n\n\n\n\n\n\nSteps to make the residuals plot:\n\nFit a regression model to predict variable (Y).\nObtain the predicted and residual values associated with each observation on (Y).\nPlot the actual and predicted values of (Y) so that they are distinguishable, but connected.\nUse the residuals to make an aesthetic adjustment to highlight points which are poorly predicted by the model.\n\nI’ll treat wheat prices as the response variable (could easily be the other way round with this data).\n\n# Fit the model\nfit_wheat &lt;- lm(wheat ~ wages, data = playfair_wheat)  \n# lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)\n\nfit_wheat\n\n\nCall:\nlm(formula = wheat ~ wages, data = playfair_wheat)\n\nCoefficients:\n(Intercept)        wages  \n     28.505        1.177  \n\n\nadd predicted and residuals to the original data\n\nwheat_fitted &lt;-\nplayfair_wheat |&gt;\n  mutate(predicted = predict(fit_wheat), residuals = residuals(fit_wheat))\n\nhead(wheat_fitted)\n\n  year wheat wages predicted residuals\n1 1565  41.0  5.00  34.39133  6.608674\n2 1570  45.0  5.05  34.45019 10.549808\n3 1575  42.0  5.08  34.48551  7.514488\n4 1580  49.0  5.12  34.53260 14.467395\n5 1585  41.5  5.15  34.56792  6.932075\n6 1590  47.0  5.25  34.68566 12.314343\n\n\nMaking and adjusting the scatterplot to highlight the residuals:\n\nplot the actual data\nplot the predicted values so they’re distinguishable from the actual values\nconnect the actual data points with their corresponding predicted value\naesthetic adjustments, eg\n\n\nfade out connection lines with alpha\nadd best fit line with geom_smooth()\n\n\nfinal adjustments to highlight the size of the residual.\n\nAn example at step 4:\n\nwheat_fitted |&gt;\n  # set up with outcome variable on y-axis\nggplot(aes(x = wages, y = wheat)) +  \n  # (3) connect actual and predicted; (4) use alpha to fade lines\n  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) +  \n  # (1) plot the actual points\n  geom_point() + \n  # (2) add the predicted values as open circles.\n  geom_point(aes(y = predicted), shape=1) + \n  # (4) add the regression line\n  geom_smooth(method = \"lm\", se = FALSE, color = \"lightgrey\") \n\n\n\n\n\n\n\n\nStep 5 options include\n\nchange alpha, colour, size of actual values based on absolute value of residuals\nchange colour according to whether difference is plus or minus and/or by how much.\n\n(the example colours are terrible though)\n\nwheat_fitted |&gt;\nggplot(aes(x = wages, y = wheat)) + \n  geom_segment(aes(xend = wages, yend = predicted), alpha = .2) + \n  geom_point(aes(colour=residuals, size=abs(residuals)), show.legend = F) + \n  geom_point(aes(y = predicted), shape = 1) + \n  geom_smooth(method = \"lm\", se = FALSE, color = \"lightgrey\") + \n  scale_color_gradient2(low = \"blue\", mid = \"white\", high = \"red\")  \n\n\n\n\n\n\n\n\nThe tutorial also shows how to do faceted versions to compare regressions on multiple variables if you have more than two. I’ll need different data for that!\nNB that geom_smooth doesn’t think lm is actually the optimal model for this data…\n\nwheat_fitted |&gt;\n  ggplot(aes(wages, wheat)) +\n  geom_point() +\n  geom_smooth(se=FALSE)"
   },
   {
     "objectID": "notes/note-words-to-numbers-20250729.html",
@@ -1120,109 +1120,67 @@
     "text": "Resources\n\nforum post\nword_to_number.R"
   },
   {
-    "objectID": "notes/note-frequency-tables-baser-20250925.html",
-    "href": "notes/note-frequency-tables-baser-20250925.html",
-    "title": "frequency tables - multidimensional (base R)",
-    "section": "",
-    "text": "source(here::here('R/shared.R'))\n\npetitions &lt;-\n  cheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\"))"
-  },
-  {
-    "objectID": "notes/note-frequency-tables-baser-20250925.html#includes",
-    "href": "notes/note-frequency-tables-baser-20250925.html#includes",
-    "title": "frequency tables - multidimensional (base R)",
-    "section": "",
-    "text": "source(here::here('R/shared.R'))\n\npetitions &lt;-\n  cheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\"))"
-  },
-  {
-    "objectID": "notes/note-frequency-tables-baser-20250925.html#notes",
-    "href": "notes/note-frequency-tables-baser-20250925.html#notes",
-    "title": "frequency tables - multidimensional (base R)",
-    "section": "Notes",
-    "text": "Notes\n\nsee also vcd::structable which does essentially the same thing as ftable (but a base R method may be useful if you don’t want vcd)"
-  },
-  {
-    "objectID": "notes/note-frequency-tables-baser-20250925.html#examples",
-    "href": "notes/note-frequency-tables-baser-20250925.html#examples",
-    "title": "frequency tables - multidimensional (base R)",
-    "section": "Examples",
-    "text": "Examples\nif you give table() three variables it will make a list of 2-way tables, breaking down by the last variable.\n\n(petitions_table &lt;- \n   table(petitions$topic, petitions$petition_gender, petitions$petition_type) )\n\n, ,  = collective\n\n                    \n                      f fm  m\n  alehouse            0  0  1\n  charitable brief    0  0  1\n  cottage             1  0  1\n  dissenting worship  0  0  0\n  employment          0  0  0\n  imprisoned debtors  0  0  0\n  litigation          3  0  2\n  military relief     0  0  2\n  officeholding       0  0  0\n  other               0  0  0\n  paternity           0  0  0\n  poor relief         0  0  1\n  rates               0  0  0\n\n, ,  = multiple\n\n                    \n                      f fm  m\n  alehouse            0  0  0\n  charitable brief    1  1  0\n  cottage             1  7  3\n  dissenting worship  0  0  3\n  employment          0  0  1\n  imprisoned debtors  0  0  0\n  litigation          1 13 15\n  military relief     0  0  0\n  officeholding       0  0  4\n  other               0  0  1\n  paternity           0  2  2\n  poor relief         0  4  1\n  rates               0  0 13\n\n, ,  = single\n\n                    \n                      f fm  m\n  alehouse            2  0 11\n  charitable brief    0  0  9\n  cottage            17  0 60\n  dissenting worship  0  0  2\n  employment          6  0  8\n  imprisoned debtors  0  0  1\n  litigation         31  0 97\n  military relief     7  0 21\n  officeholding       0  0 12\n  other               4  0  8\n  paternity          36  0 20\n  poor relief        20  0 34\n  rates               2  0 20\n\n\nxtabs does the same thing\n\nxtabs(~ topic + petition_gender + petition_type, data=petitions) \n\n, , petition_type = collective\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            0  0  1\n  charitable brief    0  0  1\n  cottage             1  0  1\n  dissenting worship  0  0  0\n  employment          0  0  0\n  imprisoned debtors  0  0  0\n  litigation          3  0  2\n  military relief     0  0  2\n  officeholding       0  0  0\n  other               0  0  0\n  paternity           0  0  0\n  poor relief         0  0  1\n  rates               0  0  0\n\n, , petition_type = multiple\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            0  0  0\n  charitable brief    1  1  0\n  cottage             1  7  3\n  dissenting worship  0  0  3\n  employment          0  0  1\n  imprisoned debtors  0  0  0\n  litigation          1 13 15\n  military relief     0  0  0\n  officeholding       0  0  4\n  other               0  0  1\n  paternity           0  2  2\n  poor relief         0  4  1\n  rates               0  0 13\n\n, , petition_type = single\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            2  0 11\n  charitable brief    0  0  9\n  cottage            17  0 60\n  dissenting worship  0  0  2\n  employment          6  0  8\n  imprisoned debtors  0  0  1\n  litigation         31  0 97\n  military relief     7  0 21\n  officeholding       0  0 12\n  other               4  0  8\n  paternity          36  0 20\n  poor relief        20  0 34\n  rates               2  0 20\n\n\nftable() makes a flattened 3-way table\nyou can do it in one step (play around with order of variables…)\n\nftable(petition_type ~ topic + petition_gender, petitions) \n\n                                   petition_type collective multiple single\ntopic              petition_gender                                         \nalehouse           f                                      0        0      2\n                   fm                                     0        0      0\n                   m                                      1        0     11\ncharitable brief   f                                      0        1      0\n                   fm                                     0        1      0\n                   m                                      1        0      9\ncottage            f                                      1        1     17\n                   fm                                     0        7      0\n                   m                                      1        3     60\ndissenting worship f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        3      2\nemployment         f                                      0        0      6\n                   fm                                     0        0      0\n                   m                                      0        1      8\nimprisoned debtors f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        0      1\nlitigation         f                                      3        1     31\n                   fm                                     0       13      0\n                   m                                      2       15     97\nmilitary relief    f                                      0        0      7\n                   fm                                     0        0      0\n                   m                                      2        0     21\nofficeholding      f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        4     12\nother              f                                      0        0      4\n                   fm                                     0        0      0\n                   m                                      0        1      8\npaternity          f                                      0        0     36\n                   fm                                     0        2      0\n                   m                                      0        2     20\npoor relief        f                                      0        0     20\n                   fm                                     0        4      0\n                   m                                      1        1     34\nrates              f                                      0        0      2\n                   fm                                     0        0      0\n                   m                                      0       13     20\n\n\nor you can give it your list of 2-way tables and it will flatten them into a 3-way. (vcd::structable will do that as well)\n\nftable(petitions_table)\n\n                       collective multiple single\n                                                 \nalehouse           f            0        0      2\n                   fm           0        0      0\n                   m            1        0     11\ncharitable brief   f            0        1      0\n                   fm           0        1      0\n                   m            1        0      9\ncottage            f            1        1     17\n                   fm           0        7      0\n                   m            1        3     60\ndissenting worship f            0        0      0\n                   fm           0        0      0\n                   m            0        3      2\nemployment         f            0        0      6\n                   fm           0        0      0\n                   m            0        1      8\nimprisoned debtors f            0        0      0\n                   fm           0        0      0\n                   m            0        0      1\nlitigation         f            3        1     31\n                   fm           0       13      0\n                   m            2       15     97\nmilitary relief    f            0        0      7\n                   fm           0        0      0\n                   m            2        0     21\nofficeholding      f            0        0      0\n                   fm           0        0      0\n                   m            0        4     12\nother              f            0        0      4\n                   fm           0        0      0\n                   m            0        1      8\npaternity          f            0        0     36\n                   fm           0        2      0\n                   m            0        2     20\npoor relief        f            0        0     20\n                   fm           0        4      0\n                   m            1        1     34\nrates              f            0        0      2\n                   fm           0        0      0\n                   m            0       13     20"
-  },
-  {
-    "objectID": "notes/note-vector-deframe-20250805.html",
-    "href": "notes/note-vector-deframe-20250805.html",
-    "title": "make paired vectors from a DF with deframe()",
-    "section": "",
-    "text": "library(scales)\nsource(here::here('R/shared.R'))"
-  },
-  {
-    "objectID": "notes/note-vector-deframe-20250805.html#includes",
-    "href": "notes/note-vector-deframe-20250805.html#includes",
-    "title": "make paired vectors from a DF with deframe()",
-    "section": "",
-    "text": "library(scales)\nsource(here::here('R/shared.R'))"
-  },
-  {
-    "objectID": "notes/note-vector-deframe-20250805.html#notes",
-    "href": "notes/note-vector-deframe-20250805.html#notes",
-    "title": "make paired vectors from a DF with deframe()",
-    "section": "Notes",
-    "text": "Notes\n\ni’ve spent too much time making paired vectors by hand [ ie: c(“key1”=“value1”, “key2”=“value2”) ]\noften for use in ggplot scale_colour_manual but other uses eg in str_replace_all\nan easier way to do this with two columns in a dataframe using tibble::deframe()\nthen it’s easy to use the data you’re actually working with to create the vector"
-  },
-  {
-    "objectID": "notes/note-vector-deframe-20250805.html#examples",
-    "href": "notes/note-vector-deframe-20250805.html#examples",
-    "title": "make paired vectors from a DF with deframe()",
-    "section": "Examples",
-    "text": "Examples\nadd a vector of hand-picked colours\n\ncheshire_petitions &lt;-\ncheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\")) \n\ntype_colours &lt;-\n  cheshire_petitions |&gt;\n  count(petition_type) |&gt;\n  # make sure you have things in the order you want\n  # and numbers of things need to match!\n  mutate(colour = c(\"#EE8866\", \"#EEDD88\", \"#99DDFF\")) |&gt;\n  # for deframe need two columns, `name` (key), `value` (value)\n  select(name=petition_type, value=colour) |&gt;\n  deframe()\n\ntype_colours\n\ncollective   multiple     single \n \"#EE8866\"  \"#EEDD88\"  \"#99DDFF\" \n\n\n\ncheshire_petitions |&gt;\n  count(petition_gender, petition_type) |&gt;\n  filter(!is.na(petition_gender)) |&gt;\n  ggplot(aes(petition_gender, n,  fill=petition_type)) +\n  geom_col() +\n  scale_fill_manual(values = type_colours)\n\n\n\n\n\n\n\n\nYou don’t have to make the vector of colours by hand either; could use something like scales::colour_ramp()\n\nramp &lt;- scales::colour_ramp(c(\"orange\",  \"blue\"))\ncolours5 &lt;- ramp(seq(0, 1, length = 5))\n\ncolours5\n\n[1] \"#FFA500\" \"#E77F64\" \"#C7599A\" \"#9731CD\" \"#0000FF\"\n\n\n\nverdict_colours &lt;-\ncoroners |&gt;\n  count(verdict) |&gt;\n  mutate(colours = colours5) |&gt;\n  select(name=verdict, value=colours) |&gt;\n  deframe()\n\nverdict_colours\n\n    accidental       homicide natural causes        suicide   undetermined \n     \"#FFA500\"      \"#E77F64\"      \"#C7599A\"      \"#9731CD\"      \"#0000FF\" \n\n\n\ncoroners |&gt;\n  count(verdict, gender) |&gt;\n  ggplot(aes(gender, n, fill = verdict)) +\n  geom_col(position = \"fill\") +\n  scale_fill_manual(values = verdict_colours)\n\n\n\n\n\n\n\n\na slightly silly example for str_replace_all() - replace a string with an abbreviated version\n\nverdict_abbs &lt;-\ncoroners |&gt;\n  count(verdict) |&gt;\n  mutate(v = c(\"acc\", \"hom\", \"nat\", \"sui\", \"und\")) |&gt;\n  select(name=verdict, value=v) |&gt;\n  deframe()\n\nverdict_abbs\n\n    accidental       homicide natural causes        suicide   undetermined \n         \"acc\"          \"hom\"          \"nat\"          \"sui\"          \"und\" \n\n\n\ncoroners |&gt;\n  mutate(abb = str_replace_all(verdict, verdict_abbs)) |&gt;\n  count(abb)\n\n# A tibble: 5 × 2\n  abb       n\n  &lt;chr&gt; &lt;int&gt;\n1 acc    1193\n2 hom     131\n3 nat     682\n4 sui     700\n5 und     179"
-  },
-  {
-    "objectID": "notes/note-summarise-across-20250804.html",
-    "href": "notes/note-summarise-across-20250804.html",
-    "title": "summarise() and across()",
+    "objectID": "notes/note-spreadsheets-20250927.html",
+    "href": "notes/note-spreadsheets-20250927.html",
+    "title": "spreadsheets",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "notes/note-summarise-across-20250804.html#includes",
-    "href": "notes/note-summarise-across-20250804.html#includes",
-    "title": "summarise() and across()",
+    "objectID": "notes/note-spreadsheets-20250927.html#includes",
+    "href": "notes/note-spreadsheets-20250927.html#includes",
+    "title": "spreadsheets",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "notes/note-summarise-across-20250804.html#notes",
-    "href": "notes/note-summarise-across-20250804.html#notes",
-    "title": "summarise() and across()",
+    "objectID": "notes/note-spreadsheets-20250927.html#notes",
+    "href": "notes/note-spreadsheets-20250927.html#notes",
+    "title": "spreadsheets",
     "section": "Notes",
-    "text": "Notes\n\nI’ve been using across() with mutate() since forever but didn’t twig I could use it with summarise() as well!"
+    "text": "Notes\nI’ve accumulated many bits of code for working with spreadsheets (mainly Excel; sometimes ODS), and can never remember how to use them. So this is a page to bring them together.\n\n#library(readxl) # loaded in shared\nlibrary(writexl)\nlibrary(readODS)"
   },
   {
-    "objectID": "notes/note-summarise-across-20250804.html#examples",
-    "href": "notes/note-summarise-across-20250804.html#examples",
-    "title": "summarise() and across()",
+    "objectID": "notes/note-spreadsheets-20250927.html#examples",
+    "href": "notes/note-spreadsheets-20250927.html#examples",
+    "title": "spreadsheets",
     "section": "Examples",
-    "text": "Examples\n\ncount NAs in multiple columns.\n\nbear in mind this won’t handle 0s (named_petrs) as NAs.\n\ncheshire_petitions |&gt;\n  summarise(across(everything(), ~sum(is.na(.)) )) |&gt;\n  # result will be very wide; use pivot_longer to make it more readable and sortable.\n  pivot_longer(everything(), names_to = \"var\", values_to = \"n\") |&gt;\n  arrange(-n)\n\n# A tibble: 12 × 2\n   var                 n\n   &lt;chr&gt;           &lt;int&gt;\n 1 subtopic          338\n 2 repository        321\n 3 petition_gender   100\n 4 abstract           22\n 5 petition_id         0\n 6 year                0\n 7 topic               0\n 8 petition_type       0\n 9 named_petrs         0\n10 response            0\n11 petitioner          0\n12 reference           0\n\n# I'm not sure there should be so many NAs in repository!\n\n\nmultiple columns and multiple functions (using list())\n\n\n# dataset in historydata\npaulist_missions |&gt;\n  # there are some NAs hiding somewhere, get rid. \n  drop_na(confessions, converts) |&gt;\n  summarise(across(c(duration_days, confessions, converts), \n                   list(mean = mean, med = median)))\n\n# A tibble: 1 × 6\n  duration_days_mean duration_days_med confessions_mean confessions_med\n               &lt;dbl&gt;             &lt;int&gt;            &lt;dbl&gt;           &lt;int&gt;\n1               9.56                 8            1761.            1100\n# ℹ 2 more variables: converts_mean &lt;dbl&gt;, converts_med &lt;int&gt;\n\n\n\nand add group_by\n\n\npaulist_missions |&gt;\n  drop_na(confessions, converts) |&gt;\n  group_by(order) |&gt;\n  summarise(across(c(duration_days, confessions, converts), \n                   list(mean = mean, med = median))) |&gt;\n  ungroup()\n\n# A tibble: 2 × 7\n  order    duration_days_mean duration_days_med confessions_mean confessions_med\n  &lt;chr&gt;                 &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;\n1 Paulist                9.46                 8            1741.            1070\n2 Redempt…              10.5                 10            1936.            1375\n# ℹ 2 more variables: converts_mean &lt;dbl&gt;, converts_med &lt;dbl&gt;"
+    "text": "Examples\nhttps://readxl.tidyverse.org/articles/articles/readxl-workflows.html\n\nread in multiple sheets in an xlsx, selectively\nthere are two functions to this\n\nget a list of sheets in a spreadsheet (and name them)\nread in selected sheets one at a time from the list using sheets$sheetname\n\nnb:\n\nI’ve added guess to the second function because read_excel’s default is hardly ever generous enough to deal with the weirdness of historical spreadsheets\njanitor::clean_names() is used for much the same reason. The names of sheets and columns in sheets are frequently hideous.\n\n\nread_all_sheets &lt;- function(path){\n  path |&gt;\n    excel_sheets() |&gt;\n    set_names() |&gt;\n    clean_names(\"snake\")\n}\n\nread_a_sheet &lt;- function(sheet, path, guess=1000) {\n  path |&gt;\n    read_excel(sheet = sheet, guess_max = guess) |&gt;\n    clean_names(case=\"snake\") \n}\n\n\napprentices_path &lt;- here::here(\"data/apprenticeship_disputes.xlsx\") \n\n# this will give a bunch of \"New names\" messages if not suppressed\napprentices_sheets &lt;-\n  apprentices_path |&gt;\n  read_all_sheets() |&gt;\n  map(read_a_sheet, path=apprentices_path, guess=10000)\n\napprentices_main_index &lt;-\n  apprentices_sheets$main_index\n\nOccasionally there might be a lot of sheets that you want to get out of a spreadsheet, so the individual sheet$name method would get tedious.\nThe function list2env() can be used to put all of the sheets from the list as separate DFs into your R environment, but use that function very carefully (eg if any of the sheet names are the same as existing objects it’ll overwrite them without any warning).\n\n## list2env(apprentices_sheets, envir = .GlobalEnv)\n\n\n\nsame for ODS spreadsheets\nTODO: this should work but I need to get an .ods file to test it.\n\nread_ods_sheets &lt;- function(path){\n  path |&gt;\n    ods_sheets() |&gt;\n    set_names()\n}\n\nread_ods_sheet &lt;- function(sheet, path) {\n  path |&gt;\n    read_ods(sheet = sheet) |&gt;\n    clean_names(case=\"snake\") \n}\n\n\n\nwrite several DFs to a single xlsx as separate tabs\nTODO."
   },
   {
-    "objectID": "notes/note-summarise-across-20250804.html#resources",
-    "href": "notes/note-summarise-across-20250804.html#resources",
-    "title": "summarise() and across()",
+    "objectID": "notes/note-scales-pretty-numbers-20250901.html",
+    "href": "notes/note-scales-pretty-numbers-20250901.html",
+    "title": "make numbers more readable with scales::number()",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))\nlibrary(scales)"
+  },
+  {
+    "objectID": "notes/note-scales-pretty-numbers-20250901.html#includes",
+    "href": "notes/note-scales-pretty-numbers-20250901.html#includes",
+    "title": "make numbers more readable with scales::number()",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))\nlibrary(scales)"
+  },
+  {
+    "objectID": "notes/note-scales-pretty-numbers-20250901.html#notes",
+    "href": "notes/note-scales-pretty-numbers-20250901.html#notes",
+    "title": "make numbers more readable with scales::number()",
+    "section": "Notes",
+    "text": "Notes\nThe thing I learned: the scales number() function can be used outside ggplot!\n\nsee this post by Cara Thompson\n\nwhy? sometimes precision isn’t everything.\n\nin creating visualisations where the main focus is summary statistics and comparisons between groups rather than on precision down to the closest 0.01, sometimes printing 1234567890 as “1,234.6M” is the most helpful thing to do for the end user.\n\nNote. in the online scales package docs it’s not documented; in R docs it’s described as\n\na low-level helper that powers many of the labelling functions. You should generally not need to call it directly unless you are creating your own labelling function."
+  },
+  {
+    "objectID": "notes/note-scales-pretty-numbers-20250901.html#examples",
+    "href": "notes/note-scales-pretty-numbers-20250901.html#examples",
+    "title": "make numbers more readable with scales::number()",
+    "section": "Examples",
+    "text": "Examples\nfrom Thompson post: abbreviating a long number using cut_long_scale (which is also not documented…)\n\nnumber(12345, scale_cut = scales::cut_long_scale())\n\n[1] \"12K\"\n\n\nnegative number\n\nnumber(-12345, accuracy = 0.1, scale_cut = scales::cut_long_scale())\n\n[1] \"-12.3K\"\n\n\na really really really long number\n\nscales::number(\n  1234567890,\n  accuracy = 0.1,\n  drop0trailing = TRUE,\n  big.mark = \",\",\n  scale_cut = scales::cut_long_scale()\n)\n\n[1] \"1,234.6M\"\n\n\nwith mutate in a dataframe\n\n# accuracy: 0.01 for 2 decimal places, 0.1 for one, etc.\nsarna |&gt;\n  filter(value &gt; 1000000) |&gt;\n  head(10) |&gt;\n  mutate(value_commas = number(value, big.mark = \",\"),\n         value_abbr = number(value, accuracy = 0.01, scale_cut = cut_long_scale()))\n\n# A tibble: 10 × 5\n    year estimate         value value_commas value_abbr\n   &lt;int&gt; &lt;fct&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;     \n 1  1910 population_low 1508000 1,508,000    1.51M     \n 2  1920 population_low 3300000 3,300,000    3.30M     \n 3  1930 population_low 4228000 4,228,000    4.23M     \n 4  1940 population_low 4771000 4,771,000    4.77M     \n 5  1950 population_low 4500000 4,500,000    4.50M     \n 6  1960 population_low 5367000 5,367,000    5.37M     \n 7  1970 population_low 5370000 5,370,000    5.37M     \n 8  1980 population_low 5500000 5,500,000    5.50M     \n 9  1990 population_low 5515000 5,515,000    5.52M     \n10  2000 population_low 5340000 5,340,000    5.34M     \n\n\nThere are probably lots more possibilities…"
+  },
+  {
+    "objectID": "notes/note-scales-pretty-numbers-20250901.html#resources",
+    "href": "notes/note-scales-pretty-numbers-20250901.html#resources",
+    "title": "make numbers more readable with scales::number()",
     "section": "Resources",
-    "text": "Resources\n\nacross doc\nwhy I love across"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "TILs and Things",
-    "section": "",
-    "text": "R code, mostly."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "Sharon Howard"
+    "text": "Resources\n\npackage docs"
   },
   {
     "objectID": "notes/note-anonymous-functions-20250906.html",
@@ -1260,39 +1218,109 @@
     "text": "Resources\n\nRodrigues, chapter 3\nadv-r\ncool but useless\nwikipedia"
   },
   {
-    "objectID": "notes/note-scales-pretty-numbers-20250901.html",
-    "href": "notes/note-scales-pretty-numbers-20250901.html",
-    "title": "make numbers more readable with scales::number()",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "source(here::here('R/shared.R'))\nlibrary(scales)"
+    "text": "Sharon Howard"
   },
   {
-    "objectID": "notes/note-scales-pretty-numbers-20250901.html#includes",
-    "href": "notes/note-scales-pretty-numbers-20250901.html#includes",
-    "title": "make numbers more readable with scales::number()",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "TILs and Things",
     "section": "",
-    "text": "source(here::here('R/shared.R'))\nlibrary(scales)"
+    "text": "R code, mostly."
   },
   {
-    "objectID": "notes/note-scales-pretty-numbers-20250901.html#notes",
-    "href": "notes/note-scales-pretty-numbers-20250901.html#notes",
-    "title": "make numbers more readable with scales::number()",
+    "objectID": "notes/note-summarise-across-20250804.html",
+    "href": "notes/note-summarise-across-20250804.html",
+    "title": "summarise() and across()",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "notes/note-summarise-across-20250804.html#includes",
+    "href": "notes/note-summarise-across-20250804.html#includes",
+    "title": "summarise() and across()",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "notes/note-summarise-across-20250804.html#notes",
+    "href": "notes/note-summarise-across-20250804.html#notes",
+    "title": "summarise() and across()",
     "section": "Notes",
-    "text": "Notes\nThe thing I learned: the scales number() function can be used outside ggplot!\n\nsee this post by Cara Thompson\n\nwhy? sometimes precision isn’t everything.\n\nin creating visualisations where the main focus is summary statistics and comparisons between groups rather than on precision down to the closest 0.01, sometimes printing 1234567890 as “1,234.6M” is the most helpful thing to do for the end user.\n\nNote. in the online scales package docs it’s not documented; in R docs it’s described as\n\na low-level helper that powers many of the labelling functions. You should generally not need to call it directly unless you are creating your own labelling function."
+    "text": "Notes\n\nI’ve been using across() with mutate() since forever but didn’t twig I could use it with summarise() as well!"
   },
   {
-    "objectID": "notes/note-scales-pretty-numbers-20250901.html#examples",
-    "href": "notes/note-scales-pretty-numbers-20250901.html#examples",
-    "title": "make numbers more readable with scales::number()",
+    "objectID": "notes/note-summarise-across-20250804.html#examples",
+    "href": "notes/note-summarise-across-20250804.html#examples",
+    "title": "summarise() and across()",
     "section": "Examples",
-    "text": "Examples\nfrom Thompson post: abbreviating a long number using cut_long_scale (which is also not documented…)\n\nnumber(12345, scale_cut = scales::cut_long_scale())\n\n[1] \"12K\"\n\n\nnegative number\n\nnumber(-12345, accuracy = 0.1, scale_cut = scales::cut_long_scale())\n\n[1] \"-12.3K\"\n\n\na really really really long number\n\nscales::number(\n  1234567890,\n  accuracy = 0.1,\n  drop0trailing = TRUE,\n  big.mark = \",\",\n  scale_cut = scales::cut_long_scale()\n)\n\n[1] \"1,234.6M\"\n\n\nwith mutate in a dataframe\n\n# accuracy: 0.01 for 2 decimal places, 0.1 for one, etc.\nsarna |&gt;\n  filter(value &gt; 1000000) |&gt;\n  head(10) |&gt;\n  mutate(value_commas = number(value, big.mark = \",\"),\n         value_abbr = number(value, accuracy = 0.01, scale_cut = cut_long_scale()))\n\n# A tibble: 10 × 5\n    year estimate         value value_commas value_abbr\n   &lt;int&gt; &lt;fct&gt;            &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;     \n 1  1910 population_low 1508000 1,508,000    1.51M     \n 2  1920 population_low 3300000 3,300,000    3.30M     \n 3  1930 population_low 4228000 4,228,000    4.23M     \n 4  1940 population_low 4771000 4,771,000    4.77M     \n 5  1950 population_low 4500000 4,500,000    4.50M     \n 6  1960 population_low 5367000 5,367,000    5.37M     \n 7  1970 population_low 5370000 5,370,000    5.37M     \n 8  1980 population_low 5500000 5,500,000    5.50M     \n 9  1990 population_low 5515000 5,515,000    5.52M     \n10  2000 population_low 5340000 5,340,000    5.34M     \n\n\nThere are probably lots more possibilities…"
+    "text": "Examples\n\ncount NAs in multiple columns.\n\nbear in mind this won’t handle 0s (named_petrs) as NAs.\n\ncheshire_petitions |&gt;\n  summarise(across(everything(), ~sum(is.na(.)) )) |&gt;\n  # result will be very wide; use pivot_longer to make it more readable and sortable.\n  pivot_longer(everything(), names_to = \"var\", values_to = \"n\") |&gt;\n  arrange(-n)\n\n# A tibble: 12 × 2\n   var                 n\n   &lt;chr&gt;           &lt;int&gt;\n 1 subtopic          338\n 2 repository        321\n 3 petition_gender   100\n 4 abstract           22\n 5 petition_id         0\n 6 year                0\n 7 topic               0\n 8 petition_type       0\n 9 named_petrs         0\n10 response            0\n11 petitioner          0\n12 reference           0\n\n# I'm not sure there should be so many NAs in repository!\n\n\nmultiple columns and multiple functions (using list())\n\n\n# dataset in historydata\npaulist_missions |&gt;\n  # there are some NAs hiding somewhere, get rid. \n  drop_na(confessions, converts) |&gt;\n  summarise(across(c(duration_days, confessions, converts), \n                   list(mean = mean, med = median)))\n\n# A tibble: 1 × 6\n  duration_days_mean duration_days_med confessions_mean confessions_med\n               &lt;dbl&gt;             &lt;int&gt;            &lt;dbl&gt;           &lt;int&gt;\n1               9.56                 8            1761.            1100\n# ℹ 2 more variables: converts_mean &lt;dbl&gt;, converts_med &lt;int&gt;\n\n\n\nand add group_by\n\n\npaulist_missions |&gt;\n  drop_na(confessions, converts) |&gt;\n  group_by(order) |&gt;\n  summarise(across(c(duration_days, confessions, converts), \n                   list(mean = mean, med = median))) |&gt;\n  ungroup()\n\n# A tibble: 2 × 7\n  order    duration_days_mean duration_days_med confessions_mean confessions_med\n  &lt;chr&gt;                 &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;\n1 Paulist                9.46                 8            1741.            1070\n2 Redempt…              10.5                 10            1936.            1375\n# ℹ 2 more variables: converts_mean &lt;dbl&gt;, converts_med &lt;dbl&gt;"
   },
   {
-    "objectID": "notes/note-scales-pretty-numbers-20250901.html#resources",
-    "href": "notes/note-scales-pretty-numbers-20250901.html#resources",
-    "title": "make numbers more readable with scales::number()",
+    "objectID": "notes/note-summarise-across-20250804.html#resources",
+    "href": "notes/note-summarise-across-20250804.html#resources",
+    "title": "summarise() and across()",
     "section": "Resources",
-    "text": "Resources\n\npackage docs"
+    "text": "Resources\n\nacross doc\nwhy I love across"
+  },
+  {
+    "objectID": "notes/note-vector-deframe-20250805.html",
+    "href": "notes/note-vector-deframe-20250805.html",
+    "title": "make paired vectors from a DF with deframe()",
+    "section": "",
+    "text": "library(scales)\nsource(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "notes/note-vector-deframe-20250805.html#includes",
+    "href": "notes/note-vector-deframe-20250805.html#includes",
+    "title": "make paired vectors from a DF with deframe()",
+    "section": "",
+    "text": "library(scales)\nsource(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "notes/note-vector-deframe-20250805.html#notes",
+    "href": "notes/note-vector-deframe-20250805.html#notes",
+    "title": "make paired vectors from a DF with deframe()",
+    "section": "Notes",
+    "text": "Notes\n\ni’ve spent too much time making paired vectors by hand [ ie: c(“key1”=“value1”, “key2”=“value2”) ]\noften for use in ggplot scale_colour_manual but other uses eg in str_replace_all\nan easier way to do this with two columns in a dataframe using tibble::deframe()\nthen it’s easy to use the data you’re actually working with to create the vector"
+  },
+  {
+    "objectID": "notes/note-vector-deframe-20250805.html#examples",
+    "href": "notes/note-vector-deframe-20250805.html#examples",
+    "title": "make paired vectors from a DF with deframe()",
+    "section": "Examples",
+    "text": "Examples\nadd a vector of hand-picked colours\n\ncheshire_petitions &lt;-\ncheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\")) \n\ntype_colours &lt;-\n  cheshire_petitions |&gt;\n  count(petition_type) |&gt;\n  # make sure you have things in the order you want\n  # and numbers of things need to match!\n  mutate(colour = c(\"#EE8866\", \"#EEDD88\", \"#99DDFF\")) |&gt;\n  # for deframe need two columns, `name` (key), `value` (value)\n  select(name=petition_type, value=colour) |&gt;\n  deframe()\n\ntype_colours\n\ncollective   multiple     single \n \"#EE8866\"  \"#EEDD88\"  \"#99DDFF\" \n\n\n\ncheshire_petitions |&gt;\n  count(petition_gender, petition_type) |&gt;\n  filter(!is.na(petition_gender)) |&gt;\n  ggplot(aes(petition_gender, n,  fill=petition_type)) +\n  geom_col() +\n  scale_fill_manual(values = type_colours)\n\n\n\n\n\n\n\n\nYou don’t have to make the vector of colours by hand either; could use something like scales::colour_ramp()\n\nramp &lt;- scales::colour_ramp(c(\"orange\",  \"blue\"))\ncolours5 &lt;- ramp(seq(0, 1, length = 5))\n\ncolours5\n\n[1] \"#FFA500\" \"#E77F64\" \"#C7599A\" \"#9731CD\" \"#0000FF\"\n\n\n\nverdict_colours &lt;-\ncoroners |&gt;\n  count(verdict) |&gt;\n  mutate(colours = colours5) |&gt;\n  select(name=verdict, value=colours) |&gt;\n  deframe()\n\nverdict_colours\n\n    accidental       homicide natural causes        suicide   undetermined \n     \"#FFA500\"      \"#E77F64\"      \"#C7599A\"      \"#9731CD\"      \"#0000FF\" \n\n\n\ncoroners |&gt;\n  count(verdict, gender) |&gt;\n  ggplot(aes(gender, n, fill = verdict)) +\n  geom_col(position = \"fill\") +\n  scale_fill_manual(values = verdict_colours)\n\n\n\n\n\n\n\n\na slightly silly example for str_replace_all() - replace a string with an abbreviated version\n\nverdict_abbs &lt;-\ncoroners |&gt;\n  count(verdict) |&gt;\n  mutate(v = c(\"acc\", \"hom\", \"nat\", \"sui\", \"und\")) |&gt;\n  select(name=verdict, value=v) |&gt;\n  deframe()\n\nverdict_abbs\n\n    accidental       homicide natural causes        suicide   undetermined \n         \"acc\"          \"hom\"          \"nat\"          \"sui\"          \"und\" \n\n\n\ncoroners |&gt;\n  mutate(abb = str_replace_all(verdict, verdict_abbs)) |&gt;\n  count(abb)\n\n# A tibble: 5 × 2\n  abb       n\n  &lt;chr&gt; &lt;int&gt;\n1 acc    1193\n2 hom     131\n3 nat     682\n4 sui     700\n5 und     179"
+  },
+  {
+    "objectID": "notes/note-frequency-tables-baser-20250925.html",
+    "href": "notes/note-frequency-tables-baser-20250925.html",
+    "title": "frequency tables - multidimensional (base R)",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))\n\npetitions &lt;-\n  cheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\"))"
+  },
+  {
+    "objectID": "notes/note-frequency-tables-baser-20250925.html#includes",
+    "href": "notes/note-frequency-tables-baser-20250925.html#includes",
+    "title": "frequency tables - multidimensional (base R)",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))\n\npetitions &lt;-\n  cheshire_petitions |&gt;\n  mutate(petition_type = str_remove(petition_type, \" *on behalf\"))"
+  },
+  {
+    "objectID": "notes/note-frequency-tables-baser-20250925.html#notes",
+    "href": "notes/note-frequency-tables-baser-20250925.html#notes",
+    "title": "frequency tables - multidimensional (base R)",
+    "section": "Notes",
+    "text": "Notes\n\nsee also vcd::structable which does essentially the same thing as ftable (but a base R method may be useful if you don’t want vcd)"
+  },
+  {
+    "objectID": "notes/note-frequency-tables-baser-20250925.html#examples",
+    "href": "notes/note-frequency-tables-baser-20250925.html#examples",
+    "title": "frequency tables - multidimensional (base R)",
+    "section": "Examples",
+    "text": "Examples\nif you give table() three variables it will make a list of 2-way tables, breaking down by the last variable.\n\n(petitions_table &lt;- \n   table(petitions$topic, petitions$petition_gender, petitions$petition_type) )\n\n, ,  = collective\n\n                    \n                      f fm  m\n  alehouse            0  0  1\n  charitable brief    0  0  1\n  cottage             1  0  1\n  dissenting worship  0  0  0\n  employment          0  0  0\n  imprisoned debtors  0  0  0\n  litigation          3  0  2\n  military relief     0  0  2\n  officeholding       0  0  0\n  other               0  0  0\n  paternity           0  0  0\n  poor relief         0  0  1\n  rates               0  0  0\n\n, ,  = multiple\n\n                    \n                      f fm  m\n  alehouse            0  0  0\n  charitable brief    1  1  0\n  cottage             1  7  3\n  dissenting worship  0  0  3\n  employment          0  0  1\n  imprisoned debtors  0  0  0\n  litigation          1 13 15\n  military relief     0  0  0\n  officeholding       0  0  4\n  other               0  0  1\n  paternity           0  2  2\n  poor relief         0  4  1\n  rates               0  0 13\n\n, ,  = single\n\n                    \n                      f fm  m\n  alehouse            2  0 11\n  charitable brief    0  0  9\n  cottage            17  0 60\n  dissenting worship  0  0  2\n  employment          6  0  8\n  imprisoned debtors  0  0  1\n  litigation         31  0 97\n  military relief     7  0 21\n  officeholding       0  0 12\n  other               4  0  8\n  paternity          36  0 20\n  poor relief        20  0 34\n  rates               2  0 20\n\n\nxtabs does the same thing\n\nxtabs(~ topic + petition_gender + petition_type, data=petitions) \n\n, , petition_type = collective\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            0  0  1\n  charitable brief    0  0  1\n  cottage             1  0  1\n  dissenting worship  0  0  0\n  employment          0  0  0\n  imprisoned debtors  0  0  0\n  litigation          3  0  2\n  military relief     0  0  2\n  officeholding       0  0  0\n  other               0  0  0\n  paternity           0  0  0\n  poor relief         0  0  1\n  rates               0  0  0\n\n, , petition_type = multiple\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            0  0  0\n  charitable brief    1  1  0\n  cottage             1  7  3\n  dissenting worship  0  0  3\n  employment          0  0  1\n  imprisoned debtors  0  0  0\n  litigation          1 13 15\n  military relief     0  0  0\n  officeholding       0  0  4\n  other               0  0  1\n  paternity           0  2  2\n  poor relief         0  4  1\n  rates               0  0 13\n\n, , petition_type = single\n\n                    petition_gender\ntopic                 f fm  m\n  alehouse            2  0 11\n  charitable brief    0  0  9\n  cottage            17  0 60\n  dissenting worship  0  0  2\n  employment          6  0  8\n  imprisoned debtors  0  0  1\n  litigation         31  0 97\n  military relief     7  0 21\n  officeholding       0  0 12\n  other               4  0  8\n  paternity          36  0 20\n  poor relief        20  0 34\n  rates               2  0 20\n\n\nftable() makes a flattened 3-way table\nyou can do it in one step (play around with order of variables…)\n\nftable(petition_type ~ topic + petition_gender, petitions) \n\n                                   petition_type collective multiple single\ntopic              petition_gender                                         \nalehouse           f                                      0        0      2\n                   fm                                     0        0      0\n                   m                                      1        0     11\ncharitable brief   f                                      0        1      0\n                   fm                                     0        1      0\n                   m                                      1        0      9\ncottage            f                                      1        1     17\n                   fm                                     0        7      0\n                   m                                      1        3     60\ndissenting worship f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        3      2\nemployment         f                                      0        0      6\n                   fm                                     0        0      0\n                   m                                      0        1      8\nimprisoned debtors f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        0      1\nlitigation         f                                      3        1     31\n                   fm                                     0       13      0\n                   m                                      2       15     97\nmilitary relief    f                                      0        0      7\n                   fm                                     0        0      0\n                   m                                      2        0     21\nofficeholding      f                                      0        0      0\n                   fm                                     0        0      0\n                   m                                      0        4     12\nother              f                                      0        0      4\n                   fm                                     0        0      0\n                   m                                      0        1      8\npaternity          f                                      0        0     36\n                   fm                                     0        2      0\n                   m                                      0        2     20\npoor relief        f                                      0        0     20\n                   fm                                     0        4      0\n                   m                                      1        1     34\nrates              f                                      0        0      2\n                   fm                                     0        0      0\n                   m                                      0       13     20\n\n\nor you can give it your list of 2-way tables and it will flatten them into a 3-way. (vcd::structable will do that as well)\n\nftable(petitions_table)\n\n                       collective multiple single\n                                                 \nalehouse           f            0        0      2\n                   fm           0        0      0\n                   m            1        0     11\ncharitable brief   f            0        1      0\n                   fm           0        1      0\n                   m            1        0      9\ncottage            f            1        1     17\n                   fm           0        7      0\n                   m            1        3     60\ndissenting worship f            0        0      0\n                   fm           0        0      0\n                   m            0        3      2\nemployment         f            0        0      6\n                   fm           0        0      0\n                   m            0        1      8\nimprisoned debtors f            0        0      0\n                   fm           0        0      0\n                   m            0        0      1\nlitigation         f            3        1     31\n                   fm           0       13      0\n                   m            2       15     97\nmilitary relief    f            0        0      7\n                   fm           0        0      0\n                   m            2        0     21\nofficeholding      f            0        0      0\n                   fm           0        0      0\n                   m            0        4     12\nother              f            0        0      4\n                   fm           0        0      0\n                   m            0        1      8\npaternity          f            0        0     36\n                   fm           0        2      0\n                   m            0        2     20\npoor relief        f            0        0     20\n                   fm           0        4      0\n                   m            1        1     34\nrates              f            0        0      2\n                   fm           0        0      0\n                   m            0       13     20"
   },
   {
     "objectID": "notes/note-na-omit-20250721.html",

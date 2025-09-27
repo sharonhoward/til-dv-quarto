@@ -68,38 +68,39 @@ Steps to make the residuals plot:
 I'll treat wheat prices as the response variable (could easily be the other way round with this data).
 
 ```{r}
+# Fit the model
+fit_wheat <- lm(wheat ~ wages, data = playfair_wheat)  
 # lm(outcome/response_variable [y] ~ predictor/explanatory_variable [x], data=df)
 
-fit <- lm(wheat ~ wages, data = playfair_wheat)  # Fit the model
-
-# find a way to do this in a tidy pipeline...
-playfair_wheat$predicted <- predict(fit)   # Save the predicted values
-playfair_wheat$residuals <- residuals(fit) # Save the residual values
-
-summary(fit) 
+fit_wheat
 ```
-With the predicted/residual values added.
+
+add predicted and residuals to the original data
 
 ```{r}
-head(playfair_wheat)
+wheat_fitted <-
+playfair_wheat |>
+  mutate(predicted = predict(fit_wheat), residuals = residuals(fit_wheat))
+
+head(wheat_fitted)
 ```
 
-The tutorial shows various ways to adjust a scatterplot to highlight the residuals. 
 
-Steps:
+
+Making and adjusting the scatterplot to highlight the residuals:
 
 1. plot the actual data 
-2. plot the predicted values in a way that makes them distinguishable from the actual values (eg by shape)
-3. connect the actual data points with their corresponding predicted value using geom_segment():
-4. make adjustments: eg 
-  - fade out connection lines with alpha; 
+2. plot the predicted values so they're distinguishable from the actual values
+3. connect the actual data points with their corresponding predicted value
+4. aesthetic adjustments, eg 
+  - fade out connection lines with alpha 
   - add best fit line with geom_smooth()
-5. final adjustments (to actual or predicted) to highlight the size of the residual. 
+5. final adjustments to highlight the size of the residual. 
 
-At step 4:
+An example at step 4:
 
 ```{r}
-playfair_wheat |>
+wheat_fitted |>
   # set up with outcome variable on y-axis
 ggplot(aes(x = wages, y = wheat)) +  
   # (3) connect actual and predicted; (4) use alpha to fade lines
@@ -112,15 +113,15 @@ ggplot(aes(x = wages, y = wheat)) +
   geom_smooth(method = "lm", se = FALSE, color = "lightgrey") 
 ```
 
-Step 5 examples
+Step 5 options include
 
 - change alpha, colour, size of actual values based on absolute value of residuals
 - change colour according to whether difference is plus or minus and/or by how much.
 
-(the example colours are terrible though, find somethng nicer)
+(the example colours are terrible though)
 
 ```{r}
-playfair_wheat |>
+wheat_fitted |>
 ggplot(aes(x = wages, y = wheat)) + 
   geom_segment(aes(xend = wages, yend = predicted), alpha = .2) + 
   geom_point(aes(colour=residuals, size=abs(residuals)), show.legend = F) + 
@@ -129,4 +130,14 @@ ggplot(aes(x = wages, y = wheat)) +
   scale_color_gradient2(low = "blue", mid = "white", high = "red")  
 ```
 
-The tutorial also shows how to do faceted versions to compare regressions on different variables if you have more than two. I'll need different data for that!
+The tutorial also shows how to do faceted versions to compare regressions on multiple variables if you have more than two. I'll need different data for that!
+
+NB that geom_smooth doesn't think lm is actually the optimal model for this data...
+
+```{r}
+wheat_fitted |>
+  ggplot(aes(wages, wheat)) +
+  geom_point() +
+  geom_smooth(se=FALSE)
+```
+
