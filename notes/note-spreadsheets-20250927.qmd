@@ -18,18 +18,12 @@ source(here::here('R/shared.R'))
 
 I've accumulated many bits of code for working with spreadsheets (mainly Excel; sometimes ODS), and can never remember how to use them. So this is a page to bring them together.
 
-```{r}
-#library(readxl) # loaded in shared
-library(writexl)
-library(readODS)
-```
 
 
 ## Examples
 
- https://readxl.tidyverse.org/articles/articles/readxl-workflows.html
 
-### read in multiple sheets in an xlsx, selectively
+### read in multiple sheets in an xlsx
 
 there are two functions to this 
 
@@ -44,14 +38,14 @@ nb:
 ```{r}
 read_all_sheets <- function(path){
   path |>
-    excel_sheets() |>
+    readxl::excel_sheets() |>
     set_names() |>
     clean_names("snake")
 }
 
 read_a_sheet <- function(sheet, path, guess=1000) {
   path |>
-    read_excel(sheet = sheet, guess_max = guess) |>
+    readxl::read_excel(sheet = sheet, guess_max = guess) |>
     clean_names(case="snake") 
 }
 ```
@@ -103,7 +97,118 @@ read_ods_sheet <- function(sheet, path) {
 
 
 
-### write several DFs to a single xlsx as separate tabs
+### write several DFs to a single spreadsheet, as separate sheets
 
-TODO.
+This is quite easy, as several functions for writing spreadsheets will take a list of DFs and put them in separate tabs. 
 
+But you have to give each element of the list a name.
+
+You can do this by hand in list()
+
+```{r}
+list_of_dfs <-
+  list(
+    "petitions"=cheshire_petitions,
+    "petitioners"=cheshire_petitioners
+  )
+```
+
+Or you can make a vector of names to assign to the list
+
+```{r}
+list_of_unnamed_dfs <-
+  list(cheshire_petitions, cheshire_petitioners)
+
+sheet_names <- c("petitions", "petitioners")
+
+names(list_of_unnamed_dfs) <- sheet_names 
+```
+
+If you have a DF that you want to split up by a chosen group column and write each group to a separate sheet in an xlsx, you can use dplyr::group_split() and then purrr::map() to make sheet names based on the column values.
+
+NB:
+
+- If the column contains NAs, you need to make a separate group_name column turning them into "na" or similar character string. 
+- You might need to do some other manipulation if there are non-standard characters in column values, if you want to avoid spaces, etc etc.
+
+
+```{r}
+petitions_split_gender <-
+cheshire_petitions |>
+  mutate(grp_name = if_else(is.na(petition_gender), "na", petition_gender)) |>
+  group_split(grp_name)
+
+  petitions_split_gender |>
+    map(~pull(., grp_name)) |>
+    map(~unique(.)) -> names(petitions_split_gender)
+
+# get rid of the extra grp_name col now you've finished with it
+petitions_split_gender <-
+petitions_split_gender |>
+  map(~select(., -grp_name))
+```
+
+Then you just give the list name in the function to write the spreadsheet. 
+
+This works with several functions
+
+- xlsx
+
+```{r}
+ # writexl::write_xlsx(petitions_split_gender, 
+ #          "path/to/petitions_gender.xlsx", 
+ #          format_headers=FALSE)
+```
+
+```{r}
+ # openxlsx::write.xlsx(list_dfs, 
+ #                      "path/to/petitions_petitioners.xlsx", 
+ #                      colNames=TRUE)
+```
+
+- ods
+
+```{r}
+ # readODS::write_ods(list_of_unnamed_dfs, 
+ #                    "path/to/petitions_petitioners.ods")
+```
+
+I haven't tested it with any others.
+
+It's quite easy to functionify if you'll need to use it repeatedly.
+
+NB that you have to ["embrace" the group name](https://dplyr.tidyverse.org/articles/programming.html) inside the function  
+
+
+
+```{r}
+# need to make sure the output_folder exists!
+
+# df = dataframe to be split
+# group = grouping column to split on
+# sheetname = name of the spreadsheet (needs to be "quoted" in the args?)
+
+one_df_split_to_excel <- function(df, group, sheetname){
+  
+  file_name <- paste0(sheetname, ".xlsx")  
+  file_path <- here::here("output_folder", file_name)
+  
+  # split the df into groups
+  list_dfs <- 
+    df |>
+    group_split({{group}})
+  
+  # group name -> list name which will be used as the spreadsheet tab name
+  list_dfs |>
+    purrr::map(~pull(., {{group}})) |>
+    purrr::map(~unique(.)) ->names(list_dfs)
+   
+   # write to spreadsheet
+   writexl::write_xlsx(list_dfs, file_path, format_headers = FALSE)
+}
+```
+
+## Resources
+
+- [readxl workflows](https://readxl.tidyverse.org/articles/articles/readxl-workflows.html)
+- [Write & Read Multiple Excel files with purrr](https://martinctc.github.io/blog/vignette-write-and-read-multiple-excel-files-with-purrr/)
