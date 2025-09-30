@@ -5,6 +5,7 @@ library(glue)
 library(tidytext)
 library(tidyverse)
 
+library(HistData)
 library(historydata)
 library(mindseyedata)
 

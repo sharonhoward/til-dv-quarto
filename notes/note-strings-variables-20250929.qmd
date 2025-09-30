@@ -1,0 +1,231 @@
+---
+title: "variable as column name"
+author: "Sharon Howard"
+date: "2025-09-30"
+categories: [variables, naming things]
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+I'm lazy. I don't like typing the same thing over and over. *Especially* when I got data from somewhere which has long column names.
+
+So sometimes I want to do something like
+
+```{r}
+var <- "a_very_long_column_name_in_my_dataset"
+```
+
+and then reuse the stored short `var` instead of typing out a_very_long_column_name_in_my_dataset.
+
+Examples below may also work in writing functions; compare with the various TILs on naming things/functions. 
+
+
+## Examples
+
+Using a sample taken from the [Addressing Health Pensions Database](https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=9325#!/details)
+
+```{r}
+addressing_health <- 
+  read_csv(here::here("data/addressing_health_sample1000.csv"))
+```
+
+
+```{r}
+addressing_health |>
+  names()
+```
+
+Let's say I want to mess around with the columns `length_of_service_years` and `ppg_allowance_decimal`.
+
+```{r}
+(losy <- "length_of_service_years")
+(pad <- "ppg_allowance_decimal")
+```
+
+
+
+## in tidyverse pipes
+
+### select
+
+use `all_of()` or `any_of()` (seem to be interchangeable)
+
+```{r}
+addressing_health |> 
+  select(any_of(pad)) |>
+  head(10)
+```
+
+can select more than one with usual tidy-select stuff
+
+```{r}
+addressing_health |> 
+  select(any_of(c(losy, pad))) |>
+  head(10)
+```
+
+
+
+### group by
+
+use `group_by_at()` 
+
+```{r}
+addressing_health |>
+  group_by_at(losy) |>
+  summarise(n = n()) |>
+  head(10)
+```
+
+or `across()` + `all_of()` (or `any_of`) 
+
+```{r}
+addressing_health |>
+  group_by(across(all_of(losy))) |>
+  summarise(n = n()) |>
+  head(10)
+```
+
+
+
+
+### filter 
+
+use `get()`
+
+
+```{r}
+addressing_health |> 
+  filter(get(losy) <= 8)
+```
+
+### mutate
+
+on the *right hand side* of a mutate, use `get()`
+
+```{r}
+addressing_health |>
+  select(all_of(c(losy, pad))) |>
+  mutate(p = get(losy)/get(pad)) |>
+  head(10)
+```
+
+On the *left hand side* of a mutate (eg, you want to base the new column name on the old one) is slightly more complex: use !! and :=
+
+```{r}
+addressing_health |>
+  select(all_of(c(losy, pad))) |>
+  filter(get(losy) > 45) |>
+  # nb !! goes outside paste()
+  mutate(!! paste0("p_", losy) := get(losy)/get(pad))
+```
+
+
+if for some reason you want to reuse the variable as a string on the righthand side (eg make a new grouping name?)
+
+```{r}
+addressing_health |>
+  select(all_of(c(losy, pad))) |>
+  mutate(new_grp = paste0(losy, "_2")) |>
+  head(10)
+```
+
+
+you could also make the new variable name beforehand rather than doing paste inside mutate
+
+```{r}
+newvarname <- paste0("p_", losy)
+
+addressing_health |> 
+  select(all_of(c(losy, pad))) |>
+  mutate( !! newvarname := get(losy)/get(pad) ) |>
+  head(10)
+```
+
+### summarise 
+
+same as mutate, I think.
+
+```{r}
+addressing_health |> 
+  summarise(ml = mean(get(losy)), !! paste0("mean_", pad) := mean(get(pad)))
+```
+
+
+
+## working with vectors
+
+Let's say I want to get the mean, median and standard deviation of each column, as separate vectors rather than in a dataframe.
+ 
+This is largely a lesson in subsetting... but
+NB that the shorthand form x$y doesn't work; you have to use x[[y]].
+
+([Hadley Wickham explains](https://adv-r.hadley.nz/subsetting.html#section-1) this is because x$var gets translated as x[["var"]] instead of x[[var]])
+
+
+```{r}
+mean_losy <- mean(addressing_health[[losy]])
+median_losy <- median(addressing_health[[losy]])
+sd_losy <- sd(addressing_health[[losy]])
+
+mean_losy
+median_losy
+sd_losy
+```
+
+```{r}
+mean_pension <- mean(addressing_health[[pad]])
+median_pension <- median(addressing_health[[pad]])
+sd_pension <- sd(addressing_health[[pad]])
+
+mean_pension
+median_pension
+sd_pension
+```
+
+
+Or I want to get the length of service columnn - don't need get() or anything else this way
+
+```{r}
+head( addressing_health[losy] )
+```
+
+get the first 3 rows of the pension allowance column
+
+```{r}
+addressing_health[1:3, pad] 
+```
+
+
+
+## fun with frequency tables
+
+Using the historydata judges data for this.
+
+```{r}
+g <- "gender"
+bps <- "birthplace_state"
+```
+
+```{r}
+table(judges_people[[bps]], judges_people[[g]]) |>
+  head(10)
+```
+
+or, to make the table using `with()`, you want `get()` again. I imagine something similar applies if you want to use `xtab()`.
+
+```{r}
+with(judges_people, table(get(bps), get(g))) |>
+  head(10)
+```
+
+
