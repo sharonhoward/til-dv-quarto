@@ -1,0 +1,248 @@
+---
+title: "automate counts"
+author: "Sharon Howard"
+date: "2025-10-06"
+categories: [variables, combinations, count]
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+The scenario: I have a dataset with several variables and want to do counts of all the 2-way combinations (maybe even 3-way combinations) for faceted ggplots or automated tests.
+
+I have some tutorials on eg [automating multiple plots](https://aosmith.rbind.io/2018/08/20/automating-exploratory-plots/), but with interval data rather than categorical data that you need to count before you can start analysis.
+
+
+## Examples
+
+```{r}
+petitions <-
+cheshire_petitions |>
+  select(petition_id, topic, petition_type, petition_gender, response) |>
+  mutate(petition_type= str_remove(petition_type, " *on behalf")) |>
+  mutate(response = case_when(
+    response %in% c("absent", "uncertain") ~ NA,
+    str_detect(response, "grant|referred") ~ "positive",
+    .default = "negative"
+  )) 
+```
+
+
+### count variables singly using pivot_longer
+
+before getting on to doing multiple variables, an easy way to count lots of single variables
+
+(recording it here because it took me, a dummy, ages to work it out...)
+
+```{r}
+petitions |>
+  pivot_longer(-petition_id, names_to = "variable", values_to = "value") |>
+  count(variable, value) 
+```
+
+once you've done that, you can look at the counts for each variable with ggplot faceting.
+
+```{r}
+petitions |>
+  pivot_longer(-petition_id, names_to = "variable", values_to = "value") |>
+  count(variable, value) |>
+  ggplot(aes(value, n)) +
+  geom_col() +
+# need at least "free_x" here; free" if groups are very different
+  facet_wrap(~variable, scales="free") 
+```
+
+
+you could do things like compute averages for each variable. (A bit weird for this data. Need better example.)
+
+```{r}
+petitions |>
+  pivot_longer(-petition_id, names_to = "variable", values_to = "value") |>
+  count(variable, value) |>
+  group_by(variable) |>
+  summarise(mn = mean(n), med=median(n)) |>
+  ungroup()
+```
+
+### counting combinations of multiple variables
+
+example: petitions data has four categorical variables (topic, petition_type, petition_gender, response). I want to do counts of each combination of pairs without having to type the names out every time.
+
+first, get the variable names and store in a named vector
+
+```{r}
+# drop the id column
+petitions_cat <-
+petitions |>
+   select(-petition_id)
+
+(cat_names <- 
+  petitions_cat |>
+  names() |> 
+  # use set_names to name the names 
+  # then you'll get named lists, easier to do things with
+  # https://aosmith.rbind.io/2018/08/20/automating-exploratory-plots/
+  set_names() 
+)
+```
+
+
+Another way to count one variable at a time, but this time you get a list of dataframes. 
+
+i'm not sure how this works or where i got it from... (nb the list elements are named because you used a named vector!)
+
+```{r}
+map(cat_names, ~petitions_cat |>  count(.data[[.x]])) 
+```
+
+but counting 2 at a time gets more complicated.
+
+ there are six possible 2 way combos (as long as you can assume it doesn't matter which way round you have them)
+
+- topic x petition_type
+- topic x petition_gender
+- topic x response
+- petition_type x petition_gender
+- petition_type x response
+- petition_gender x response
+
+
+you need to get each pair in a list
+
+easy way to make the pairs is combn() but that makes a matrix. 
+
+```{r}
+combn(cat_names, m=2 ) 
+```
+
+several options to turn the matrix into a list (see [SO: Convert a matrix to a list of column-vectors](https://stackoverflow.com/questions/6819804/convert-a-matrix-to-a-list-of-column-vectors))
+
+- convert to tibble then to list (straight to as.list() doesn't quite work)
+
+```{r}
+(petition_cat_names <-
+  combn(cat_names, m=2 ) |>  
+  # give the columns short names in .name_repair
+  as_tibble(.name_repair = ~c("tp", "tg", "tr", "pg", "pr", "gr") ) 
+)
+```
+a) as.list() 
+
+```{r}
+(petition_cat_names_list <-
+  petition_cat_names |> 
+   as.list())
+```
+
+b) use map with `[` to pull out the values (learned this from [Jenny Bryan](https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html#extract_multiple_values))
+
+```{r}
+map(petition_cat_names, `[`)
+```
+
+- or skip making the tibble using asplit(), but then it needs naming
+
+```{r}
+combn(cat_names, m=2) |> 
+  asplit(MARGIN = 2) |> 
+  set_names(c("tp", "tg", "tr", "pg", "pr", "gr"))
+```
+
+It's helpful to test the next step with a single pair before trying to scale up.
+
+```{r}
+petition_cat_names[[4]] # pull out both rows in 4th column, as a vector
+```
+
+Can't just use the stored variables directly inside count(); need across(all_of()).
+
+```{r}
+petitions |>
+  count(across(all_of(petition_cat_names[[4]])))
+```
+
+Now for some purrr::map magic to scale it up.
+
+For this make a little helper function.
+
+```{r}
+across_count <- function(data, vars) {
+  data |>
+    count(across(all_of({{vars}})))
+}
+```
+
+tada!
+
+```{r}
+petition_cat_names_list |>
+  map(~across_count(petitions_cat, .x))
+```
+
+
+
+Can do the same thing in a group_by/summarise pipeline (might want to do something other than just count)
+
+test with a single pair
+
+```{r}
+petitions_cat |>
+  group_by(across(all_of(petition_cat_names[[4]]))) |>
+  summarise(n = n(), .groups = "drop_last") |>
+  ungroup()
+```
+
+make the across(all_of()) function
+
+```{r}
+across_group_by <- function(data, vars) {
+  data |>
+    group_by(across(all_of(vars)))
+}
+```
+
+
+start with map in the group_by function to create a list of three grouped DFs, and then summarise *inside* the map (took me so long to work this out...)
+
+```{r}
+petition_cat_names_list |> 
+  map(~across_group_by(petitions_cat, .x) |>  
+        summarise(n = n(), .groups = "drop_last") |> 
+        ungroup() |>
+        mutate(pct = round(n/sum(n)*100, 2))
+      )
+```
+
+
+
+### bonus select only version
+
+I might want to make a list of dfs for each pair but *without* group_by/count.
+
+select only needs all_of
+
+```{r}
+# seems this doesn't need embracing?
+all_select <- function(data, vars){
+  data |> select(all_of(vars))
+}
+```
+
+
+```{r}
+petition_cat_names_list |>
+  map(~all_select(petitions_cat, .x) |> 
+        head()
+      )
+```
+
+
+

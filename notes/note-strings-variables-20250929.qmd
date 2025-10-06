@@ -28,10 +28,12 @@ and then reuse the stored short `var` instead of typing out a_very_long_column_n
 
 Examples below may also work in writing functions; compare with the various TILs on naming things/functions. 
 
+Todo: another post with more on working with multiple variables.
+
 
 ## Examples
 
-Using a sample taken from the [Addressing Health Pensions Database](https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=9325#!/details)
+Using a sample taken from the [Addressing Health Pensions Database](https://beta.ukdataservice.ac.uk/datacatalogue/studies/study?id=9325#!/details) which has lots of variables with quite long descriptive names; the sample includes only some of them.
 
 ```{r}
 addressing_health <- 
@@ -44,11 +46,12 @@ addressing_health |>
   names()
 ```
 
-Let's say I want to mess around with the columns `length_of_service_years` and `ppg_allowance_decimal`.
+Let's say I want to mess around with the columns `length_of_service_years`, `ppg_allowance_decimal` or `cause_medical`.
 
 ```{r}
 (losy <- "length_of_service_years")
 (pad <- "ppg_allowance_decimal")
+(cause <- "cause_medical")
 ```
 
 
@@ -77,16 +80,7 @@ addressing_health |>
 
 ### group by
 
-use `group_by_at()` 
-
-```{r}
-addressing_health |>
-  group_by_at(losy) |>
-  summarise(n = n()) |>
-  head(10)
-```
-
-or `across()` + `all_of()` (or `any_of`) 
+use `across()` + `all_of()` (or `any_of`) 
 
 ```{r}
 addressing_health |>
@@ -95,6 +89,15 @@ addressing_health |>
   head(10)
 ```
 
+
+or `group_by_at()` [in fact this is marked as superseded]
+
+```{r}
+addressing_health |>
+  group_by_at(losy) |>
+  summarise(n = n()) |>
+  head(10)
+```
 
 
 
@@ -107,6 +110,7 @@ use `get()`
 addressing_health |> 
   filter(get(losy) <= 8)
 ```
+
 
 ### mutate
 
@@ -161,11 +165,28 @@ addressing_health |>
 ```
 
 
+### count() (and add_count()?)
+
+as with group_by, use across(all_of()) (alternatively could use pick() but that also seems to be deprecated, boo)
+
+
+```{r}
+addressing_health |>
+  count(across(all_of(losy)), sort = T) |>
+  head(10)
+```
+
+
+```{r}
+addressing_health |>
+  count(pick(cause))
+```
+
 
 ## working with vectors
 
-Let's say I want to get the mean, median and standard deviation of each column, as separate vectors rather than in a dataframe.
- 
+Let's say I want to get the mean, median and standard deviation of each numerical column, as separate vectors rather than in a dataframe.
+
 This is largely a lesson in subsetting... but
 NB that the shorthand form x$y doesn't work; you have to use x[[y]].
 

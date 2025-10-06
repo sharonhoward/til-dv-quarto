@@ -1,0 +1,100 @@
+---
+title: "automate frequency tables"
+author: "Sharon Howard"
+date: "2025-10-06"
+categories: [variables, combinations, frequency tables]
+execute:
+  warning: false
+  message: false
+---
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+
+## Notes
+
+The scenario: I have a dataset with several variables and want to make frequency tables of all the 2-way combinations (maybe even 3-way combinations).
+
+
+## Examples
+
+Using Old Bailey trials data.
+
+```{r}
+trials_cat <-
+obv_trials |>
+  select(deft_speech_cat, deft_gender, offence_cat, verdict_cat) |>
+  filter(!is.na(deft_gender), verdict_cat %in% c("guilty", "notGuilty")) 
+```
+
+
+```{r}
+trials_cat |>
+  head(10)
+```
+
+
+Given a tibble in the format above, with each variable in its own column,
+it's amazingly easy to do 1-way frequency tables and get a (named) list of tables. 
+
+```{r}
+too_easy <-
+  map(trials_cat, table)
+
+too_easy
+```
+
+
+so then you can run, eg, chi-squared goodness of fit tests on all of them at once...
+
+```{r}
+map(too_easy, chisq.test)
+```
+
+2-way tables need a little bit more work.
+Instead of just using a single tibble, you want a list of tibbles, each one containing a pair of variables.
+
+[see post on automating counts for the gory details.]
+
+```{r}
+cat_names <- 
+  trials_cat |>
+  names() |> 
+  set_names() 
+
+cat_names_list <-
+  combn(cat_names, m=2 ) |>  
+  as_tibble(.name_repair = ~c("sg", "so", "sv", "go", "gv", "ov") ) |> 
+  as.list()
+
+all_select <- function(data, vars){
+  data |> select(all_of(vars))
+}
+
+trial_cat_groups <-
+cat_names_list |>
+  map(~all_select(trials_cat, .x))
+```
+
+
+then it's just map() and table() again.
+
+```{r}
+(trial_cat_tabs <-
+  map(trial_cat_groups, table)
+ )
+```
+
+Run chi-squared test of independence on all the tables.
+
+```{r}
+map(trial_cat_tabs, chisq.test)
+```
+
+
+
+
