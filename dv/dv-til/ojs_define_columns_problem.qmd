@@ -1,0 +1,102 @@
+---
+title: "ojs_define problem with .columns"
+date: "2025-10-25"
+categories: 
+  - ojs
+  - naming things
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+I came across a puzzling problem (bug?) using ObservableJS in a Quarto website. In OJS you can use "columns" (like R names()) to get the names of variables in a data object. Sometimes I need to get the names to reuse (eg in columns of Inputs.table or functions). 
+
+But this didn't seem to work when using the ojs_define() method to convert R data to OJS format. This is an examination of the cause of the problem and my workaround for it.
+
+## Examples
+
+```{r includes}
+#| code-fold: true
+
+library(tidyverse)
+
+library(mindseyedata)
+
+# get the first 15 rows of the coroners data
+inquests <-
+coroners |> 
+  select(id=rowid, doc_date, parish, the_deceased, gender, verdict) |> 
+  mutate(across(where(is.character ), ~na_if(., "") )) |>
+  slice(1:15)
+
+# make a copy of inquests
+# write_csv(inquests, here::here("outputs/inquests_20251025.csv"), na="")
+```
+
+```{r}
+ojs_define(ojs_inquests = inquests)
+```
+
+```{ojs}
+ojsInquests = transpose(ojs_inquests)
+```
+
+Using .columns with a built-in OJS dataset just to show that the method does work.
+
+```{ojs}
+penguins.columns
+```
+
+But what happens if I try to access columns in ojsInquests? I get an "undefined" warning.
+
+```{ojs}
+ojsInquests.columns
+```
+
+If I import inquests using the FileAttachment method, it's fine.
+
+```{ojs}
+inquestsFile = FileAttachment("../../outputs/inquests_20251025.csv").csv()
+```
+
+
+```{ojs}
+inquestsFile.columns
+```
+
+The thing is that the [FileAttachment](https://observablehq.com/documentation/data/files/file-attachments) method does a number of nice extra things under the hood. The other thing is that, as a Javascript novice, I don't always know what's [ObservableJS and what's vanilla JS](https://observablehq.com/documentation/cells/observable-javascript).
+
+I already knew that FileAttachment can format dates, but with ojs_define() you have to do that yourself. It turns out that FileAttachment also adds `columns` as metadata (click on the triangle to open up the array and you'll see it at the end).
+
+```{ojs}
+inquestsFile
+```
+
+ojs_define doesn't do that bit.
+
+```{ojs}
+ojsInquests
+```
+
+
+I don't really want to have to use FileAttachment all the time, but one workaround would be write_csv with the data created in R and then import it that way.
+
+A simpler (I think) workaround is to use names() in R to get the names as a vector, then convert that with ojs_define (unlike dataframes, it doesn't need transpose).
+
+```{r}
+(inquests_names <-
+  names(inquests))
+
+ojs_define(ojsInquestsNames = inquests_names)
+
+```
+
+So now I have the array I want. Tada, etc.
+
+```{ojs}
+ojsInquestsNames
+```
+
+I could possibly add the columns metadata *before* OJS conversion if I turn the R dataframe into JSON... but that really feels like overthinking it.

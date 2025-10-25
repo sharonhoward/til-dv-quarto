@@ -562,35 +562,35 @@
   {
     "objectID": "tils/til-combn-make-pairs-20250630.html",
     "href": "tils/til-combn-make-pairs-20250630.html",
-    "title": "make unique pairs from a list of values",
+    "title": "make unique pairs from a list of values with combn()",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
     "objectID": "tils/til-combn-make-pairs-20250630.html#includes",
     "href": "tils/til-combn-make-pairs-20250630.html#includes",
-    "title": "make unique pairs from a list of values",
+    "title": "make unique pairs from a list of values with combn()",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
     "objectID": "tils/til-combn-make-pairs-20250630.html#notes",
     "href": "tils/til-combn-make-pairs-20250630.html#notes",
-    "title": "make unique pairs from a list of values",
+    "title": "make unique pairs from a list of values with combn()",
     "section": "Notes",
-    "text": "Notes\n\n\nIf x is a positive integer, returns all combinations of the elements of seq(x) taken m at a time.\n\ncompletely unique pairs - eg you don’t get a+b and b+a. if you want that, use expand_grid() TIL\ncombn makes a matrix, so then you have to turn it into a tibble.\n\nas_tibble .name_repair can be used to create column names, nb need to prefix c(a,b, etc) with tilde.\nneeds public data if moved to gh.io?"
+    "text": "Notes\n\n\nIf x is a positive integer, returns all combinations of the elements of seq(x) taken m at a time.\n\ncompletely unique pairs - eg you don’t get a+b and b+a. if you want that, use expand_grid() TIL\ncombn() makes a matrix, so then you have to turn it into a tibble.\n\nas_tibble .name_repair can be used to create column names, nb need to prefix c(a,b, etc) with tilde.\nneeds public data if moved to gh.io?"
   },
   {
     "objectID": "tils/til-combn-make-pairs-20250630.html#example",
     "href": "tils/til-combn-make-pairs-20250630.html#example",
-    "title": "make unique pairs from a list of values",
+    "title": "make unique pairs from a list of values with combn()",
     "section": "Example",
     "text": "Example\n\nagg_variables_csv &lt;- \n  read_csv(here::here(\"data/agg_variables.csv\"), show_col_types = FALSE) \n \nagg_variables_names &lt;- \nagg_variables_csv$name \n \nnew_col_names &lt;- c(\"rows\", \"series\") \n \n \ncombn(agg_variables_names, m=2 ) |&gt;  \n  # transpose the matrix else you get stupidly wide df. \n  t() |&gt; \n  as_tibble(.name_repair = ~new_col_names) \n\n# A tibble: 120 × 2\n   rows             series                \n   &lt;chr&gt;            &lt;chr&gt;                 \n 1 offence_category offence_subcategory   \n 2 offence_category plea                  \n 3 offence_category verdict_category      \n 4 offence_category verdict_subcategory   \n 5 offence_category punishment_category   \n 6 offence_category punishment_subcategory\n 7 offence_category defendant_gender      \n 8 offence_category defendant_age         \n 9 offence_category victim_gender         \n10 offence_category victim_age            \n# ℹ 110 more rows\n\n  #as_tibble(.name_repair = ~c(\"rows\", \"series\")) # either way works but nb placing of ~"
   },
   {
     "objectID": "tils/til-combn-make-pairs-20250630.html#resources",
     "href": "tils/til-combn-make-pairs-20250630.html#resources",
-    "title": "make unique pairs from a list of values",
+    "title": "make unique pairs from a list of values with combn()",
     "section": "Resources",
     "text": "Resources\n\nhttps://stackoverflow.com/a/1710387/7281022\nhttps://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn"
   },
@@ -924,95 +924,116 @@
     "text": "Notes\n\nyou can even replace previously specified labels. might be handy for overriding function defaults?"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html",
-    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html",
-    "title": "reverse numerical scales in ggplot",
+    "objectID": "dv/dv-til/ojs_define_dates_problem.html",
+    "href": "dv/dv-til/ojs_define_dates_problem.html",
+    "title": "ojs_define problem with dates",
     "section": "",
-    "text": "source(here::here('R/shared.R'))"
+    "text": "The Quarto ojs_define method to convert R (or python) data to OJS format has some limitations compared to attaching files with FileAttachment. In particular, ojs_define won’t formate dates. This is a quick post for me, a Javascript dummy, to get them correctly formatted in ojs."
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#includes",
-    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#includes",
-    "title": "reverse numerical scales in ggplot",
+    "objectID": "dv/dv-til/ojs_define_dates_problem.html#notes",
+    "href": "dv/dv-til/ojs_define_dates_problem.html#notes",
+    "title": "ojs_define problem with dates",
     "section": "",
-    "text": "source(here::here('R/shared.R'))"
+    "text": "The Quarto ojs_define method to convert R (or python) data to OJS format has some limitations compared to attaching files with FileAttachment. In particular, ojs_define won’t formate dates. This is a quick post for me, a Javascript dummy, to get them correctly formatted in ojs."
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#notes",
-    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#notes",
-    "title": "reverse numerical scales in ggplot",
-    "section": "Notes",
-    "text": "Notes\n\ndoes the same thing as mutate fct_rev before ggplot, but with a numerical col\n(could you also use it with a chr column? no, has to be num.)"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#example",
-    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#example",
-    "title": "reverse numerical scales in ggplot",
+    "objectID": "dv/dv-til/ojs_define_dates_problem.html#example",
+    "href": "dv/dv-til/ojs_define_dates_problem.html#example",
+    "title": "ojs_define problem with dates",
     "section": "Example",
-    "text": "Example\n\ncheshire_petitions |&gt; \n  count(topic) |&gt; \n  ggplot(aes(n, topic)) + \n  geom_col() + \n  scale_x_reverse() # yes very ridiculous \n\n\n\n\n\n\n\n  #scale_y_reverse() # chr data: nope."
+    "text": "Example\n\n\nCode\nlibrary(tidyverse)\n\nlibrary(mindseyedata)\n\n# get a selection of the coroners data\ninquests &lt;-\ncoroners |&gt; \n  select(id=rowid, doc_date, parish, the_deceased, gender, verdict) |&gt; \n  mutate(across(where(is.character ), ~na_if(., \"\") )) \n\nojs_define(ojs_inquests = inquests)\n\n\n\nojsInquests = transpose(ojs_inquests)\n\n\n\n\n\n\nIt’s not obvious at this point, but the doc_date in the ojs version of the data is not formatted as a date.\n\nojsInquests\n\n\n\n\n\n\nThis causes big problems for visualisation. As far as Observable Plot is concerned, doc_date is just a string.\n\nPlot.plot({\n    title: \"By date\",\n    x: {label: \"date\"},\n    y: {label: \"inquests\", grid:true},\n    width: width,\n    marks: [\n      Plot.lineY(\n            ojsInquests,\n            Plot.groupX({y: \"count\"}, {x:\"doc_date\"})\n        )\n    ]\n})\n\n\n\n\n\n\nThe d3 function timeParse will turn doc_date into a “proper” date.\n\nparseDate = d3.timeParse(\"%Y-%m-%d\");\n\n// Use map() to apply the parser to each row\nojsInquestsDates = ojsInquests.map(d =&gt; ({\n  date: parseDate(d.doc_date),\n  ...d\n}));\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nojsInquestsDates\n\n\n\n\n\n\nThere’s a bit more to do before it’s possible to get a nice visualisation from this data, because the dates are quite sparsely distributed. But since Plot now understands the date column is a date, this can be done quite easily with Plot.bin and the interval option (experiment to get the best effect).\n\nPlot.plot({\n    title: \"By date\",\n    x: {label: \"date\"},\n    y: {label: \"inquests\", grid: true},\n    width: width,\n    marks: [\n      Plot.lineY(ojsInquestsDates, \n          Plot.binX({y: \"count\"}, {x: \"date\", interval: \"3 months\"}))\n    ]\n})\n\n\n\n\n\n\nFinally, d3 also has date formatting functions that are useful for displaying the data in a table.\n\n// format dates nicely\nformatDate = d3.timeFormat(\"%e %b %Y\");\n\n\n\n\n\n\n\nInputs.table(ojsInquestsDates, {\n    layout: \"auto\",\n    format: {\n        date: formatDate,\n        id: d3.format(\".0f\") \n    },\n  columns: [\n    \"id\",\n    \"the_deceased\",\n    \"date\",\n    \"gender\",\n    \"verdict\",\n    \"parish\"\n  ]\n})"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
-    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
-    "title": "multiple scales in a ggplot with ggnewscale",
-    "section": "",
-    "text": "source(here::here('R/shared.R'))"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#includes",
-    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#includes",
-    "title": "multiple scales in a ggplot with ggnewscale",
-    "section": "",
-    "text": "source(here::here('R/shared.R'))"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#notes",
-    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#notes",
-    "title": "multiple scales in a ggplot with ggnewscale",
-    "section": "Notes",
-    "text": "Notes\n\npackage docs example as i haven’t thought up anything for this"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#example",
-    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#example",
-    "title": "multiple scales in a ggplot with ggnewscale",
-    "section": "Example",
-    "text": "Example\n\nlibrary(ggnewscale) \n \n# Equivalent to melt(volcano), but we don't want to depend on reshape2 \ntopography &lt;- expand.grid(x = 1:nrow(volcano), \n                          y = 1:ncol(volcano)) \ntopography$z &lt;- c(volcano) \n \n# point measurements of something at a few locations \nmeasurements &lt;- data.frame(x = runif(30, 1, 80), \n                           y = runif(30, 1, 60), \n                           thing = rnorm(30)) \n \nggplot(mapping = aes(x, y)) + \n  geom_contour(data = topography, aes(z = z, color = after_stat(level))) + \n  # Color scale for topography \n  scale_color_viridis_c(option = \"D\") + \n  # geoms below will use another color scale \n  new_scale_color() + \n  geom_point(data = measurements, size = 3, aes(color = thing)) + \n  # Color scale applied to geoms added after new_scale_color() \n  scale_color_viridis_c(option = \"A\")"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#resources",
-    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#resources",
-    "title": "multiple scales in a ggplot with ggnewscale",
+    "objectID": "dv/dv-til/ojs_define_dates_problem.html#resources",
+    "href": "dv/dv-til/ojs_define_dates_problem.html#resources",
+    "title": "ojs_define problem with dates",
     "section": "Resources",
-    "text": "Resources\n\nhttps://eliocamp.github.io/ggnewscale/index.html"
+    "text": "Resources\n\nObservable: don’t use ordinal scales for dates"
   },
   {
-    "objectID": "dv/dv-til/reorder-within.html",
-    "href": "dv/dv-til/reorder-within.html",
-    "title": "reordering faceted charts",
+    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
+    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
+    "title": "change legend ordering in geom_waffle for fill",
     "section": "",
-    "text": "Sometimes you want to reorder by counts of values in ggplot faceted charts (small multiples). In a single chart you could easily do this with something like fct_reorder. But that won’t work with a faceted chart. The solution is the reorder_within functions in the tidytext package.\nFocus here on bar charts, but should work with any facet-able ggplot chart."
+    "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "dv/dv-til/reorder-within.html#notes",
-    "href": "dv/dv-til/reorder-within.html#notes",
-    "title": "reordering faceted charts",
+    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#includes",
+    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#includes",
+    "title": "change legend ordering in geom_waffle for fill",
     "section": "",
-    "text": "Sometimes you want to reorder by counts of values in ggplot faceted charts (small multiples). In a single chart you could easily do this with something like fct_reorder. But that won’t work with a faceted chart. The solution is the reorder_within functions in the tidytext package.\nFocus here on bar charts, but should work with any facet-able ggplot chart."
+    "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "dv/dv-til/reorder-within.html#examples",
-    "href": "dv/dv-til/reorder-within.html#examples",
-    "title": "reordering faceted charts",
+    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#notes",
+    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#notes",
+    "title": "change legend ordering in geom_waffle for fill",
+    "section": "Notes",
+    "text": "Notes\n\nin scale_fill_* use guide = guide_legend(reverse = TRUE)\nlegend order doesn’t actually seem to be a problem any more?\nthen again I’m not keen on the order inside the waffle. but this doesn’t fix that."
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#example",
+    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#example",
+    "title": "change legend ordering in geom_waffle for fill",
+    "section": "Example",
+    "text": "Example\n\nlibrary(waffle) \nlibrary(ggthemes) \n \n \ncheshire_petitions |&gt; \n  count(petition_gender, response) |&gt; \n  ggplot(aes(fill=response, values=n)) + \n  geom_waffle(colour=\"white\", make_proportional = TRUE, n_rows = 10) + \n  coord_equal() + \n  facet_wrap(~petition_gender) + \n  theme_minimal() + \n  theme_enhance_waffle() + \n  # it does reverse the legend, *without* changing order in waffles. \n  scale_fill_tableau(guide = guide_legend(reverse = TRUE)) \n\n\n\n\n\n\n\n# what happens if you use fct_rev on response_cat ? order in waffles is unchanged but legend is in reverse order \n# cheshire_petitions |&gt; \n#   count(petition_gender, response) |&gt; \n#   mutate(response_cat=fct_rev(response)) |&gt; \n#   ggplot(aes(fill=response_cat, values=n)) + \n#   geom_waffle(colour=\"white\", flip = TRUE, make_proportional = TRUE, n_rows = 10) + \n#   coord_equal() + \n#   facet_wrap(~petition_gender) + \n#   theme_minimal() + \n#   theme_enhance_waffle() + \n#   scale_fill_tableau() \n \n \n# response_cat order in waffles unchanged. legend same order, but colours different! \n# cheshire_petitions |&gt; \n#   count(petition_gender, response) |&gt; \n#   mutate(response_cat = fct_reorder(response, n)) |&gt; \n#   ggplot(aes(fill=response_cat, values=n)) + \n#   geom_waffle(colour=\"white\", flip = TRUE, make_proportional = TRUE, n_rows = 10) + \n#   coord_equal() + \n#   facet_wrap(~petition_gender) + \n#   theme_minimal() + \n#   theme_enhance_waffle() + \n#   scale_fill_tableau()"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
+    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
+    "title": "move legend into an empty ggplot facet to save space",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#includes",
+    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#includes",
+    "title": "move legend into an empty ggplot facet to save space",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#notes",
+    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#notes",
+    "title": "move legend into an empty ggplot facet to save space",
+    "section": "Notes",
+    "text": "Notes\n\nadjust position in guides() and theme()\noriginal TIL and SO is superseded to some extent\n\nPlease use the legend.position.inside argument of theme() instead.\n\n\nlegend.position.inside A numeric vector of length two setting the placement of legends that have the “inside” position."
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#example",
+    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#example",
+    "title": "move legend into an empty ggplot facet to save space",
+    "section": "Example",
+    "text": "Example\n\nlibrary(waffle) \n \ncheshire_petitions_responses &lt;- \n  cheshire_petitions |&gt; \n  filter(response!=\"uncertain\") |&gt; \n  # slightly simplified responses - merge non-full grants and merge written rejections \n  mutate(response_ss = case_when( \n    response==\"grant_cond\" ~ \"grant_part\", \n    response %in% c(\"nothing\", \"absent\") ~ \"rejected\", \n    TRUE ~ response \n  )) |&gt; \n  # order of values  \n  mutate(response_ss = fct_relevel(response_ss, \"granted\", \"grant_part\", \"referred\", \"rejected\", \"no_response\")) |&gt;  \n  mutate(period = case_when( \n    year&lt;1600 ~ \"1500s\", \n    year&lt;1630 ~ \"1608-1628\", \n    year&lt;1650 ~ \"1638-1658\", \n    year&lt;1700 ~ \"1668-1698\", \n    year&gt;1700 ~ \"1700s\" \n  ))  \n \ncheshire_petitions_responses |&gt; \n  count(period, response_ss) |&gt; \n    ggplot(aes(fill=response_ss, values=n)) + \n  geom_waffle(colour=\"white\", n_rows = 10, make_proportional = TRUE) +  \n  # can't remember how to fix ordering in waffle... was it something to do with reordering when you make the df, not when doing the ggplot???? not sure. \n  coord_equal() + \n  facet_wrap(~period) + \n    scale_fill_manual(values = c('#2166ac',  '#92c5de',  '#d1e5f0', '#f4a582','#d6604d')) + \n  theme_minimal() + \n  theme_enhance_waffle() + \n  theme(legend.position.inside = c(0.9,0.3) ) + # pretty close, will do for now. \n  # theme(legend.position = c(1,0), legend.justification = c(1,0)) + # correct place but warning \n  guides(fill = guide_legend(title.position = \"top\" , position = \"inside\")) + \n  labs(title=\"Changing responses to Cheshire QS petitions 1573-1798\", fill=\"response\", caption=\"1 square=1% of petitions\")"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#resources",
+    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#resources",
+    "title": "move legend into an empty ggplot facet to save space",
+    "section": "Resources",
+    "text": "Resources\n\nhttps://stackoverflow.com/questions/54438495/shift-legend-into-empty-facets-of-a-faceted-plot-in-ggplot2\nhttps://www.tidyverse.org/blog/2024/02/ggplot2-3-5-0-legends/#placement"
+  },
+  {
+    "objectID": "dv/dv-til/ojs_define_columns_problem.html",
+    "href": "dv/dv-til/ojs_define_columns_problem.html",
+    "title": "ojs_define problem with .columns",
+    "section": "",
+    "text": "I came across a puzzling problem (bug?) using ObservableJS in a Quarto website. In OJS you can use “columns” (like R names()) to get the names of variables in a data object. Sometimes I need to get the names to reuse (eg in columns of Inputs.table or functions).\nBut this didn’t seem to work when using the ojs_define() method to convert R data to OJS format. This is an examination of the cause of the problem and my workaround for it."
+  },
+  {
+    "objectID": "dv/dv-til/ojs_define_columns_problem.html#notes",
+    "href": "dv/dv-til/ojs_define_columns_problem.html#notes",
+    "title": "ojs_define problem with .columns",
+    "section": "",
+    "text": "I came across a puzzling problem (bug?) using ObservableJS in a Quarto website. In OJS you can use “columns” (like R names()) to get the names of variables in a data object. Sometimes I need to get the names to reuse (eg in columns of Inputs.table or functions).\nBut this didn’t seem to work when using the ojs_define() method to convert R data to OJS format. This is an examination of the cause of the problem and my workaround for it."
+  },
+  {
+    "objectID": "dv/dv-til/ojs_define_columns_problem.html#examples",
+    "href": "dv/dv-til/ojs_define_columns_problem.html#examples",
+    "title": "ojs_define problem with .columns",
     "section": "Examples",
-    "text": "Examples\nusing cheshire petitions\n\n\nCode\nlibrary(scales) \nlibrary(janitor) \nlibrary(tidytext)\nlibrary(tidyverse)\n\nlibrary(ggthemes)\ntheme_set(theme_minimal())  \n\nlibrary(mindseyedata)\n\n\n\na single chart for comparison\nThe ggplot default is alphabetical order. (For reasons best known to itself, in a horizontal bar chart it sorts descending Z-A, which always looks wrong to me… this can be fixed with fct_rev()).\n\ncheshire_petitions |&gt;\n  count(topic) |&gt;\n  mutate(topic = fct_rev(topic)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col()\n\n\n\n\n\n\n\n\nbut often you’d prefer to order the chart by counts. This is easy with a single chart.\n\ncheshire_petitions |&gt;\n  count(topic) |&gt;\n  mutate(topic = fct_reorder(topic, n)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col()\n\n\n\n\n\n\n\n\n\n\nthe faceted chart\nOK, so I want to add an extra dimension and make a faceted chart. (NB fct_rev works fine.)\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = fct_rev(topic)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nBut if I try to reorder with fct_reorder, weird things start to happen. The problem is that it sorts by the overall counts, not within each facet.\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = fct_reorder(topic, n)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nSo instead, I need to use reorder_within() and scale_*_reordered()\nI always forget which order the variables should go in reorder_within; the faceting variable needs to go last.\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = reorder_within(topic, n, petition_gender)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  scale_y_reordered() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nIt’s possible to reorder_within multiple variables: check the docuemntation."
-  },
-  {
-    "objectID": "dv/dv-til/reorder-within.html#resources",
-    "href": "dv/dv-til/reorder-within.html#resources",
-    "title": "reordering faceted charts",
-    "section": "Resources",
-    "text": "Resources\n\ndocumentation\nReordering and facetting for ggplot2\nOrdering categories within ggplot2 facets"
+    "text": "Examples\n\n\nCode\nlibrary(tidyverse)\n\nlibrary(mindseyedata)\n\n# get the first 15 rows of the coroners data\ninquests &lt;-\ncoroners |&gt; \n  select(id=rowid, doc_date, parish, the_deceased, gender, verdict) |&gt; \n  mutate(across(where(is.character ), ~na_if(., \"\") )) |&gt;\n  slice(1:15)\n\n# make a copy of inquests\n# write_csv(inquests, here::here(\"outputs/inquests_20251025.csv\"), na=\"\")\n\n\n\nojs_define(ojs_inquests = inquests)\n\n\nojsInquests = transpose(ojs_inquests)\n\n\n\n\n\n\nUsing .columns with a built-in OJS dataset just to show that the method does work.\n\npenguins.columns\n\n\n\n\n\n\nBut what happens if I try to access columns in ojsInquests? I get an “undefined” warning.\n\nojsInquests.columns\n\n\n\n\n\n\nIf I import inquests using the FileAttachment method, it’s fine.\n\ninquestsFile = FileAttachment(\"../../outputs/inquests_20251025.csv\").csv()\n\n\n\n\n\n\n\ninquestsFile.columns\n\n\n\n\n\n\nThe thing is that the FileAttachment method does a number of nice extra things under the hood. The other thing is that, as a Javascript novice, I don’t always know what’s ObservableJS and what’s vanilla JS.\nI already knew that FileAttachment can format dates, but with ojs_define() you have to do that yourself. It turns out that FileAttachment also adds columns as metadata (click on the triangle to open up the array and you’ll see it at the end).\n\ninquestsFile\n\n\n\n\n\n\nojs_define doesn’t do that bit.\n\nojsInquests\n\n\n\n\n\n\nI don’t really want to have to use FileAttachment all the time, but one workaround would be write_csv with the data created in R and then import it that way.\nA simpler (I think) workaround is to use names() in R to get the names as a vector, then convert that with ojs_define (unlike dataframes, it doesn’t need transpose).\n\n(inquests_names &lt;-\n  names(inquests))\n\n[1] \"id\"           \"doc_date\"     \"parish\"       \"the_deceased\" \"gender\"      \n[6] \"verdict\"     \n\nojs_define(ojsInquestsNames = inquests_names)\n\nSo now I have the array I want. Tada, etc.\n\nojsInquestsNames\n\n\n\n\n\n\nI could possibly add the columns metadata before OJS conversion if I turn the R dataframe into JSON… but that really feels like overthinking it."
   },
   {
     "objectID": "dv/ridgeline.html",
@@ -1624,67 +1645,95 @@
     "text": "Resources\nrdocumentation"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
-    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
-    "title": "move legend into an empty ggplot facet to save space",
+    "objectID": "dv/dv-til/reorder-within.html",
+    "href": "dv/dv-til/reorder-within.html",
+    "title": "reordering faceted charts",
     "section": "",
-    "text": "source(here::here('R/shared.R'))"
+    "text": "Sometimes you want to reorder by counts of values in ggplot faceted charts (small multiples). In a single chart you could easily do this with something like fct_reorder. But that won’t work with a faceted chart. The solution is the reorder_within functions in the tidytext package.\nFocus here on bar charts, but should work with any facet-able ggplot chart."
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#includes",
-    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#includes",
-    "title": "move legend into an empty ggplot facet to save space",
+    "objectID": "dv/dv-til/reorder-within.html#notes",
+    "href": "dv/dv-til/reorder-within.html#notes",
+    "title": "reordering faceted charts",
     "section": "",
-    "text": "source(here::here('R/shared.R'))"
+    "text": "Sometimes you want to reorder by counts of values in ggplot faceted charts (small multiples). In a single chart you could easily do this with something like fct_reorder. But that won’t work with a faceted chart. The solution is the reorder_within functions in the tidytext package.\nFocus here on bar charts, but should work with any facet-able ggplot chart."
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#notes",
-    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#notes",
-    "title": "move legend into an empty ggplot facet to save space",
-    "section": "Notes",
-    "text": "Notes\n\nadjust position in guides() and theme()\noriginal TIL and SO is superseded to some extent\n\nPlease use the legend.position.inside argument of theme() instead.\n\n\nlegend.position.inside A numeric vector of length two setting the placement of legends that have the “inside” position."
+    "objectID": "dv/dv-til/reorder-within.html#examples",
+    "href": "dv/dv-til/reorder-within.html#examples",
+    "title": "reordering faceted charts",
+    "section": "Examples",
+    "text": "Examples\nusing cheshire petitions\n\n\nCode\nlibrary(scales) \nlibrary(janitor) \nlibrary(tidytext)\nlibrary(tidyverse)\n\nlibrary(ggthemes)\ntheme_set(theme_minimal())  \n\nlibrary(mindseyedata)\n\n\n\na single chart for comparison\nThe ggplot default is alphabetical order. (For reasons best known to itself, in a horizontal bar chart it sorts descending Z-A, which always looks wrong to me… this can be fixed with fct_rev()).\n\ncheshire_petitions |&gt;\n  count(topic) |&gt;\n  mutate(topic = fct_rev(topic)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col()\n\n\n\n\n\n\n\n\nbut often you’d prefer to order the chart by counts. This is easy with a single chart.\n\ncheshire_petitions |&gt;\n  count(topic) |&gt;\n  mutate(topic = fct_reorder(topic, n)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col()\n\n\n\n\n\n\n\n\n\n\nthe faceted chart\nOK, so I want to add an extra dimension and make a faceted chart. (NB fct_rev works fine.)\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = fct_rev(topic)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nBut if I try to reorder with fct_reorder, weird things start to happen. The problem is that it sorts by the overall counts, not within each facet.\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = fct_reorder(topic, n)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nSo instead, I need to use reorder_within() and scale_*_reordered()\nI always forget which order the variables should go in reorder_within; the faceting variable needs to go last.\n\ncheshire_petitions |&gt;\n  count(topic, petition_gender) |&gt;\n  filter(petition_gender %in% c(\"f\", \"m\")) |&gt;\n  mutate(topic = reorder_within(topic, n, petition_gender)) |&gt;\n  ggplot(aes(n, topic)) +\n  geom_col() +\n  scale_y_reordered() +\n  facet_wrap(~petition_gender, scales=\"free\")\n\n\n\n\n\n\n\n\nIt’s possible to reorder_within multiple variables: check the docuemntation."
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#example",
-    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#example",
-    "title": "move legend into an empty ggplot facet to save space",
-    "section": "Example",
-    "text": "Example\n\nlibrary(waffle) \n \ncheshire_petitions_responses &lt;- \n  cheshire_petitions |&gt; \n  filter(response!=\"uncertain\") |&gt; \n  # slightly simplified responses - merge non-full grants and merge written rejections \n  mutate(response_ss = case_when( \n    response==\"grant_cond\" ~ \"grant_part\", \n    response %in% c(\"nothing\", \"absent\") ~ \"rejected\", \n    TRUE ~ response \n  )) |&gt; \n  # order of values  \n  mutate(response_ss = fct_relevel(response_ss, \"granted\", \"grant_part\", \"referred\", \"rejected\", \"no_response\")) |&gt;  \n  mutate(period = case_when( \n    year&lt;1600 ~ \"1500s\", \n    year&lt;1630 ~ \"1608-1628\", \n    year&lt;1650 ~ \"1638-1658\", \n    year&lt;1700 ~ \"1668-1698\", \n    year&gt;1700 ~ \"1700s\" \n  ))  \n \ncheshire_petitions_responses |&gt; \n  count(period, response_ss) |&gt; \n    ggplot(aes(fill=response_ss, values=n)) + \n  geom_waffle(colour=\"white\", n_rows = 10, make_proportional = TRUE) +  \n  # can't remember how to fix ordering in waffle... was it something to do with reordering when you make the df, not when doing the ggplot???? not sure. \n  coord_equal() + \n  facet_wrap(~period) + \n    scale_fill_manual(values = c('#2166ac',  '#92c5de',  '#d1e5f0', '#f4a582','#d6604d')) + \n  theme_minimal() + \n  theme_enhance_waffle() + \n  theme(legend.position.inside = c(0.9,0.3) ) + # pretty close, will do for now. \n  # theme(legend.position = c(1,0), legend.justification = c(1,0)) + # correct place but warning \n  guides(fill = guide_legend(title.position = \"top\" , position = \"inside\")) + \n  labs(title=\"Changing responses to Cheshire QS petitions 1573-1798\", fill=\"response\", caption=\"1 square=1% of petitions\")"
-  },
-  {
-    "objectID": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#resources",
-    "href": "dv/dv-til/til-ggplot-legend-empty-facet-20250630.html#resources",
-    "title": "move legend into an empty ggplot facet to save space",
+    "objectID": "dv/dv-til/reorder-within.html#resources",
+    "href": "dv/dv-til/reorder-within.html#resources",
+    "title": "reordering faceted charts",
     "section": "Resources",
-    "text": "Resources\n\nhttps://stackoverflow.com/questions/54438495/shift-legend-into-empty-facets-of-a-faceted-plot-in-ggplot2\nhttps://www.tidyverse.org/blog/2024/02/ggplot2-3-5-0-legends/#placement"
+    "text": "Resources\n\ndocumentation\nReordering and facetting for ggplot2\nOrdering categories within ggplot2 facets"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
-    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
-    "title": "change legend ordering in geom_waffle for fill",
+    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
+    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
+    "title": "multiple scales in a ggplot with ggnewscale",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#includes",
-    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#includes",
-    "title": "change legend ordering in geom_waffle for fill",
+    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#includes",
+    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#includes",
+    "title": "multiple scales in a ggplot with ggnewscale",
     "section": "",
     "text": "source(here::here('R/shared.R'))"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#notes",
-    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#notes",
-    "title": "change legend ordering in geom_waffle for fill",
+    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#notes",
+    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#notes",
+    "title": "multiple scales in a ggplot with ggnewscale",
     "section": "Notes",
-    "text": "Notes\n\nin scale_fill_* use guide = guide_legend(reverse = TRUE)\nlegend order doesn’t actually seem to be a problem any more?\nthen again I’m not keen on the order inside the waffle. but this doesn’t fix that."
+    "text": "Notes\n\npackage docs example as i haven’t thought up anything for this"
   },
   {
-    "objectID": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#example",
-    "href": "dv/dv-til/til-ggplot-waffle-order-legend-20250630.html#example",
-    "title": "change legend ordering in geom_waffle for fill",
+    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#example",
+    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#example",
+    "title": "multiple scales in a ggplot with ggnewscale",
     "section": "Example",
-    "text": "Example\n\nlibrary(waffle) \nlibrary(ggthemes) \n \n \ncheshire_petitions |&gt; \n  count(petition_gender, response) |&gt; \n  ggplot(aes(fill=response, values=n)) + \n  geom_waffle(colour=\"white\", make_proportional = TRUE, n_rows = 10) + \n  coord_equal() + \n  facet_wrap(~petition_gender) + \n  theme_minimal() + \n  theme_enhance_waffle() + \n  # it does reverse the legend, *without* changing order in waffles. \n  scale_fill_tableau(guide = guide_legend(reverse = TRUE)) \n\n\n\n\n\n\n\n# what happens if you use fct_rev on response_cat ? order in waffles is unchanged but legend is in reverse order \n# cheshire_petitions |&gt; \n#   count(petition_gender, response) |&gt; \n#   mutate(response_cat=fct_rev(response)) |&gt; \n#   ggplot(aes(fill=response_cat, values=n)) + \n#   geom_waffle(colour=\"white\", flip = TRUE, make_proportional = TRUE, n_rows = 10) + \n#   coord_equal() + \n#   facet_wrap(~petition_gender) + \n#   theme_minimal() + \n#   theme_enhance_waffle() + \n#   scale_fill_tableau() \n \n \n# response_cat order in waffles unchanged. legend same order, but colours different! \n# cheshire_petitions |&gt; \n#   count(petition_gender, response) |&gt; \n#   mutate(response_cat = fct_reorder(response, n)) |&gt; \n#   ggplot(aes(fill=response_cat, values=n)) + \n#   geom_waffle(colour=\"white\", flip = TRUE, make_proportional = TRUE, n_rows = 10) + \n#   coord_equal() + \n#   facet_wrap(~petition_gender) + \n#   theme_minimal() + \n#   theme_enhance_waffle() + \n#   scale_fill_tableau()"
+    "text": "Example\n\nlibrary(ggnewscale) \n \n# Equivalent to melt(volcano), but we don't want to depend on reshape2 \ntopography &lt;- expand.grid(x = 1:nrow(volcano), \n                          y = 1:ncol(volcano)) \ntopography$z &lt;- c(volcano) \n \n# point measurements of something at a few locations \nmeasurements &lt;- data.frame(x = runif(30, 1, 80), \n                           y = runif(30, 1, 60), \n                           thing = rnorm(30)) \n \nggplot(mapping = aes(x, y)) + \n  geom_contour(data = topography, aes(z = z, color = after_stat(level))) + \n  # Color scale for topography \n  scale_color_viridis_c(option = \"D\") + \n  # geoms below will use another color scale \n  new_scale_color() + \n  geom_point(data = measurements, size = 3, aes(color = thing)) + \n  # Color scale applied to geoms added after new_scale_color() \n  scale_color_viridis_c(option = \"A\")"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#resources",
+    "href": "dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html#resources",
+    "title": "multiple scales in a ggplot with ggnewscale",
+    "section": "Resources",
+    "text": "Resources\n\nhttps://eliocamp.github.io/ggnewscale/index.html"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html",
+    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html",
+    "title": "reverse numerical scales in ggplot",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#includes",
+    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#includes",
+    "title": "reverse numerical scales in ggplot",
+    "section": "",
+    "text": "source(here::here('R/shared.R'))"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#notes",
+    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#notes",
+    "title": "reverse numerical scales in ggplot",
+    "section": "Notes",
+    "text": "Notes\n\ndoes the same thing as mutate fct_rev before ggplot, but with a numerical col\n(could you also use it with a chr column? no, has to be num.)"
+  },
+  {
+    "objectID": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#example",
+    "href": "dv/dv-til/til-ggplot-scale-reverse-20250630.html#example",
+    "title": "reverse numerical scales in ggplot",
+    "section": "Example",
+    "text": "Example\n\ncheshire_petitions |&gt; \n  count(topic) |&gt; \n  ggplot(aes(n, topic)) + \n  geom_col() + \n  scale_x_reverse() # yes very ridiculous \n\n\n\n\n\n\n\n  #scale_y_reverse() # chr data: nope."
   },
   {
     "objectID": "dv/dv-til/til-ggplot-images-save-tiffs-20250630.html",
@@ -2160,14 +2209,14 @@
     "href": "tils/til-complete-counted-combinations-20250630.html#notes",
     "title": "fill in missing values with complete()",
     "section": "Notes",
-    "text": "Notes\n\nit’s not exactly missing data, but sometimes you want something like this for ggplot\nfill=list(n=0) will fill missings with 0 instead of NA"
+    "text": "Notes\n\nit’s not exactly missing data, but sometimes you want something like this for ggplot\nneeds a pair of columns\nfill=list(n=0) will fill missings with 0 instead of NA"
   },
   {
-    "objectID": "tils/til-complete-counted-combinations-20250630.html#example",
-    "href": "tils/til-complete-counted-combinations-20250630.html#example",
+    "objectID": "tils/til-complete-counted-combinations-20250630.html#examples",
+    "href": "tils/til-complete-counted-combinations-20250630.html#examples",
     "title": "fill in missing values with complete()",
-    "section": "Example",
-    "text": "Example\n\njudges100_appts |&gt; \n  count(judge_id, court_type) |&gt; \n  complete(judge_id, court_type, fill=list(n=0)) \n\n# A tibble: 500 × 3\n   judge_id court_type          n\n      &lt;int&gt; &lt;chr&gt;           &lt;int&gt;\n 1      110 Court of Claims     0\n 2      110 USCA                0\n 3      110 USCC (1869)         0\n 4      110 USDC                1\n 5      110 USSC                0\n 6      144 Court of Claims     0\n 7      144 USCA                0\n 8      144 USCC (1869)         0\n 9      144 USDC                1\n10      144 USSC                0\n# ℹ 490 more rows"
+    "section": "Examples",
+    "text": "Examples\nA data frame of counts. Most judges won’t appear in all court types, but I need explicit 0s for those cases.\n\njudges100_appts |&gt; \n  count(judge_id, court_type) |&gt; \n  complete(judge_id, court_type, fill=list(n=0)) \n\n# A tibble: 500 × 3\n   judge_id court_type          n\n      &lt;int&gt; &lt;chr&gt;           &lt;int&gt;\n 1      110 Court of Claims     0\n 2      110 USCA                0\n 3      110 USCC (1869)         0\n 4      110 USDC                1\n 5      110 USSC                0\n 6      144 Court of Claims     0\n 7      144 USCA                0\n 8      144 USCC (1869)         0\n 9      144 USDC                1\n10      144 USSC                0\n# ℹ 490 more rows\n\n\nA short list of biographical categories, as a vector. I want all the pairs of categories.\n\n(categories &lt;- c(\"height\", \"weight\", \"age\", \"gender\"))\n\n[1] \"height\" \"weight\" \"age\"    \"gender\"\n\n\nIt’ll include identical pairs, which I probably won’t want; I can filter those out. [See TILs on combn, expand_grid, for alternative approaches.]\n\ntibble(a=categories, b=categories) |&gt;\n  complete(a, b) |&gt;\n  filter(a != b) \n\n# A tibble: 12 × 2\n   a      b     \n   &lt;chr&gt;  &lt;chr&gt; \n 1 age    gender\n 2 age    height\n 3 age    weight\n 4 gender age   \n 5 gender height\n 6 gender weight\n 7 height age   \n 8 height gender\n 9 height weight\n10 weight age   \n11 weight gender\n12 weight height"
   },
   {
     "objectID": "tils/til-complete-counted-combinations-20250630.html#resources",

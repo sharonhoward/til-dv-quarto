@@ -1,0 +1,126 @@
+---
+title: "ojs_define problem with dates"
+date: "2025-10-25"
+categories: 
+  - ojs
+  - dates
+execute: 
+  warning: false
+  message: false
+---
+
+## Notes
+
+The Quarto ojs_define method to convert R (or python) data to OJS format has some limitations compared to attaching files with FileAttachment. In particular, [ojs_define won't formate dates](https://stackoverflow.com/questions/76499928/passing-dates-from-r-chunk-to-ojs-chunk-using-ojs-define-in-quarto). This is a quick post for me, a Javascript dummy, to get them correctly formatted in ojs.  
+
+## Example
+
+```{r includes}
+#| code-fold: true
+
+library(tidyverse)
+
+library(mindseyedata)
+
+# get a selection of the coroners data
+inquests <-
+coroners |> 
+  select(id=rowid, doc_date, parish, the_deceased, gender, verdict) |> 
+  mutate(across(where(is.character ), ~na_if(., "") )) 
+
+ojs_define(ojs_inquests = inquests)
+```
+
+```{ojs}
+ojsInquests = transpose(ojs_inquests)
+```
+
+It's not obvious at this point, but the doc_date in the ojs version of the data is not formatted as a date.
+
+```{ojs}
+ojsInquests
+```
+
+This causes big problems for visualisation. As far as Observable Plot is concerned, doc_date is just a string.
+
+```{ojs}
+Plot.plot({
+	title: "By date",
+	x: {label: "date"},
+	y: {label: "inquests", grid:true},
+	width: width,
+	marks: [
+	  Plot.lineY(
+			ojsInquests,
+			Plot.groupX({y: "count"}, {x:"doc_date"})
+		)
+	]
+})
+
+```
+
+The d3 function [timeParse](https://d3js.org/d3-time-format#timeParse) will turn doc_date into a "proper" date.
+
+```{ojs}
+//d3 = require("d3") // shouldn't be needed...
+
+// Define the expected date format
+parseDate = d3.timeParse("%Y-%m-%d");
+
+// Use map() to apply the parser to each row
+ojsInquestsDates = ojsInquests.map(d => ({
+  date: parseDate(d.doc_date),
+  ...d
+}));
+
+```
+
+```{ojs}
+ojsInquestsDates
+```
+
+There's a bit more to do before it's possible to get a nice visualisation from this data, because the dates are quite sparsely distributed. But since Plot now understands the date column is a date, this can be done quite easily with Plot.bin and the interval option (experiment to get the best effect). 
+
+```{ojs}
+Plot.plot({
+	title: "By date",
+	x: {label: "date"},
+	y: {label: "inquests", grid: true},
+	width: width,
+	marks: [
+	  Plot.lineY(ojsInquestsDates, 
+	      Plot.binX({y: "count"}, {x: "date", interval: "3 months"}))
+	]
+})
+
+```
+
+Finally, d3 also has date formatting functions that are useful for displaying the data in a table.
+
+```{ojs}
+// format dates nicely
+formatDate = d3.timeFormat("%e %b %Y");
+```
+
+
+```{ojs}
+Inputs.table(ojsInquestsDates, {
+	layout: "auto",
+	format: {
+		date: formatDate,
+		id: d3.format(".0f") 
+	},
+  columns: [
+    "id",
+    "the_deceased",
+    "date",
+    "gender",
+    "verdict",
+    "parish"
+  ]
+})
+```
+
+## Resources
+
+- [Observable: don't use ordinal scales for dates](https://observablehq.com/@tophtucker/dont-use-ordinal-scales-for-dates)

@@ -1,0 +1,16 @@
+id,doc_date,parish,the_deceased,gender,verdict
+1,1760-02-14,St Martin in the Fields,Joseph Bladzen,male,suicide
+2,1760-02-18,St John the Evangelist,John Ryall,male,suicide
+3,1760-02-28,St James,Martha Strong,female,suicide
+4,1760-03-10,St Margaret,Unnamed woman,female,accidental
+5,1760-03-13,St George Hanover Square,Unnamed woman,female,accidental
+6,1760-03-17,St George Hanover Square,Unnamed female child,female,natural causes
+7,1760-03-29,St Martin in the Fields,James Nugent,male,accidental
+8,1760-04-17,St Margaret,Unnamed man,male,natural causes
+9,1760-05-02,St George Hanover Square,Unnamed man,male,suicide
+10,1760-05-21,St George Hanover Square,William Robinson,male,homicide
+11,1760-06-02,St John the Evangelist,Samuel Coast,male,accidental
+12,1760-06-06,St Martin in the Fields,Ann Burchell,female,accidental
+13,1760-07-03,St Anne Soho,Alexander Bean,male,natural causes
+14,1760-07-14,St George Hanover Square,Richard Bond,male,suicide
+15,1760-07-22,Whitehall,Benjamin Robinson,male,accidental

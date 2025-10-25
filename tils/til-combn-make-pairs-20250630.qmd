@@ -1,5 +1,5 @@
 ---
-title: "make unique pairs from a list of values"
+title: "make unique pairs from a list of values with combn()"
 author: "Sharon Howard"
 date: "2025-06-30"
 categories: [combinations, naming things]
@@ -19,7 +19,7 @@ source(here::here('R/shared.R'))
 
 -  > If x is a positive integer, returns all combinations of the elements of seq(x) taken m at a time. 
 -  completely unique pairs - eg you don't get a+b and b+a. if you want that, use expand_grid() TIL 
--  combn makes a matrix, so then you have to turn it into a tibble.  
+-  combn() makes a matrix, so then you have to turn it into a tibble.  
 -  as_tibble .name_repair can be used to create column names, nb need to prefix c(a,b, etc) with tilde. 
 -  needs public data if moved to gh.io? 
 

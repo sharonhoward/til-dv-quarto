@@ -18,18 +18,41 @@ source(here::here('R/shared.R'))
 ## Notes
 
 -  it's not exactly missing data, but sometimes you want something like this for ggplot 
+-  needs a pair of columns 
 -  fill=list(n=0) will fill missings with 0 instead of NA 
 
 
 
 
-## Example
+
+
+## Examples
+
+A data frame of counts. Most judges won't appear in all court types, but I need explicit 0s for those cases.
 
 ```{r}
 judges100_appts |> 
   count(judge_id, court_type) |> 
   complete(judge_id, court_type, fill=list(n=0)) 
+```
 
+
+
+A short list of biographical categories, as a vector. I want all the pairs of categories.
+
+```{r}
+(categories <- c("height", "weight", "age", "gender"))
+```
+
+
+
+
+It'll include identical pairs, which I probably won't want; I can filter those out. [See TILs on combn, expand_grid, for alternative approaches.]
+
+```{r}
+tibble(a=categories, b=categories) |>
+  complete(a, b) |>
+  filter(a != b) 
 ```
 
 
