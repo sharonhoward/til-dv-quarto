@@ -2,7 +2,7 @@
 title: "group_by_at() can take a string, useful in functions"
 author: "Sharon Howard"
 date: "2025-06-30"
-categories: [functions, naming things, group, reshape, wip]
+categories: [functions, naming things, group, wip]
 slug: til-functions-group-by-at-20250630
 execute:
   warning: false

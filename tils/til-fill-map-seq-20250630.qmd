@@ -2,7 +2,7 @@
 title: "fill out a list from a start to end number  "
 author: "Sharon Howard"
 date: "2025-06-30"
-categories: [combinations, sequences, map]
+categories: [combinations, map, base]
 slug: til-fill-map-seq-20250630
 execute:
   warning: false
@@ -19,8 +19,6 @@ source(here::here('R/shared.R'))
 
 -  for data that has start and end columns of some sort, eg birth and death dates 
 -  see also full_seq and complete notes rmd 
-
-
 
 
 ## Example
@@ -44,7 +42,7 @@ judges100 |>
 ## Resources
 
 * [https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html](https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html) 
-* [https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq)
+* [cran](https://search.r-project.org/R/refmans/base/html/seq.html)
 
 ```{r}
 #| include: false

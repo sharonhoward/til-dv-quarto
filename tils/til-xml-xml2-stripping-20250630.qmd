@@ -1,5 +1,5 @@
 ---
-title: "read_xml needs options=blank to stop it stripping out blank text nodes"
+title: "read_xml options to stop it stripping blank text nodes"
 author: "Sharon Howard"
 date: "2025-06-30"
 categories: [nocode, xml, warning]
@@ -16,7 +16,7 @@ source(here::here('R/shared.R'))
 ```
 
 
-
+The xml2::read_xml default is to strip out blank text nodes. There doesn't seem to be a named arg in options to tell it not to do that; as far as I can see, you have to use *options=""*. Srsly.
 
 
 ## Example

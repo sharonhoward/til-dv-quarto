@@ -2,7 +2,7 @@
 title: "variable as column name"
 author: "Sharon Howard"
 date: "2025-09-30"
-categories: [variables, naming things]
+categories: [variables, naming things, note]
 execute:
   warning: false
   message: false

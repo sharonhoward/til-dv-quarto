@@ -9,7 +9,7 @@
 <meta name="author" content="Sharon Howard">
 <meta name="dcterms.date" content="2025-06-30">
 
-<title>read_xml needs options=blank to stop it stripping out blank text nodes – TIL</title>
+<title>read_xml options to stop it stripping blank text nodes – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -161,7 +161,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">read_xml needs options=blank to stop it stripping out blank text nodes</h1>
+<h1 class="title">read_xml options to stop it stripping blank text nodes</h1>
   <div class="quarto-categories">
     <div class="quarto-category">nocode</div>
     <div class="quarto-category">xml</div>
@@ -200,6 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'R/shared.R'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>The xml2::read_xml default is to strip out blank text nodes. There doesn’t seem to be a named arg in options to tell it not to do that; as far as I can see, you have to use <em>options=““</em>. Srsly.</p>
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>

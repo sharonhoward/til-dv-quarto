@@ -19,7 +19,8 @@ source(here::here('R/shared.R'))
 
 - function found on RStudio/Posit community forum by @nutterb
 - https://forum.posit.co/t/convert-written-numbers-to-integers/10302/2
-- his comments are the bit where I maybe learned something not just C&Ping a function...
+
+their comments are the important bit there:
 
 > Consider that numbers repeat themselves cyclically over the the range of 1 to 9, we really only need to know how to translate the text ranging from "one" to "ninety nine". Anything larger is just a matter of adding a scalar to the translation. For example:
 
@@ -30,16 +31,18 @@ source(here::here('R/shared.R'))
 
 > The code below seems to behave reasonably well for translating text numbers to their numeric representations and is configured to work up to the quadrilions. By adding magnitudes to magnitude_reference, it could be extended further. But I suspect it will lose precision somewhere along the order of 4.5 quadrillion. 
 
-But don't use the code in the forum post (it doesn't work in a mutate) - use the github version below instead.
+But *don't* use the code in the forum post (it doesn't work in a mutate) - use the github version below instead.
 
 > added a fully vectorized version of this to my playground package at https://github.com/nutterb/Bluegrass/blob/devel-main/R/word_to_number.R
 
-What about going the other way?
+What about going the other way, numbers to words? 
 
 - [xfun::numbers_to_words](https://search.r-project.org/CRAN/refmans/xfun/html/numbers_to_words.html)
 
 
 ## Function
+
+copied from github.
 
 ```{r}
 word_to_number <- function(x){

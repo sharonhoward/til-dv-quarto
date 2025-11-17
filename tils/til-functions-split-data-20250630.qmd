@@ -2,7 +2,7 @@
 title: "functions use a column name as an arg and convert to a string"
 author: "Sharon Howard"
 date: "2025-06-30"
-categories: [functions, naming things, group, reshape]
+categories: [functions, naming things, group]
 slug: til-functions-split-data-20250630
 execute:
   warning: false

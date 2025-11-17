@@ -2,7 +2,7 @@
 title: "fill in start-end sequences with seq() or seq_len() "
 author: "Sharon Howard"
 date: "2025-06-30"
-categories: [combinations, sequences]
+categories: [combinations, base]
 slug: til-fill-seq-len-20250630
 execute:
   warning: false
@@ -47,8 +47,8 @@ seq(1,901,100) *2
 
 ## Resources
 
+* [cran](https://search.r-project.org/R/refmans/base/html/seq.html) 
 * [https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html](https://stat.ethz.ch/R-manual/R-devel/library/base/html/seq.html) 
-* [https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/seq) 
 * [https://tidyr.tidyverse.org/reference/full_seq.html](https://tidyr.tidyverse.org/reference/full_seq.html)
 
 ```{r}

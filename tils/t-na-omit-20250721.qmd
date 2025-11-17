@@ -91,5 +91,4 @@ judges100 |>
 ## Resources
 
 * [Exclude observations with missing data](https://bookdown.org/rwnahhas/IntroToR/exclude-observations-with-missing-data.html)
-* [RDocumentation](https://www.rdocumentation.org/packages/photobiology/versions/0.13.1/topics/na.omit)
 * [How to Use na.omit in R: A Comprehensive Guide to Handling Missing Values](https://www.spsanderson.com/steveondata/posts/2024-12-16/)

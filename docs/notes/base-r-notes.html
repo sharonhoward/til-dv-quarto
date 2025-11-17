@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sharon Howard">
-<meta name="dcterms.date" content="2025-09-06">
+<meta name="dcterms.date" content="2025-11-17">
 
-<title>anonymous functions – TIL</title>
+<title>all your base R belong to us – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -151,10 +151,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#includes" id="toc-includes" class="nav-link active" data-scroll-target="#includes">Includes</a></li>
-  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link active" data-scroll-target="#notes">Notes</a>
+  <ul class="collapse">
+  <li><a href="#getting-help" id="toc-getting-help" class="nav-link" data-scroll-target="#getting-help">getting help</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -163,10 +163,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">anonymous functions</h1>
+<h1 class="title">all your base R belong to us</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">functions</div>
+    <div class="quarto-category">base</div>
     <div class="quarto-category">wip</div>
+    <div class="quarto-category">note</div>
   </div>
   </div>
 
@@ -184,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">6 September 2025</p>
+      <p class="date">17 November 2025</p>
     </div>
   </div>
   
@@ -196,137 +197,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="includes" class="level2">
-<h2 class="anchored" data-anchor-id="includes">Includes</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'R/shared.R'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
 <section id="notes" class="level2">
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<p>I have been very very rubbish at understanding these. making this as a wip to help me get better</p>
-<p>a helpful brief intro in Rodrigues book in <a href="https://b-rodrigues.github.io/fput/fprog.html#basic-anonymous-functions">chapter 3</a></p>
+<p>WIP on getting to know base R better.</p>
+<p>See also TILs tagged <code>base</code>, but this is for more general notes and resources.</p>
+<section id="getting-help" class="level3">
+<h3 class="anchored" data-anchor-id="getting-help">getting help</h3>
 <ul>
-<li>an anonymous function can always be a regular named function - but “sometimes it is faster to simply use an anonymous function as long as it does not hurt clarity”.</li>
+<li>within R/Rstudio to open up the docs</li>
 </ul>
-<p><em>cool but useless</em> post on usefulness and constraints (and suggested alternatives, might follow up later)</p>
-<blockquote class="blockquote">
-<p>An Anonymous Function (also known as a lambda expression) is a function definition that is not bound to an identifier. That is, it is a function that is created and used, but never assigned to a variable.</p>
-</blockquote>
-<p>Hadley Wickham in <em>adv-r</em></p>
-<blockquote class="blockquote">
-<p>[In R, functions] aren’t automatically bound to a name… R doesn’t have a special syntax for creating a named function: when you create a function, you use the regular assignment operator to give it a name. If you choose not to give the function a name, you get an anonymous function. You use an anonymous function when it’s not worth the effort to give it a name:</p>
-</blockquote>
-<p>Likely to be most useful for v small functions that you won’t need to reuse (but if you do it’s easy to turn the anonymous function into a named one)</p>
-</section>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<p>a list of slightly varying datasets - want to map over them to make simple histograms</p>
-<p>RHC heights</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (need height filter because of an erroneous value lol)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>rhc_heights <span class="ot">&lt;-</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>rhc <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">between</span>(height_inches, <span class="dv">50</span>, <span class="dv">90</span>) <span class="sc">&amp;</span> gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#help(package = 'base')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>a simple histogram with base hist()</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(rhc_heights<span class="sc">$</span>height_inches)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="note-anonymous-functions-20250906_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use group_split to make list of DFs</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rhc_gender_heights <span class="ot">&lt;-</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>rhc <span class="sc">|&gt;</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">between</span>(height_inches, <span class="dv">50</span>, <span class="dv">80</span>) <span class="sc">&amp;</span> gender <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_split</span>(gender)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>If you try something like <code>map(rhc_gender_heights, ~hist(height_inches))</code> it won’t work.</p>
-<p>One solution is to use an anonymous function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(rhc_gender_heights, (<span class="cf">function</span>(x) <span class="fu">hist</span>(x<span class="sc">$</span>height_inches)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="note-anonymous-functions-20250906_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="note-anonymous-functions-20250906_files/figure-html/unnamed-chunk-5-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[[1]]
-$breaks
- [1] 50 52 54 56 58 60 62 64 66 68 70 72 74 76
-
-$counts
- [1]    6   35  240 1401 3500 4047 2549  703  136   31    6    3    2
-
-$density
- [1] 2.369855e-04 1.382416e-03 9.479422e-03 5.533612e-02 1.382416e-01
- [6] 1.598467e-01 1.006794e-01 2.776681e-02 5.371672e-03 1.224425e-03
-[11] 2.369855e-04 1.184928e-04 7.899518e-05
-
-$mids
- [1] 51 53 55 57 59 61 63 65 67 69 71 73 75
-
-$xname
-[1] "x$height_inches"
-
-$equidist
-[1] TRUE
-
-attr(,"class")
-[1] "histogram"
-
-[[2]]
-$breaks
- [1] 50 52 54 56 58 60 62 64 66 68 70 72 74 76 78 80
-
-$counts
- [1]    24    50   152   427  2654 11555 26862 35435 27302 12168  2939   520
-[13]    76    30    13
-
-$density
- [1] 9.982780e-05 2.079746e-04 6.322427e-04 1.776103e-03 1.103929e-02
- [6] 4.806292e-02 1.117323e-01 1.473916e-01 1.135624e-01 5.061269e-02
-[11] 1.222475e-02 2.162936e-03 3.161214e-04 1.247847e-04 5.407339e-05
-
-$mids
- [1] 51 53 55 57 59 61 63 65 67 69 71 73 75 77 79
-
-$xname
-[1] "x$height_inches"
-
-$equidist
-[1] TRUE
-
-attr(,"class")
-[1] "histogram"</code></pre>
-</div>
-</div>
-</section>
-<section id="resources" class="level2">
-<h2 class="anchored" data-anchor-id="resources">Resources</h2>
+<p>that won’t include the other default packages that are loaded with base:</p>
 <ul>
-<li><a href="https://b-rodrigues.github.io/fput/fprog.html#basic-anonymous-functions">Rodrigues, chapter 3</a></li>
-<li><a href="http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions">adv-r</a></li>
-<li><a href="https://coolbutuseless.github.io/2019/03/13/anonymous-functions-in-r-part-1/">cool but useless</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Anonymous_function">wikipedia</a></li>
+<li><p>datasets</p></li>
+<li><p>utils</p></li>
+<li><p>grDevices</p></li>
+<li><p>graphics</p></li>
+<li><p>stats”</p></li>
+<li><p>docs on the web: official, full, up-to-date list of packages on CRAN, linking to all the reference manuals:</p></li>
 </ul>
+<p>https://search.r-project.org/R/doc/html/packages.html</p>
+<p>refman for base:</p>
+<p>https://search.r-project.org/R/refmans/base/html/00Index.html</p>
+<p>and for stats:</p>
+<p>https://search.r-project.org/R/refmans/stats/html/00Index.html</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

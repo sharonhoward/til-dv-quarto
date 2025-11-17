@@ -11,7 +11,7 @@ execute:
 
 ## Notes
 
-I came across a puzzling problem (bug?) using ObservableJS in a Quarto website. In OJS you can use "columns" (like R names()) to get the names of variables in a data object. Sometimes I need to get the names to reuse (eg in columns of Inputs.table or functions). 
+I came across a puzzling problem using ObservableJS in a Quarto website. In OJS you can use "columns" (like R names()) to get the names of variables in a data object. Sometimes I need to get the names to reuse (eg in columns of Inputs.table or functions). 
 
 But this didn't seem to work when using the ojs_define() method to convert R data to OJS format. This is an examination of the cause of the problem and my workaround for it.
 

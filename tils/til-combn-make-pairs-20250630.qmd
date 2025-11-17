@@ -51,7 +51,7 @@ combn(agg_variables_names, m=2 ) |>
 ## Resources
 
 * [https://stackoverflow.com/a/1710387/7281022](https://stackoverflow.com/a/1710387/7281022) 
-* [https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/combn)
+* [cran](https://search.r-project.org/R/refmans/utils/html/combn.html)
 
 ```{r}
 #| include: false

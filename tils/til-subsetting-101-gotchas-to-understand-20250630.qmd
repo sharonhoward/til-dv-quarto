@@ -2,7 +2,7 @@
 title: "subsetting in base R - notes and gotchas"
 author: "Sharon Howard"
 date: "2025-06-30"
-categories: [wip, needs data, subset]
+categories: [wip, needs data, subset, base]
 slug: til-subsetting-101-gotchas-to-understand-20250630
 execute:
   warning: false

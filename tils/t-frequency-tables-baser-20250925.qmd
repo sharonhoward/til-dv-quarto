@@ -2,7 +2,7 @@
 title: "frequency tables - multidimensional (base R)"
 author: "Sharon Howard"
 date: "2025-09-25"
-categories: [frequency tables]
+categories: [frequency tables, base]
 execute:
   warning: false
   message: false

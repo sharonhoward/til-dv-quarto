@@ -2,7 +2,7 @@
 title: "anonymous functions"
 author: "Sharon Howard"
 date: "2025-09-06"
-categories: [functions, wip]
+categories: [functions, wip, note]
 execute:
   warning: false
   message: false

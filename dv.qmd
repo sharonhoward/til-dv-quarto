@@ -47,7 +47,9 @@ search: false
 
 
 
-## ggplot TILs
+## dataviz TILs
+
+- ggplot, OJS/Observable Plot, etc.
 
 :::{#dv-til-table}
 :::

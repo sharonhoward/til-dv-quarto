@@ -2,6 +2,7 @@
 title: "pretty() breaks"
 date: "2025-09-09"
 categories: 
+  - base
   - scales
   - ggplot
 execute: 
@@ -81,4 +82,4 @@ The scales package has some fancier [axis breaks functions](https://scales.r-lib
 
 ## Resources
 
-[rdocumentation](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/pretty)
+[cran](https://search.r-project.org/R/refmans/base/html/pretty.html)

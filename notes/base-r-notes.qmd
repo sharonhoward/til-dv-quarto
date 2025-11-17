@@ -1,0 +1,47 @@
+---
+title: "all your base R belong to us"
+author: "Sharon Howard"
+date: "2025-11-17"
+categories: [base, wip, note]
+execute:
+  warning: false
+  message: false
+---
+
+## Notes
+
+WIP on getting to know base R better. 
+
+See also TILs tagged `base`, but this is for more general notes and resources.
+
+
+### getting help
+
+- within R/Rstudio to open up the docs
+
+```{r}
+#help(package = 'base')
+```
+
+that won't include the other default packages that are loaded with base:
+
+- datasets
+- utils
+- grDevices
+- graphics
+- stats" 
+
+
+- docs on the web: official, full, up-to-date list of packages on CRAN, linking to all the reference manuals:
+
+https://search.r-project.org/R/doc/html/packages.html
+
+refman for base:
+
+https://search.r-project.org/R/refmans/base/html/00Index.html
+
+and for stats:
+
+https://search.r-project.org/R/refmans/stats/html/00Index.html
+
+

@@ -2,7 +2,7 @@
 title: "automate counts"
 author: "Sharon Howard"
 date: "2025-10-06"
-categories: [variables, combinations, count]
+categories: [variables, combinations, count, note]
 execute:
   warning: false
   message: false
@@ -19,6 +19,8 @@ source(here::here('R/shared.R'))
 The scenario: I have a dataset with several variables and want to do counts of all the 2-way combinations (maybe even 3-way combinations) for faceted ggplots or automated tests.
 
 I have some tutorials on eg [automating multiple plots](https://aosmith.rbind.io/2018/08/20/automating-exploratory-plots/), but with interval data rather than categorical data that you need to count before you can start analysis.
+
+*See also*: note on automating frequency tables.
 
 
 ## Examples

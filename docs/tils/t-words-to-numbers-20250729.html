@@ -209,8 +209,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>function found on RStudio/Posit community forum by <span class="citation" data-cites="nutterb">@nutterb</span></li>
 <li>https://forum.posit.co/t/convert-written-numbers-to-integers/10302/2</li>
-<li>his comments are the bit where I maybe learned something not just C&amp;Ping a function…</li>
 </ul>
+<p>their comments are the important bit there:</p>
 <blockquote class="blockquote">
 <p>Consider that numbers repeat themselves cyclically over the the range of 1 to 9, we really only need to know how to translate the text ranging from “one” to “ninety nine”. Anything larger is just a matter of adding a scalar to the translation. For example:</p>
 </blockquote>
@@ -223,17 +223,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>The code below seems to behave reasonably well for translating text numbers to their numeric representations and is configured to work up to the quadrilions. By adding magnitudes to magnitude_reference, it could be extended further. But I suspect it will lose precision somewhere along the order of 4.5 quadrillion.</p>
 </blockquote>
-<p>But don’t use the code in the forum post (it doesn’t work in a mutate) - use the github version below instead.</p>
+<p>But <em>don’t</em> use the code in the forum post (it doesn’t work in a mutate) - use the github version below instead.</p>
 <blockquote class="blockquote">
 <p>added a fully vectorized version of this to my playground package at https://github.com/nutterb/Bluegrass/blob/devel-main/R/word_to_number.R</p>
 </blockquote>
-<p>What about going the other way?</p>
+<p>What about going the other way, numbers to words?</p>
 <ul>
 <li><a href="https://search.r-project.org/CRAN/refmans/xfun/html/numbers_to_words.html">xfun::numbers_to_words</a></li>
 </ul>
 </section>
 <section id="function" class="level2">
 <h2 class="anchored" data-anchor-id="function">Function</h2>
+<p>copied from github.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>word_to_number <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove punctuation and 'and'</span></span>

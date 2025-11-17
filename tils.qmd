@@ -1,5 +1,6 @@
 ---
 title: "Today I Learned Something"
+subtitle: "all the TILs that's fit to print."
 listing:
   - id: til-table
     contents:
@@ -26,6 +27,8 @@ execute:
 search: false
 ---
 
-all the TILs that's fit to print.
+Two kinds of post in here that might get separated out at some point
 
+- TILs are short posts documenting some specific technique or solution to a problem
+- Notes are a bit longer and more exploratory
 

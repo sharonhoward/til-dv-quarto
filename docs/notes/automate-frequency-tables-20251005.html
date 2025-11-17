@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sharon Howard">
-<meta name="dcterms.date" content="2025-06-30">
+<meta name="dcterms.date" content="2025-10-06">
 
-<title>group_by_at() can take a string, useful in functions – TIL</title>
+<title>automate frequency tables – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -153,8 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#includes" id="toc-includes" class="nav-link active" data-scroll-target="#includes">Includes</a></li>
   <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
-  <li><a href="#function" id="toc-function" class="nav-link" data-scroll-target="#function">Function</a></li>
-  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   </ul>
 </nav>
     </div>
@@ -163,12 +162,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">group_by_at() can take a string, useful in functions</h1>
+<h1 class="title">automate frequency tables</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">functions</div>
-    <div class="quarto-category">naming things</div>
-    <div class="quarto-category">group</div>
-    <div class="quarto-category">wip</div>
+    <div class="quarto-category">variables</div>
+    <div class="quarto-category">combinations</div>
+    <div class="quarto-category">frequency tables</div>
+    <div class="quarto-category">note</div>
   </div>
   </div>
 
@@ -186,7 +185,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">30 June 2025</p>
+      <p class="date">6 October 2025</p>
     </div>
   </div>
   
@@ -206,42 +205,237 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="notes" class="level2">
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<ul>
-<li><blockquote class="blockquote">
-<p>we can make use of the group_by_at that can take string as input avoiding the syms and evaluation (!!!)</p>
-</blockquote></li>
-<li>example in SO</li>
-<li>MEAN_OUT2 &lt;- function(VARS) {</li>
-<li><pre><code>             DF %&gt;%  </code></pre></li>
-<li><pre><code>                  group_by_at(VARS) %&gt;%  </code></pre></li>
-<li><pre><code>                  summarise(Mean = mean(Output)) %&gt;%  </code></pre></li>
-<li><pre><code>                  as.data.frame() </code></pre></li>
-<li><pre><code> } </code></pre></li>
-<li>caveat: not entirely sure about my example…</li>
-</ul>
+<p>The scenario: I have a dataset with several variables and want to make frequency tables of all the 2-way combinations (maybe even 3-way combinations).</p>
 </section>
-<section id="function" class="level2">
-<h2 class="anchored" data-anchor-id="function">Function</h2>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<p>Using Old Bailey trials data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>transpose_agg_data <span class="ot">&lt;-</span> <span class="cf">function</span>(data, <span class="at">key=</span>key, rows){ </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># drop existing doc_count.  </span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>doc_count) <span class="sc">|&gt;</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="sc">-</span>{{key}}, <span class="at">names_to =</span> rows, <span class="at">values_to =</span> <span class="st">"n"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make new doc_count for rows. nb use of group_by_at. </span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># don't really need this?   </span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by_at</span>(rows) <span class="sc">|&gt;</span> </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">doc_count =</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span> </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> {{key}}, <span class="at">values_from =</span> n)  </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>trials_cat <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obv_trials <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(deft_speech_cat, deft_gender, offence_cat, verdict_cat) <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(deft_gender), verdict_cat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"guilty"</span>, <span class="st">"notGuilty"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="resources" class="level2">
-<h2 class="anchored" data-anchor-id="resources">Resources</h2>
-<ul>
-<li><a href="https://stackoverflow.com/a/52437493/7281022">https://stackoverflow.com/a/52437493/7281022</a></li>
-</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trials_cat <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 4
+   deft_speech_cat deft_gender offence_cat  verdict_cat
+   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;      
+ 1 deft_speaks     female      theft        guilty     
+ 2 deft_silent     male        theft        guilty     
+ 3 deft_speaks     male        theft        guilty     
+ 4 deft_speaks     female      theft        guilty     
+ 5 deft_speaks     male        theft        notGuilty  
+ 6 deft_speaks     male        theft        notGuilty  
+ 7 deft_speaks     female      theft        guilty     
+ 8 deft_speaks     female      theft        notGuilty  
+ 9 deft_speaks     male        violentTheft notGuilty  
+10 deft_speaks     male        theft        guilty     </code></pre>
+</div>
+</div>
+<p>Given a tibble in the format above, with each variable in its own column, it’s amazingly easy to do 1-way frequency tables and get a (named) list of tables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>too_easy <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(trials_cat, table)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>too_easy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$deft_speech_cat
+
+deft_silent deft_speaks   no_speech 
+       6324        9547        4698 
+
+$deft_gender
+
+female   male 
+  4367  16202 
+
+$offence_cat
+
+breakingPeace        damage     deception          kill miscellaneous 
+          603            60          1081           351           294 
+royalOffences        sexual         theft  violentTheft 
+         1172           424         16008           576 
+
+$verdict_cat
+
+   guilty notGuilty 
+    16046      4523 </code></pre>
+</div>
+</div>
+<p>so then you can run, eg, chi-squared goodness of fit tests on all of them at once…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(too_easy, chisq.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$deft_speech_cat
+
+    Chi-squared test for given probabilities
+
+data:  .x[[i]]
+X-squared = 1776.7, df = 2, p-value &lt; 2.2e-16
+
+
+$deft_gender
+
+    Chi-squared test for given probabilities
+
+data:  .x[[i]]
+X-squared = 6809.6, df = 1, p-value &lt; 2.2e-16
+
+
+$offence_cat
+
+    Chi-squared test for given probabilities
+
+data:  .x[[i]]
+X-squared = 93145, df = 8, p-value &lt; 2.2e-16
+
+
+$verdict_cat
+
+    Chi-squared test for given probabilities
+
+data:  .x[[i]]
+X-squared = 6455.3, df = 1, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>2-way tables need a little bit more work. Instead of just using a single tibble, you want a list of tibbles, each one containing a pair of variables.</p>
+<p>[see post on automating counts for the gory details.]</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cat_names <span class="ot">&lt;-</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  trials_cat <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_names</span>() </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>cat_names_list <span class="ot">&lt;-</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">combn</span>(cat_names, <span class="at">m=</span><span class="dv">2</span> ) <span class="sc">|&gt;</span>  </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">.name_repair =</span> <span class="sc">~</span><span class="fu">c</span>(<span class="st">"sg"</span>, <span class="st">"so"</span>, <span class="st">"sv"</span>, <span class="st">"go"</span>, <span class="st">"gv"</span>, <span class="st">"ov"</span>) ) <span class="sc">|&gt;</span> </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.list</span>()</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>all_select <span class="ot">&lt;-</span> <span class="cf">function</span>(data, vars){</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(vars))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>trial_cat_groups <span class="ot">&lt;-</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>cat_names_list <span class="sc">|&gt;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span><span class="fu">all_select</span>(trials_cat, .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>then it’s just map() and table() again.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(trial_cat_tabs <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(trial_cat_groups, table)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sg
+               deft_gender
+deft_speech_cat female male
+    deft_silent   1305 5019
+    deft_speaks   2251 7296
+    no_speech      811 3887
+
+$so
+               offence_cat
+deft_speech_cat breakingPeace damage deception kill miscellaneous royalOffences
+    deft_silent           221     28       348  206            52           267
+    deft_speaks           203     22       256   86            76           578
+    no_speech             179     10       477   59           166           327
+               offence_cat
+deft_speech_cat sexual theft violentTheft
+    deft_silent     67  4975          160
+    deft_speaks     44  7907          375
+    no_speech      313  3126           41
+
+$sv
+               verdict_cat
+deft_speech_cat guilty notGuilty
+    deft_silent   4576      1748
+    deft_speaks   8077      1470
+    no_speech     3393      1305
+
+$go
+           offence_cat
+deft_gender breakingPeace damage deception  kill miscellaneous royalOffences
+     female           107     10        81    83           105           312
+     male             496     50      1000   268           189           860
+           offence_cat
+deft_gender sexual theft violentTheft
+     female     31  3574           64
+     male      393 12434          512
+
+$gv
+           verdict_cat
+deft_gender guilty notGuilty
+     female   3251      1116
+     male    12795      3407
+
+$ov
+               verdict_cat
+offence_cat     guilty notGuilty
+  breakingPeace    432       171
+  damage            36        24
+  deception        791       290
+  kill             158       193
+  miscellaneous    188       106
+  royalOffences   1016       156
+  sexual           273       151
+  theft          12777      3231
+  violentTheft     375       201</code></pre>
+</div>
+</div>
+<p>Run chi-squared test of independence on all the tables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(trial_cat_tabs, chisq.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sg
+
+    Pearson's Chi-squared test
+
+data:  .x[[i]]
+X-squared = 77.028, df = 2, p-value &lt; 2.2e-16
+
+
+$so
+
+    Pearson's Chi-squared test
+
+data:  .x[[i]]
+X-squared = 1589.5, df = 16, p-value &lt; 2.2e-16
+
+
+$sv
+
+    Pearson's Chi-squared test
+
+data:  .x[[i]]
+X-squared = 451.34, df = 2, p-value &lt; 2.2e-16
+
+
+$go
+
+    Pearson's Chi-squared test
+
+data:  .x[[i]]
+X-squared = 281.47, df = 8, p-value &lt; 2.2e-16
+
+
+$gv
+
+    Pearson's Chi-squared test with Yates' continuity correction
+
+data:  .x[[i]]
+X-squared = 40.832, df = 1, p-value = 1.659e-10
+
+
+$ov
+
+    Pearson's Chi-squared test
+
+data:  .x[[i]]
+X-squared = 480.73, df = 8, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
 
 
 </section>

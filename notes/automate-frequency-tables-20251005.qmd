@@ -2,7 +2,7 @@
 title: "automate frequency tables"
 author: "Sharon Howard"
 date: "2025-10-06"
-categories: [variables, combinations, frequency tables]
+categories: [variables, combinations, frequency tables, note]
 execute:
   warning: false
   message: false

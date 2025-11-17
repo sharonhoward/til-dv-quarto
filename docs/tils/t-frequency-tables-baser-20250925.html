@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sharon Howard">
-<meta name="dcterms.date" content="2025-10-06">
+<meta name="dcterms.date" content="2025-09-25">
 
-<title>automate frequency tables – TIL</title>
+<title>frequency tables - multidimensional (base R) – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -162,11 +162,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">automate frequency tables</h1>
+<h1 class="title">frequency tables - multidimensional (base R)</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">variables</div>
-    <div class="quarto-category">combinations</div>
     <div class="quarto-category">frequency tables</div>
+    <div class="quarto-category">base</div>
   </div>
   </div>
 
@@ -184,7 +183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">6 October 2025</p>
+      <p class="date">25 September 2025</p>
     </div>
   </div>
   
@@ -199,240 +198,233 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="includes" class="level2">
 <h2 class="anchored" data-anchor-id="includes">Includes</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'R/shared.R'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'R/shared.R'</span>))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>petitions <span class="ot">&lt;-</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  cheshire_petitions <span class="sc">|&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">petition_type =</span> <span class="fu">str_remove</span>(petition_type, <span class="st">" *on behalf"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="notes" class="level2">
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<p>The scenario: I have a dataset with several variables and want to make frequency tables of all the 2-way combinations (maybe even 3-way combinations).</p>
+<ul>
+<li>see also vcd::structable which does essentially the same thing as ftable (but a base R method may be useful if you don’t want vcd)</li>
+</ul>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<p>Using Old Bailey trials data.</p>
+<p>if you give <code>table()</code> three variables it will make a list of 2-way tables, breaking down by the last variable.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>trials_cat <span class="ot">&lt;-</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>obv_trials <span class="sc">|&gt;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(deft_speech_cat, deft_gender, offence_cat, verdict_cat) <span class="sc">|&gt;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(deft_gender), verdict_cat <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"guilty"</span>, <span class="st">"notGuilty"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trials_cat <span class="sc">|&gt;</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>(petitions_table <span class="ot">&lt;-</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">table</span>(petitions<span class="sc">$</span>topic, petitions<span class="sc">$</span>petition_gender, petitions<span class="sc">$</span>petition_type) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 4
-   deft_speech_cat deft_gender offence_cat  verdict_cat
-   &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;      
- 1 deft_speaks     female      theft        guilty     
- 2 deft_silent     male        theft        guilty     
- 3 deft_speaks     male        theft        guilty     
- 4 deft_speaks     female      theft        guilty     
- 5 deft_speaks     male        theft        notGuilty  
- 6 deft_speaks     male        theft        notGuilty  
- 7 deft_speaks     female      theft        guilty     
- 8 deft_speaks     female      theft        notGuilty  
- 9 deft_speaks     male        violentTheft notGuilty  
-10 deft_speaks     male        theft        guilty     </code></pre>
+<pre><code>, ,  = collective
+
+                    
+                      f fm  m
+  alehouse            0  0  1
+  charitable brief    0  0  1
+  cottage             1  0  1
+  dissenting worship  0  0  0
+  employment          0  0  0
+  imprisoned debtors  0  0  0
+  litigation          3  0  2
+  military relief     0  0  2
+  officeholding       0  0  0
+  other               0  0  0
+  paternity           0  0  0
+  poor relief         0  0  1
+  rates               0  0  0
+
+, ,  = multiple
+
+                    
+                      f fm  m
+  alehouse            0  0  0
+  charitable brief    1  1  0
+  cottage             1  7  3
+  dissenting worship  0  0  3
+  employment          0  0  1
+  imprisoned debtors  0  0  0
+  litigation          1 13 15
+  military relief     0  0  0
+  officeholding       0  0  4
+  other               0  0  1
+  paternity           0  2  2
+  poor relief         0  4  1
+  rates               0  0 13
+
+, ,  = single
+
+                    
+                      f fm  m
+  alehouse            2  0 11
+  charitable brief    0  0  9
+  cottage            17  0 60
+  dissenting worship  0  0  2
+  employment          6  0  8
+  imprisoned debtors  0  0  1
+  litigation         31  0 97
+  military relief     7  0 21
+  officeholding       0  0 12
+  other               4  0  8
+  paternity          36  0 20
+  poor relief        20  0 34
+  rates               2  0 20</code></pre>
 </div>
 </div>
-<p>Given a tibble in the format above, with each variable in its own column, it’s amazingly easy to do 1-way frequency tables and get a (named) list of tables.</p>
+<p><code>xtabs</code> does the same thing</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>too_easy <span class="ot">&lt;-</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(trials_cat, table)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>too_easy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">xtabs</span>(<span class="sc">~</span> topic <span class="sc">+</span> petition_gender <span class="sc">+</span> petition_type, <span class="at">data=</span>petitions) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$deft_speech_cat
+<pre><code>, , petition_type = collective
 
-deft_silent deft_speaks   no_speech 
-       6324        9547        4698 
+                    petition_gender
+topic                 f fm  m
+  alehouse            0  0  1
+  charitable brief    0  0  1
+  cottage             1  0  1
+  dissenting worship  0  0  0
+  employment          0  0  0
+  imprisoned debtors  0  0  0
+  litigation          3  0  2
+  military relief     0  0  2
+  officeholding       0  0  0
+  other               0  0  0
+  paternity           0  0  0
+  poor relief         0  0  1
+  rates               0  0  0
 
-$deft_gender
+, , petition_type = multiple
 
-female   male 
-  4367  16202 
+                    petition_gender
+topic                 f fm  m
+  alehouse            0  0  0
+  charitable brief    1  1  0
+  cottage             1  7  3
+  dissenting worship  0  0  3
+  employment          0  0  1
+  imprisoned debtors  0  0  0
+  litigation          1 13 15
+  military relief     0  0  0
+  officeholding       0  0  4
+  other               0  0  1
+  paternity           0  2  2
+  poor relief         0  4  1
+  rates               0  0 13
 
-$offence_cat
+, , petition_type = single
 
-breakingPeace        damage     deception          kill miscellaneous 
-          603            60          1081           351           294 
-royalOffences        sexual         theft  violentTheft 
-         1172           424         16008           576 
-
-$verdict_cat
-
-   guilty notGuilty 
-    16046      4523 </code></pre>
+                    petition_gender
+topic                 f fm  m
+  alehouse            2  0 11
+  charitable brief    0  0  9
+  cottage            17  0 60
+  dissenting worship  0  0  2
+  employment          6  0  8
+  imprisoned debtors  0  0  1
+  litigation         31  0 97
+  military relief     7  0 21
+  officeholding       0  0 12
+  other               4  0  8
+  paternity          36  0 20
+  poor relief        20  0 34
+  rates               2  0 20</code></pre>
 </div>
 </div>
-<p>so then you can run, eg, chi-squared goodness of fit tests on all of them at once…</p>
+<p><code>ftable()</code> makes a flattened 3-way table</p>
+<p>you can do it in one step (play around with order of variables…)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(too_easy, chisq.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(petition_type <span class="sc">~</span> topic <span class="sc">+</span> petition_gender, petitions) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$deft_speech_cat
-
-    Chi-squared test for given probabilities
-
-data:  .x[[i]]
-X-squared = 1776.7, df = 2, p-value &lt; 2.2e-16
-
-
-$deft_gender
-
-    Chi-squared test for given probabilities
-
-data:  .x[[i]]
-X-squared = 6809.6, df = 1, p-value &lt; 2.2e-16
-
-
-$offence_cat
-
-    Chi-squared test for given probabilities
-
-data:  .x[[i]]
-X-squared = 93145, df = 8, p-value &lt; 2.2e-16
-
-
-$verdict_cat
-
-    Chi-squared test for given probabilities
-
-data:  .x[[i]]
-X-squared = 6455.3, df = 1, p-value &lt; 2.2e-16</code></pre>
+<pre><code>                                   petition_type collective multiple single
+topic              petition_gender                                         
+alehouse           f                                      0        0      2
+                   fm                                     0        0      0
+                   m                                      1        0     11
+charitable brief   f                                      0        1      0
+                   fm                                     0        1      0
+                   m                                      1        0      9
+cottage            f                                      1        1     17
+                   fm                                     0        7      0
+                   m                                      1        3     60
+dissenting worship f                                      0        0      0
+                   fm                                     0        0      0
+                   m                                      0        3      2
+employment         f                                      0        0      6
+                   fm                                     0        0      0
+                   m                                      0        1      8
+imprisoned debtors f                                      0        0      0
+                   fm                                     0        0      0
+                   m                                      0        0      1
+litigation         f                                      3        1     31
+                   fm                                     0       13      0
+                   m                                      2       15     97
+military relief    f                                      0        0      7
+                   fm                                     0        0      0
+                   m                                      2        0     21
+officeholding      f                                      0        0      0
+                   fm                                     0        0      0
+                   m                                      0        4     12
+other              f                                      0        0      4
+                   fm                                     0        0      0
+                   m                                      0        1      8
+paternity          f                                      0        0     36
+                   fm                                     0        2      0
+                   m                                      0        2     20
+poor relief        f                                      0        0     20
+                   fm                                     0        4      0
+                   m                                      1        1     34
+rates              f                                      0        0      2
+                   fm                                     0        0      0
+                   m                                      0       13     20</code></pre>
 </div>
 </div>
-<p>2-way tables need a little bit more work. Instead of just using a single tibble, you want a list of tibbles, each one containing a pair of variables.</p>
-<p>[see post on automating counts for the gory details.]</p>
+<p>or you can give it your list of 2-way tables and it will flatten them into a 3-way. (vcd::structable will do that as well)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cat_names <span class="ot">&lt;-</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  trials_cat <span class="sc">|&gt;</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_names</span>() </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>cat_names_list <span class="ot">&lt;-</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">combn</span>(cat_names, <span class="at">m=</span><span class="dv">2</span> ) <span class="sc">|&gt;</span>  </span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">.name_repair =</span> <span class="sc">~</span><span class="fu">c</span>(<span class="st">"sg"</span>, <span class="st">"so"</span>, <span class="st">"sv"</span>, <span class="st">"go"</span>, <span class="st">"gv"</span>, <span class="st">"ov"</span>) ) <span class="sc">|&gt;</span> </span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.list</span>()</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>all_select <span class="ot">&lt;-</span> <span class="cf">function</span>(data, vars){</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">all_of</span>(vars))</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>trial_cat_groups <span class="ot">&lt;-</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>cat_names_list <span class="sc">|&gt;</span></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span><span class="fu">all_select</span>(trials_cat, .x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>then it’s just map() and table() again.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(trial_cat_tabs <span class="ot">&lt;-</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(trial_cat_groups, table)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ftable</span>(petitions_table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$sg
-               deft_gender
-deft_speech_cat female male
-    deft_silent   1305 5019
-    deft_speaks   2251 7296
-    no_speech      811 3887
-
-$so
-               offence_cat
-deft_speech_cat breakingPeace damage deception kill miscellaneous royalOffences
-    deft_silent           221     28       348  206            52           267
-    deft_speaks           203     22       256   86            76           578
-    no_speech             179     10       477   59           166           327
-               offence_cat
-deft_speech_cat sexual theft violentTheft
-    deft_silent     67  4975          160
-    deft_speaks     44  7907          375
-    no_speech      313  3126           41
-
-$sv
-               verdict_cat
-deft_speech_cat guilty notGuilty
-    deft_silent   4576      1748
-    deft_speaks   8077      1470
-    no_speech     3393      1305
-
-$go
-           offence_cat
-deft_gender breakingPeace damage deception  kill miscellaneous royalOffences
-     female           107     10        81    83           105           312
-     male             496     50      1000   268           189           860
-           offence_cat
-deft_gender sexual theft violentTheft
-     female     31  3574           64
-     male      393 12434          512
-
-$gv
-           verdict_cat
-deft_gender guilty notGuilty
-     female   3251      1116
-     male    12795      3407
-
-$ov
-               verdict_cat
-offence_cat     guilty notGuilty
-  breakingPeace    432       171
-  damage            36        24
-  deception        791       290
-  kill             158       193
-  miscellaneous    188       106
-  royalOffences   1016       156
-  sexual           273       151
-  theft          12777      3231
-  violentTheft     375       201</code></pre>
-</div>
-</div>
-<p>Run chi-squared test of independence on all the tables.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(trial_cat_tabs, chisq.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$sg
-
-    Pearson's Chi-squared test
-
-data:  .x[[i]]
-X-squared = 77.028, df = 2, p-value &lt; 2.2e-16
-
-
-$so
-
-    Pearson's Chi-squared test
-
-data:  .x[[i]]
-X-squared = 1589.5, df = 16, p-value &lt; 2.2e-16
-
-
-$sv
-
-    Pearson's Chi-squared test
-
-data:  .x[[i]]
-X-squared = 451.34, df = 2, p-value &lt; 2.2e-16
-
-
-$go
-
-    Pearson's Chi-squared test
-
-data:  .x[[i]]
-X-squared = 281.47, df = 8, p-value &lt; 2.2e-16
-
-
-$gv
-
-    Pearson's Chi-squared test with Yates' continuity correction
-
-data:  .x[[i]]
-X-squared = 40.832, df = 1, p-value = 1.659e-10
-
-
-$ov
-
-    Pearson's Chi-squared test
-
-data:  .x[[i]]
-X-squared = 480.73, df = 8, p-value &lt; 2.2e-16</code></pre>
+<pre><code>                       collective multiple single
+                                                 
+alehouse           f            0        0      2
+                   fm           0        0      0
+                   m            1        0     11
+charitable brief   f            0        1      0
+                   fm           0        1      0
+                   m            1        0      9
+cottage            f            1        1     17
+                   fm           0        7      0
+                   m            1        3     60
+dissenting worship f            0        0      0
+                   fm           0        0      0
+                   m            0        3      2
+employment         f            0        0      6
+                   fm           0        0      0
+                   m            0        1      8
+imprisoned debtors f            0        0      0
+                   fm           0        0      0
+                   m            0        0      1
+litigation         f            3        1     31
+                   fm           0       13      0
+                   m            2       15     97
+military relief    f            0        0      7
+                   fm           0        0      0
+                   m            2        0     21
+officeholding      f            0        0      0
+                   fm           0        0      0
+                   m            0        4     12
+other              f            0        0      4
+                   fm           0        0      0
+                   m            0        1      8
+paternity          f            0        0     36
+                   fm           0        2      0
+                   m            0        2     20
+poor relief        f            0        0     20
+                   fm           0        4      0
+                   m            1        1     34
+rates              f            0        0      2
+                   fm           0        0      0
+                   m            0       13     20</code></pre>
 </div>
 </div>
 
