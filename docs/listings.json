@@ -74,6 +74,7 @@
   {
     "listing": "/dv.html",
     "items": [
+      "/dv/accessibility.html",
       "/dv/beeswarm.html",
       "/dv/colour-notes.html",
       "/dv/resources.html",

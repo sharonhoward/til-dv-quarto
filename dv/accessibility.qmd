@@ -1,0 +1,37 @@
+---
+title: "Accessibility"
+date: "2026-01-18"
+categories: 
+  - accessibility
+  - resources
+execute: 
+  warning: false
+  message: false
+---
+
+a new list of resources about visual accessibility (apart from colour blindness) - something I'd like to work on improving in future.
+
+## General
+
+data.europa.eu data visualisation guide has a fantastic section on [accessibility](https://data.europa.eu/apps/data-visualisation-guide/tag/introduction-to-accessibility)
+
+## Alt text
+
+- [Writing alt text](https://data.europa.eu/apps/data-visualisation-guide/alt-text) (data.europa.eu) - a really useful guide
+- [Writing alt text for data visualization](https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81) (Amy Cesal) - a helpful formula particularly for writing short alt text summaries
+- [Writing Meaningful Alt Texts for Data Visualizations in R](https://lizharedogs.github.io/RLadiesNYAltText/) (Liz Hare) - detailed slides 
+- [Alt Text in R: Plots, Reports, and Shiny](https://www.jumpingrivers.com/blog/accessibility-alt-text-in-r/) (Nicola Rennie)
+
+
+## Describing Visualisations
+
+[Accessible Visualization via Natural Language Descriptions: A Four-Level Model of Semantic Content](https://vis.csail.mit.edu/pubs/vis-text-model/) - theory/evaluation of written descriptions of dataviz 
+
+
+
+## Statistical software for blind users
+
+Jonathan Godfrey's work:
+
+- [BrailleR](https://ajrgodfrey.github.io/BrailleR/) [R package]
+- [Statistical software and blind users](https://r-resources.massey.ac.nz/StatSoftware/) [resource]

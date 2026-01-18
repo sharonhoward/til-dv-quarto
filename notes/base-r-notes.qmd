@@ -17,7 +17,7 @@ See also TILs tagged `base`, but this is for more general notes and resources.
 
 ### getting help
 
-- within R/Rstudio to open up the docs
+within R/Rstudio, to open up the docs:
 
 ```{r}
 #help(package = 'base')
@@ -32,7 +32,9 @@ that won't include the other default packages that are loaded with base:
 - stats" 
 
 
-- docs on the web: official, full, up-to-date list of packages on CRAN, linking to all the reference manuals:
+docs on the web
+
+official, full, up-to-date list of packages on CRAN, linking to all the reference manuals:
 
 https://search.r-project.org/R/doc/html/packages.html
 

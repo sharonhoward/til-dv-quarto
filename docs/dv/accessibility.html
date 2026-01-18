@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-01-18">
 
-<title>DV Resources – TIL</title>
+<title>Accessibility – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -114,13 +115,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#general-inspiration" id="toc-general-inspiration" class="nav-link active" data-scroll-target="#general-inspiration">General inspiration</a></li>
-  <li><a href="#charts-i-really-want-to-make" id="toc-charts-i-really-want-to-make" class="nav-link" data-scroll-target="#charts-i-really-want-to-make">Charts I really want to make</a></li>
-  <li><a href="#packages-and-tools" id="toc-packages-and-tools" class="nav-link" data-scroll-target="#packages-and-tools">Packages and tools</a></li>
-  <li><a href="#other-stuff" id="toc-other-stuff" class="nav-link" data-scroll-target="#other-stuff">Other stuff</a>
-  <ul class="collapse">
-  <li><a href="#blog-posts-and-articles" id="toc-blog-posts-and-articles" class="nav-link" data-scroll-target="#blog-posts-and-articles">blog posts and articles</a></li>
-  </ul></li>
+  <li><a href="#general" id="toc-general" class="nav-link active" data-scroll-target="#general">General</a></li>
+  <li><a href="#alt-text" id="toc-alt-text" class="nav-link" data-scroll-target="#alt-text">Alt text</a></li>
+  <li><a href="#describing-visualisations" id="toc-describing-visualisations" class="nav-link" data-scroll-target="#describing-visualisations">Describing Visualisations</a></li>
+  <li><a href="#statistical-software-for-blind-users" id="toc-statistical-software-for-blind-users" class="nav-link" data-scroll-target="#statistical-software-for-blind-users">Statistical software for blind users</a></li>
   </ul>
 </nav>
     </div>
@@ -129,14 +127,24 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">DV Resources</h1>
-</div>
+<h1 class="title">Accessibility</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">accessibility</div>
+    <div class="quarto-category">resources</div>
+  </div>
+  </div>
 
 
 
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">18 January 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -146,52 +154,33 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>(unsystematic; adding links as and when I find something or remember)</p>
-<section id="general-inspiration" class="level2">
-<h2 class="anchored" data-anchor-id="general-inspiration">General inspiration</h2>
+<p>a new list of resources about visual accessibility (apart from colour blindness) - something I’d like to work on improving in future.</p>
+<section id="general" class="level2">
+<h2 class="anchored" data-anchor-id="general">General</h2>
+<p>data.europa.eu data visualisation guide has a fantastic section on <a href="https://data.europa.eu/apps/data-visualisation-guide/tag/introduction-to-accessibility">accessibility</a></p>
+</section>
+<section id="alt-text" class="level2">
+<h2 class="anchored" data-anchor-id="alt-text">Alt text</h2>
 <ul>
-<li><a href="https://data.europa.eu/apps/data-visualisation-guide/">Data Visualisation Guide</a> (data.europa.eu) a massive resource</li>
-<li><a href="https://www.data-to-viz.com/">From Data To Viz</a></li>
-<li><a href="https://r-graph-gallery.com/">R Graph Gallery</a></li>
-<li><a href="https://clauswilke.com/dataviz/">Fundamentals of Data Visualization</a></li>
-<li><a href="https://vizdexproject.com/">Vizdex</a> - list of dataviz blogs</li>
-<li><a href="https://nrennie.rbind.io/data-viz-resources/">Dataviz resources</a></li>
+<li><a href="https://data.europa.eu/apps/data-visualisation-guide/alt-text">Writing alt text</a> (data.europa.eu) - a really useful guide</li>
+<li><a href="https://medium.com/nightingale/writing-alt-text-for-data-visualization-2a218ef43f81">Writing alt text for data visualization</a> (Amy Cesal) - a helpful formula particularly for writing short alt text summaries</li>
+<li><a href="https://lizharedogs.github.io/RLadiesNYAltText/">Writing Meaningful Alt Texts for Data Visualizations in R</a> (Liz Hare) - detailed slides</li>
+<li><a href="https://www.jumpingrivers.com/blog/accessibility-alt-text-in-r/">Alt Text in R: Plots, Reports, and Shiny</a> (Nicola Rennie)</li>
 </ul>
 </section>
-<section id="charts-i-really-want-to-make" class="level2">
-<h2 class="anchored" data-anchor-id="charts-i-really-want-to-make">Charts I really want to make</h2>
-<ul>
-<li><a href="https://nsgrantham.github.io/ggbraid/">Braided ribbons</a></li>
-</ul>
+<section id="describing-visualisations" class="level2">
+<h2 class="anchored" data-anchor-id="describing-visualisations">Describing Visualisations</h2>
+<p><a href="https://vis.csail.mit.edu/pubs/vis-text-model/">Accessible Visualization via Natural Language Descriptions: A Four-Level Model of Semantic Content</a> - theory/evaluation of written descriptions of dataviz</p>
 </section>
-<section id="packages-and-tools" class="level2">
-<h2 class="anchored" data-anchor-id="packages-and-tools">Packages and tools</h2>
+<section id="statistical-software-for-blind-users" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-software-for-blind-users">Statistical software for blind users</h2>
+<p>Jonathan Godfrey’s work:</p>
 <ul>
-<li>ggplot
-<ul>
-<li><a href="https://ggplot2.tidyverse.org/">docs</a></li>
-<li><a href="https://exts.ggplot2.tidyverse.org/gallery/">extensions</a></li>
-</ul></li>
-<li><a href="https://github.com/hrbrmstr/waffle">waffle</a></li>
-<li><a href="https://github.com/eclarke/ggbeeswarm">ggbeeswarm</a></li>
-</ul>
-<p>(not tried yet)</p>
-<ul>
-<li><a href="https://leod123.github.io/ggcorrheatmap/">ggcorrheatmap</a></li>
-<li><a href="https://github.com/DerekStevens99/ggplayfair">ggplayfair</a></li>
-</ul>
-</section>
-<section id="other-stuff" class="level2">
-<h2 class="anchored" data-anchor-id="other-stuff">Other stuff</h2>
-<section id="blog-posts-and-articles" class="level3">
-<h3 class="anchored" data-anchor-id="blog-posts-and-articles">blog posts and articles</h3>
-<p>(a few particularly good ones)</p>
-<ul>
-<li><a href="https://www.scientificdiscovery.dev/p/salonis-guide-to-data-visualization">Saloni’s guide to data visualization</a></li>
+<li><a href="https://ajrgodfrey.github.io/BrailleR/">BrailleR</a> [R package]</li>
+<li><a href="https://r-resources.massey.ac.nz/StatSoftware/">Statistical software and blind users</a> [resource]</li>
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->

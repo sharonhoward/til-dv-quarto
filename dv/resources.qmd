@@ -6,6 +6,7 @@ title: "DV Resources"
 
 ## General inspiration
 
+- [Data Visualisation Guide](https://data.europa.eu/apps/data-visualisation-guide/) (data.europa.eu) a massive resource
 - [From Data To Viz](https://www.data-to-viz.com/)
 - [R Graph Gallery](https://r-graph-gallery.com/)
 - [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/)
@@ -34,3 +35,10 @@ title: "DV Resources"
 
 
 ## Other stuff
+
+### blog posts and articles
+
+(a few particularly good ones)
+
+- [Saloni's guide to data visualization](https://www.scientificdiscovery.dev/p/salonis-guide-to-data-visualization)
+

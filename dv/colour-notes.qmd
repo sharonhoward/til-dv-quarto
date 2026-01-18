@@ -141,7 +141,3 @@ Paul Tol:
 
 - [Paul Tol's notes](https://sronpersonalpages.nl/~pault/)
 
-Beyond colour blindness, I've been reading Jonathan Godfrey's work for blind R users:
-
-- [BrailleR](https://ajrgodfrey.github.io/BrailleR/) [R package]
-- [Statistical software and blind users](https://r-resources.massey.ac.nz/StatSoftware/) [resource]
