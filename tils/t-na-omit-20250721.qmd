@@ -18,7 +18,9 @@ source(here::here('R/shared.R'))
 ## Notes
 
 - sometimes you want to get rid of rows that have *any* missing values 
-- usual caveats would apply about blanket dropping NAs though!
+	- usual caveats would apply about blanket dropping NAs though!
+
+Also, sometimes you want to find/get rid of rows in which *all* of a specific subset of columns are NAs.
 
 
 ## Examples
@@ -32,7 +34,7 @@ judges100 |>
   filter(!is.na(name_suffix)) 
 ```
 
-can use filter with if_all to remove rows with any NAs, but it's quite fiddly - needs if_all, everything, tilde and !is.na(.x)
+can use filter with if_all to remove rows with *any* NAs, but it's quite fiddly - needs if_all, everything, tilde and !is.na(.x)
 
 ```{r}
 judges100 |> 
@@ -87,6 +89,11 @@ judges100 |>
 ```
 
 
+## added: find/remove rows if some variables are *all* NA
+
+[TODO: a working code example]
+
+-   filter(if_all([tidy-select columns], ~is.na(.x))) |>
 
 ## Resources
 

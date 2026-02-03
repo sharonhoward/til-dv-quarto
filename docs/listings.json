@@ -1,5 +1,31 @@
 [
   {
+    "listing": "/dv.html",
+    "items": [
+      "/dv/accessibility.html",
+      "/dv/beeswarm.html",
+      "/dv/colour-notes.html",
+      "/dv/resources.html",
+      "/dv/heatmaps.html",
+      "/dv/ridgeline.html",
+      "/dv/slopegraph.html",
+      "/dv/sparklines.html",
+      "/dv/residuals-scatterplots.html",
+      "/dv/waffle.html",
+      "/dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
+      "/dv/dv-til/til-ggplot-images-save-tiffs-20250630.html",
+      "/dv/dv-til/ggplot-geom-count.html",
+      "/dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
+      "/dv/dv-til/til-nocode-ggplot-labs-repeat-20250630.html",
+      "/dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
+      "/dv/dv-til/ojs_define_columns_problem.html",
+      "/dv/dv-til/ojs_define_dates_problem.html",
+      "/dv/dv-til/pretty-breaks.html",
+      "/dv/dv-til/reorder-within.html",
+      "/dv/dv-til/til-ggplot-scale-reverse-20250630.html"
+    ]
+  },
+  {
     "listing": "/tils.html",
     "items": [
       "/tils/til-lists-names-using-vectors-20250630.html",
@@ -47,6 +73,7 @@
       "/tils/til-grouping-cur-group-id-20250630.html",
       "/tils/til-grouping-dot-by-20250630.html",
       "/tils/til-functions-group-by-at-20250630.html",
+      "/tils/t-importing-bad-dates-20260203.html",
       "/tils/til-nocode-parse-number-dots-20250630.html",
       "/tils/til-joins-join-by-20250630.html",
       "/tils/til-nocode-list-elements-into-single-objects-20250630.html",
@@ -69,32 +96,6 @@
       "/tils/til-str-match-all-unnest-20250630.html",
       "/notes/strings-variables-20250929.html",
       "/tils/til-nocode-yaml-anywhere-20250630.html"
-    ]
-  },
-  {
-    "listing": "/dv.html",
-    "items": [
-      "/dv/accessibility.html",
-      "/dv/beeswarm.html",
-      "/dv/colour-notes.html",
-      "/dv/resources.html",
-      "/dv/heatmaps.html",
-      "/dv/ridgeline.html",
-      "/dv/slopegraph.html",
-      "/dv/sparklines.html",
-      "/dv/residuals-scatterplots.html",
-      "/dv/waffle.html",
-      "/dv/dv-til/til-ggplot-waffle-order-legend-20250630.html",
-      "/dv/dv-til/til-ggplot-images-save-tiffs-20250630.html",
-      "/dv/dv-til/ggplot-geom-count.html",
-      "/dv/dv-til/til-ggplot-legend-empty-facet-20250630.html",
-      "/dv/dv-til/til-nocode-ggplot-labs-repeat-20250630.html",
-      "/dv/dv-til/til-ggplot-multiple-scales-ggnewscale-20250630.html",
-      "/dv/dv-til/ojs_define_columns_problem.html",
-      "/dv/dv-til/ojs_define_dates_problem.html",
-      "/dv/dv-til/pretty-breaks.html",
-      "/dv/dv-til/reorder-within.html",
-      "/dv/dv-til/til-ggplot-scale-reverse-20250630.html"
     ]
   }
 ]

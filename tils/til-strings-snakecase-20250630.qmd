@@ -21,7 +21,7 @@ source(here::here('R/shared.R'))
 -  to use hyphens instead of underscores just use sep_out 
 -  snakecase::to_snake_case("Help Me OutHere", sep_out = "-") 
 
-
+CAVEAT: the snakecase functions don't *just* change spaces... be careful.
 
 
 ## Example

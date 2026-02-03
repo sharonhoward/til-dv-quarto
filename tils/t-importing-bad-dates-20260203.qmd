@@ -1,0 +1,81 @@
+---
+title: "import bad dates with read_* functions (and fix them)"
+author: "Sharon Howard"
+date: "2026-02-03"
+categories: [dates, import]
+execute:
+  warning: false
+  message: false
+---
+
+
+## Includes
+
+```{r}
+source(here::here('R/shared.R'))
+```
+
+## Notes
+
+I sometimes used to handle partial dates by using "00": eg, "February 1800" would become "1800-02-00". R does not like this kind of hacky nonsense. The readr read_* functions by default automatically parse date columns and will not recognise these as valid dates, so they become NAs.
+
+Nowadays, I think it's better (if more long-winded and boring) to use "01" to fill the gaps and then add a `date_precision` column to differentiate them from actual 01 dates; this can be strings ("ymd", "ym", "y") or numeric [as used by Wikidata](https://www.wikidata.org/wiki/Help:Dates#Precision).
+
+But I still need to deal with importing my old data, as well as other problems that can arise when importing historical dates. For example, I've had problems with dates like "29 February 1700", which is a valid date in the Julian calendar (up to 1752 in Britain) but not in the modern Gregorian calendar.
+
+Mostly, the read_* guessing works fine, and if I've got a lot of columns in a table I certainly don't want to have to turn it off or set the col_format for all of them individually. So the simplest way to handle this problem is to set the format for the problematic date column to character, and use guess for all the rest.
+
+In the past I also sometimes had difficulties importing Excel spreadsheets with this sort of historical date issue. I haven't encountered it recently; readxl::read_excel seems to simply import the problem exam_date column as chr but I don't know what it does with Julian 29 Feb. I'll update if I find an example in future.
+
+
+## Examples
+
+import without errors
+
+```{r}
+bad_dates_csv <-
+  read_csv(here::here("data/llep_ba_exams_bad_dates.csv"),
+           col_types = list(exam_date = col_character(), .default = col_guess() )
+           ) 
+```
+
+turn the problem date into valid dates that lubridate will parse, and make a date_precision column. (But this won't solve the problem with leap years.)
+
+
+```{r}
+bad_dates_csv |>
+  mutate(exam_date_precision = if_else(str_detect(exam_date, "-00$"), "ym", "ymd")) |>
+  mutate(exam_date = str_replace(exam_date, "00$", "01")) |>
+  mutate(exam_date = parse_date_time(exam_date, "ymd")) |>
+  relocate(exam_date_precision, .after = exam_date)
+```
+
+In this particular data, I know the only partial dates are year-month (and there are no NAs). But often there'll also be year only dates, which would need a bit more code. This should cover most eventualities.
+
+```{r}
+bad_dates_csv |>
+  separate(exam_date, into = c("d1", "d2", "d3"), sep = "-", remove = F) |>
+  mutate(exam_date_precision = case_when(
+    is.na(exam_date) | exam_date=="" ~ NA, 
+    d2=="00" ~ "y",
+    d3=="00" ~ "ym",
+    .default = "ymd"
+  )) |>
+  # \\b here should cover years like 1700 if needed; but check before using
+  mutate(exam_date = str_replace_all(exam_date, "\\b00", "01")) |>
+  mutate(exam_date = parse_date_time(exam_date, "ymd")) |>
+  select(exam_date, exam_date_precision, d1, d2, d3)
+```
+
+a valid date, but lubridate won't have it. :-( (It is a known [issue](https://github.com/tidyverse/lubridate/issues/2#issuecomment-2531929878) and [might be fixed in the future](https://github.com/r-lib/clock/issues/183).)
+
+```{r}
+parse_date_time("1700-02-29", "ymd")
+```
+
+
+
+## Resources
+
+- [readr article on column types](https://readr.tidyverse.org/articles/column-types.html)
+

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Sharon Howard">
-<meta name="dcterms.date" content="2025-07-21">
+<meta name="dcterms.date" content="2026-02-03">
 
-<title>filter missing values flexibly with na.omit or drop_na – TIL</title>
+<title>import bad dates with read_* functions (and fix them) – TIL</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -153,13 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#includes" id="toc-includes" class="nav-link active" data-scroll-target="#includes">Includes</a></li>
   <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes">Notes</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
-  <ul class="collapse">
-  <li><a href="#filter-limitations" id="toc-filter-limitations" class="nav-link" data-scroll-target="#filter-limitations">filter() limitations</a></li>
-  <li><a href="#na.omit" id="toc-na.omit" class="nav-link" data-scroll-target="#na.omit">na.omit()</a></li>
-  <li><a href="#tidyrdrop_na" id="toc-tidyrdrop_na" class="nav-link" data-scroll-target="#tidyrdrop_na">tidyr::drop_na()</a></li>
-  </ul></li>
-  <li><a href="#added-findremove-rows-if-some-variables-are-all-na" id="toc-added-findremove-rows-if-some-variables-are-all-na" class="nav-link" data-scroll-target="#added-findremove-rows-if-some-variables-are-all-na">added: find/remove rows if some variables are <em>all</em> NA</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
   <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">Resources</a></li>
   </ul>
 </nav>
@@ -169,10 +163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">filter missing values flexibly with na.omit or drop_na</h1>
+<h1 class="title">import bad dates with read_* functions (and fix them)</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">NAs</div>
-    <div class="quarto-category">filter</div>
+    <div class="quarto-category">dates</div>
+    <div class="quarto-category">import</div>
   </div>
   </div>
 
@@ -190,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">21 July 2025</p>
+      <p class="date">3 February 2026</p>
     </div>
   </div>
   
@@ -210,198 +204,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="notes" class="level2">
 <h2 class="anchored" data-anchor-id="notes">Notes</h2>
-<ul>
-<li>sometimes you want to get rid of rows that have <em>any</em> missing values
-<ul>
-<li>usual caveats would apply about blanket dropping NAs though!</li>
-</ul></li>
-</ul>
-<p>Also, sometimes you want to find/get rid of rows in which <em>all</em> of a specific subset of columns are NAs.</p>
+<p>I sometimes used to handle partial dates by using “00”: eg, “February 1800” would become “1800-02-00”. R does not like this kind of hacky nonsense. The readr read_* functions by default automatically parse date columns and will not recognise these as valid dates, so they become NAs.</p>
+<p>Nowadays, I think it’s better (if more long-winded and boring) to use “01” to fill the gaps and then add a <code>date_precision</code> column to differentiate them from actual 01 dates; this can be strings (“ymd”, “ym”, “y”) or numeric <a href="https://www.wikidata.org/wiki/Help:Dates#Precision">as used by Wikidata</a>.</p>
+<p>But I still need to deal with importing my old data, as well as other problems that can arise when importing historical dates. For example, I’ve had problems with dates like “29 February 1700”, which is a valid date in the Julian calendar (up to 1752 in Britain) but not in the modern Gregorian calendar.</p>
+<p>Mostly, the read_* guessing works fine, and if I’ve got a lot of columns in a table I certainly don’t want to have to turn it off or set the col_format for all of them individually. So the simplest way to handle this problem is to set the format for the problematic date column to character, and use guess for all the rest.</p>
+<p>In the past I also sometimes had difficulties importing Excel spreadsheets with this sort of historical date issue. I haven’t encountered it recently; readxl::read_excel seems to simply import the problem exam_date column as chr but I don’t know what it does with Julian 29 Feb.&nbsp;I’ll update if I find an example in future.</p>
 </section>
 <section id="examples" class="level2">
 <h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<section id="filter-limitations" class="level3">
-<h3 class="anchored" data-anchor-id="filter-limitations">filter() limitations</h3>
-<p>filter and !is.na - simple but only one variable at a time.</p>
+<p>import without errors</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(name_suffix)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 15
-   judge_id name_first name_middle name_last name_suffix birth_date
-      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
- 1     3518 Gerald     Austin      McHugh    Jr.               1954
- 2     2736 Henry      Harold      Kennedy   Jr.               1948
- 3     1136 Joseph     Chappell    Hutcheson Jr.               1879
- 4     3001 John       Glover      Roberts   Jr.               1955
- 5      660 John       Malcolm     Duhe      Jr.               1933
- 6     2471 Edmund     &lt;NA&gt;        Waddill   Jr.               1855
- 7      931 Ralph      B.          Guy       Jr.               1929
- 8      193 Solomon    &lt;NA&gt;        Blatt     Jr.               1921
- 9      929 George     F.          Gunn      Jr.               1927
-10      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bad_dates_csv <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/llep_ba_exams_bad_dates.csv"</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_types =</span> <span class="fu">list</span>(<span class="at">exam_date =</span> <span class="fu">col_character</span>(), <span class="at">.default =</span> <span class="fu">col_guess</span>() )</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>           ) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-<p>can use filter with if_all to remove rows with <em>any</em> NAs, but it’s quite fiddly - needs if_all, everything, tilde and !is.na(.x)</p>
+<p>turn the problem date into valid dates that lubridate will parse, and make a date_precision column. (But this won’t solve the problem with leap years.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="sc">!</span><span class="fu">is.na</span>(.x))) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bad_dates_csv <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date_precision =</span> <span class="fu">if_else</span>(<span class="fu">str_detect</span>(exam_date, <span class="st">"-00$"</span>), <span class="st">"ym"</span>, <span class="st">"ymd"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date =</span> <span class="fu">str_replace</span>(exam_date, <span class="st">"00$"</span>, <span class="st">"01"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date =</span> <span class="fu">parse_date_time</span>(exam_date, <span class="st">"ymd"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(exam_date_precision, <span class="at">.after =</span> exam_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 15
-  judge_id name_first name_middle name_last name_suffix birth_date
-     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
-1     1136 Joseph     Chappell    Hutcheson Jr.               1879
-2      929 George     F.          Gunn      Jr.               1927
-3      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
+<pre><code># A tibble: 262 × 5
+   exam_id        exam_date           exam_date_precision parish_code examinants
+   &lt;chr&gt;          &lt;dttm&gt;              &lt;chr&gt;               &lt;chr&gt;       &lt;chr&gt;     
+ 1 GLBAEP1030000… 1788-09-01 00:00:00 ym                  BA          Martha Bu…
+ 2 GLBAEP1030000… 1788-10-01 00:00:00 ym                  BA          Hannah Go…
+ 3 GLBAEP1030000… 1788-10-01 00:00:00 ym                  BA          Morris Bo…
+ 4 GLBAEP1030000… 1788-10-01 00:00:00 ym                  BA          Edward Fl…
+ 5 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          John Wils…
+ 6 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          Richard P…
+ 7 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          Mary Bayl…
+ 8 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          Elizabeth…
+ 9 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          Jonathan …
+10 GLBAEP1030000… 1788-12-01 00:00:00 ym                  BA          Munn Vaug…
+# ℹ 252 more rows</code></pre>
 </div>
 </div>
-</section>
-<section id="na.omit" class="level3">
-<h3 class="anchored" data-anchor-id="na.omit">na.omit()</h3>
-<p>much simpler to just na.omit() !</p>
+<p>In this particular data, I know the only partial dates are year-month (and there are no NAs). But often there’ll also be year only dates, which would need a bit more code. This should cover most eventualities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bad_dates_csv <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(exam_date, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"d1"</span>, <span class="st">"d2"</span>, <span class="st">"d3"</span>), <span class="at">sep =</span> <span class="st">"-"</span>, <span class="at">remove =</span> F) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date_precision =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">is.na</span>(exam_date) <span class="sc">|</span> exam_date<span class="sc">==</span><span class="st">""</span> <span class="sc">~</span> <span class="cn">NA</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    d2<span class="sc">==</span><span class="st">"00"</span> <span class="sc">~</span> <span class="st">"y"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    d3<span class="sc">==</span><span class="st">"00"</span> <span class="sc">~</span> <span class="st">"ym"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.default =</span> <span class="st">"ymd"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># \\b here should cover years like 1700 if needed; but check before using</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date =</span> <span class="fu">str_replace_all</span>(exam_date, <span class="st">"</span><span class="sc">\\</span><span class="st">b00"</span>, <span class="st">"01"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">exam_date =</span> <span class="fu">parse_date_time</span>(exam_date, <span class="st">"ymd"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(exam_date, exam_date_precision, d1, d2, d3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 15
-  judge_id name_first name_middle name_last name_suffix birth_date
-     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
-1     1136 Joseph     Chappell    Hutcheson Jr.               1879
-2      929 George     F.          Gunn      Jr.               1927
-3      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
+<pre><code># A tibble: 262 × 5
+   exam_date           exam_date_precision d1    d2    d3   
+   &lt;dttm&gt;              &lt;chr&gt;               &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+ 1 1788-09-01 00:00:00 ym                  1788  09    00   
+ 2 1788-10-01 00:00:00 ym                  1788  10    00   
+ 3 1788-10-01 00:00:00 ym                  1788  10    00   
+ 4 1788-10-01 00:00:00 ym                  1788  10    00   
+ 5 1788-12-01 00:00:00 ym                  1788  12    00   
+ 6 1788-12-01 00:00:00 ym                  1788  12    00   
+ 7 1788-12-01 00:00:00 ym                  1788  12    00   
+ 8 1788-12-01 00:00:00 ym                  1788  12    00   
+ 9 1788-12-01 00:00:00 ym                  1788  12    00   
+10 1788-12-01 00:00:00 ym                  1788  12    00   
+# ℹ 252 more rows</code></pre>
 </div>
 </div>
-<p>you can also use it like this to filter on a single column, but idk why you’d want to.</p>
+<p>a valid date, but lubridate won’t have it. :-( (It is a known <a href="https://github.com/tidyverse/lubridate/issues/2#issuecomment-2531929878">issue</a> and <a href="https://github.com/r-lib/clock/issues/183">might be fixed in the future</a>.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>judges100[<span class="sc">!</span><span class="fu">is.na</span>(judges100<span class="sc">$</span>name_suffix), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_date_time</span>(<span class="st">"1700-02-29"</span>, <span class="st">"ymd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 15
-   judge_id name_first name_middle name_last name_suffix birth_date
-      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
- 1     3518 Gerald     Austin      McHugh    Jr.               1954
- 2     2736 Henry      Harold      Kennedy   Jr.               1948
- 3     1136 Joseph     Chappell    Hutcheson Jr.               1879
- 4     3001 John       Glover      Roberts   Jr.               1955
- 5      660 John       Malcolm     Duhe      Jr.               1933
- 6     2471 Edmund     &lt;NA&gt;        Waddill   Jr.               1855
- 7      931 Ralph      B.          Guy       Jr.               1929
- 8      193 Solomon    &lt;NA&gt;        Blatt     Jr.               1921
- 9      929 George     F.          Gunn      Jr.               1927
-10      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
+<pre><code>[1] NA</code></pre>
 </div>
 </div>
-</section>
-<section id="tidyrdrop_na" class="level3">
-<h3 class="anchored" data-anchor-id="tidyrdrop_na">tidyr::drop_na()</h3>
-<ul>
-<li>much easier for a subset of variables</li>
-</ul>
-<p>though it’s simple for everything too</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 15
-  judge_id name_first name_middle name_last name_suffix birth_date
-     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
-1     1136 Joseph     Chappell    Hutcheson Jr.               1879
-2      929 George     F.          Gunn      Jr.               1927
-3      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
-</div>
-</div>
-<p>for a selection, any tidy-select thing should work</p>
-<p>(but you don’t need c() to select multiple variables)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(name_suffix, death_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 15
-  judge_id name_first name_middle name_last name_suffix birth_date
-     &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
-1     1136 Joseph     Chappell    Hutcheson Jr.               1879
-2     2471 Edmund     &lt;NA&gt;        Waddill   Jr.               1855
-3      929 George     F.          Gunn      Jr.               1927
-4      144 David      Owen        Belew     Jr.               1920
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="sc">-</span>name_suffix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 35 × 15
-   judge_id name_first name_middle name_last name_suffix birth_date
-      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
- 1      432 George     Edward      Cire      &lt;NA&gt;              1922
- 2      188 Charles    Stanley     Blair     &lt;NA&gt;              1927
- 3     2080 Harold     Lyman       Ryan      &lt;NA&gt;              1923
- 4      393 David      Kellogg     Cartter   &lt;NA&gt;              1812
- 5     1136 Joseph     Chappell    Hutcheson Jr.               1879
- 6     2567 Edward     Douglass    White     &lt;NA&gt;              1845
- 7     1337 Kenesaw    Mountain    Landis    &lt;NA&gt;              1866
- 8     3257 Glenni     William     Scofield  &lt;NA&gt;              1817
- 9     2258 John       Emilio      Sprizzo   &lt;NA&gt;              1934
-10     1260 Thomas     Martin      Kennerly  &lt;NA&gt;              1874
-# ℹ 25 more rows
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>judges100 <span class="sc">|&gt;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="fu">where</span>(is.numeric))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 58 × 15
-   judge_id name_first name_middle name_last name_suffix birth_date
-      &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;
- 1      432 George     Edward      Cire      &lt;NA&gt;              1922
- 2      831 John       &lt;NA&gt;        Gayle     &lt;NA&gt;              1792
- 3      188 Charles    Stanley     Blair     &lt;NA&gt;              1927
- 4     2080 Harold     Lyman       Ryan      &lt;NA&gt;              1923
- 5      393 David      Kellogg     Cartter   &lt;NA&gt;              1812
- 6     1136 Joseph     Chappell    Hutcheson Jr.               1879
- 7      661 Edward     &lt;NA&gt;        Dumbauld  &lt;NA&gt;              1905
- 8      573 David      &lt;NA&gt;        Davis     &lt;NA&gt;              1815
- 9     2567 Edward     Douglass    White     &lt;NA&gt;              1845
-10     1337 Kenesaw    Mountain    Landis    &lt;NA&gt;              1866
-# ℹ 48 more rows
-# ℹ 9 more variables: birthplace_city &lt;chr&gt;, birthplace_state &lt;chr&gt;,
-#   death_date &lt;int&gt;, death_city &lt;chr&gt;, death_state &lt;chr&gt;, gender &lt;chr&gt;,
-#   race &lt;chr&gt;, persname &lt;chr&gt;, id &lt;chr&gt;</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="added-findremove-rows-if-some-variables-are-all-na" class="level2">
-<h2 class="anchored" data-anchor-id="added-findremove-rows-if-some-variables-are-all-na">added: find/remove rows if some variables are <em>all</em> NA</h2>
-<p>[TODO: a working code example]</p>
-<ul>
-<li>filter(if_all([tidy-select columns], ~is.na(.x))) |&gt;</li>
-</ul>
 </section>
 <section id="resources" class="level2">
 <h2 class="anchored" data-anchor-id="resources">Resources</h2>
 <ul>
-<li><a href="https://bookdown.org/rwnahhas/IntroToR/exclude-observations-with-missing-data.html">Exclude observations with missing data</a></li>
-<li><a href="https://www.spsanderson.com/steveondata/posts/2024-12-16/">How to Use na.omit in R: A Comprehensive Guide to Handling Missing Values</a></li>
+<li><a href="https://readr.tidyverse.org/articles/column-types.html">readr article on column types</a></li>
 </ul>
 
 
