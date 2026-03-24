@@ -214,13 +214,14 @@ map = {
   let map = L.map(parent)
       .setView([54.3, -3.5], 6); // uk+ire // higher numbers are more zoomed in
   
-  // any of no-referrer-when-downgrade, origin, origin-when-cross-origin, strict-origin, or strict-origin-when-cross-origin
-  // osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 19, referrerPolicy: 'strict-origin-when-cross-origin'});
+  // from osmwiki: any of no-referrer-when-downgrade, origin, origin-when-cross-origin, strict-origin, or strict-origin-when-cross-origin
+  // does not work: referrerPolicy: 'strict-origin-when-cross-origin'}
+  // osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 19, referrerPolicy: '...'});
   let osmTileLayer = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 16,
       minZoom: 5,
-      referrerPolicy: 'strict-origin-when-cross-origin'
+      referrerPolicy: 'no-referrer-when-downgrade'
   })
   .addTo(map);
   
@@ -344,12 +345,19 @@ BUT
 
 but doesn't mention why it would vary between browsers...
 
+doesn't work:
+
+- referrerPolicy: 'strict-origin-when-cross-origin'
 
 OSM forum discussions focusing on Leaflet
 
 - [possible solution but might not still be working](https://community.openstreetmap.org/t/access-blocked-on-osm-org/141419/27)
 - [referer policy links](https://community.openstreetmap.org/t/access-blocked-leaflet-tiles-just-me/135657/14)
-- [github example](https://github.com/openstreetmap/leaflet-osm/pull/51/changes)
+
+Other resources/examples
+
+- [OSM github pr](https://github.com/openstreetmap/leaflet-osm/pull/51/changes)
+- [mdn referrerPolicy property](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy)
 
 
 ## Resources
