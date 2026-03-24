@@ -1,0 +1,338 @@
+---
+title: "Leaflet and OJS: notes and queries"
+date: "2026-03-24"
+categories: 
+  - ojs
+  - maps
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+## Notes
+
+1. an example of a Leaflet map in OJS, using filters and the markerclusters plugin.
+2. testing OpenStreetMap basemap to see if I need to change any leaflet settings to avoid Blocked warnings.
+3. list of resources
+
+
+```{r stuff}
+library(scales)  
+library(janitor) 
+library(readxl)
+library(glue)
+
+library(tidytext)
+library(tidyverse)
+
+ll_url_base <- "https://www.londonlives.org/record/"
+```
+
+```{r}
+
+## files in site_data
+
+# improved geo data. drop any existing geo data in cdrv and replace with this.
+
+cdrv_geo_csv <-
+  read_csv(here::here("data/ll/cdrv_geocoded_points_and_notgeocoded_20260226.csv"))|>
+# add "County " prefix to Irish county names
+  mutate(to_county = case_when(
+    country=="Ireland" & !is.na(to_county) ~ paste("County", to_county),
+    .default = to_county
+  ))
+
+# ensure readr treats doc_date as char as there are dates that the parser won't like in there.
+
+cdrv_names_tsv <-
+  read_tsv(here::here("data/ll/removal_orders/cdrv_removal_orders_v2_names.tsv"), guess_max = 3100,
+           col_types = list(doc_date = col_character(), .default = col_guess()) )
+
+cdrv_orders_tsv <-
+  read_tsv(here::here("data/ll/removal_orders/cdrv_removal_orders_v2_orders.tsv"), guess_max = 2500, 
+           col_types = list(doc_date = col_character(), .default = col_guess()))
+
+
+```
+
+```{r}
+# get names to add as a list to the orders
+cdrv_names <-
+cdrv_names_tsv |>
+  separate(doc_date, into = c("d1", "d2", "d3"), sep = "-", remove = F) |>
+  mutate(date_precision = case_when(
+    is.na(doc_date) | doc_date=="" ~ NA,
+    d2=="00" ~ "y",
+    d3=="00" ~ "ym",
+    .default = "ymd"
+  )) |>
+  # \\b here should cover years like 1700 if needed; but check before using
+  mutate(doc_date = str_replace_all(doc_date, "\\b00", "01")) |>
+  # make new parsed date col so doc_date remains char.
+  mutate(date = parse_date_time(doc_date, "ymd")) |>
+  mutate(doc_year = year(date)) |>
+  relocate(date, date_precision, doc_year, .after = doc_date) |>
+  select(-d1, -d2, -d3)
+
+
+
+cdrv_orders <-
+cdrv_orders_tsv |>
+  separate(doc_date, into = c("d1", "d2", "d3"), sep = "-", remove = F) |>
+  mutate(date_precision = case_when(
+    is.na(doc_date) | doc_date=="" ~ NA, 
+    d2=="00" ~ "y",
+    d3=="00" ~ "ym",
+    .default = "ymd"
+  )) |>
+  # get rid of 00 before parsing date.
+  # \\b here should cover years like 1700 if needed; but check before using
+  mutate(doc_date = str_replace_all(doc_date, "\\b00", "01")) |>
+  # parse date
+  mutate(date = parse_date_time(doc_date, "ymd")) |>
+  mutate(doc_year = year(date))  |>
+  relocate(date, date_precision, doc_year, .after = doc_date) |>
+  # why have i not done this...?
+  arrange(date, order_id) |>
+  select(-d1, -d2, -d3, -to_place, -to_area) |>
+  # add name(s) of removed.
+  left_join(
+    cdrv_names |>
+      mutate(glue_name = glue("{stdgiv} {surname}")) |>
+      group_by(order_id) |>
+      summarise(removed = glue_collapse(glue_name, sep = ", ", last = " and ")) |>
+      ungroup(), by="order_id"
+  ) |>
+  mutate(vagrant = if_else(is.na(vagrant), "no", "yes")) |>
+  mutate(has_exam = if_else(is.na(link_exam_id), "no", "yes")) 
+
+
+cdrv_orders_geo <-
+  cdrv_orders |>
+  # geo data
+  left_join(cdrv_geo_csv |>
+              select(order_id, to_place, to_county, city, country, lat, lng, src), by="order_id") |>
+  # leaflet doesn't like NAs! only drops about 30. 
+  filter(!is.na(lat)) |>
+  
+  # display date, varying precision
+  mutate(m = as.character(month(date, label=TRUE, abbr = FALSE))) |>
+  mutate(nice_date = case_when(
+    date_precision=="y" ~ as.character(doc_year),
+    date_precision=="ym" ~ paste(m, doc_year ),
+    date_precision=="ymd" ~ paste( day(date) , m, doc_year)
+  )) |>
+  relocate(nice_date, .after = doc_date) |>
+  mutate(order_url = glue("{ll_url_base}{img}")) 
+
+```
+
+
+
+
+```{r}
+ojs_define(ojs_cdrv_geo = cdrv_orders_geo)
+```
+
+```{ojs}
+ojsCdrvGeo = transpose(ojs_cdrv_geo)
+```
+
+
+```{ojs} 
+function createRVGeoData(data) {
+  const geoData = {
+    type: 'FeatureCollection',
+    crs: {type: 'name', properties: {name: 'urn:ogc:def:crs:EPSG::27700'}},
+    features: []
+  };
+  data.map(h => {
+    geoData.features.push({
+      type: 'Feature',
+      properties: {
+        id: h.order_id,
+        place: h.to_place,
+        county: h.to_county,
+        removed: h.removed,
+        vagrant: h.vagrant, // yes/no for display
+        date: h.nice_date,
+        year: h.doc_year,
+        order_url: h.order_url,
+        has_exam: h.has_exam // "yes"/"no"
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [h.lng, h.lat]
+      }
+    });
+  });
+  return geoData;
+}
+```
+
+
+## The Map
+
+
+
+```{ojs}
+
+viewof filtersRV = Inputs.form({
+// linked exams (most)
+  hasExam: Inputs.checkbox(["yes", "no"], {label: "Linked exam(s)", value: ["yes", "no"]}) ,
+  // a vagrant?
+  isVagrant: Inputs.checkbox(["yes", "no"], {label: "Vagrant", value: ["yes", "no"]}) 
+}
+,
+// https://observablehq.com/@tophtucker/use-inputs-form-with-a-template
+// https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Column_layouts
+  {
+    template: (inputs) => htl.html`<div style="display: flex; flex-wrap: wrap;" class="styled">
+    <style>
+  div.styled { border: 1px solid #d3d3d3; background-color: #f5f5f5; margin: 5px; padding: 5px; font-size: 80%; }
+  div.styled form {border: 1px solid white;}
+  div.styled form>label { width: 130px; padding:5px; }
+</style>
+  ${Object.values(inputs)}
+</div>`
+  }
+)
+  
+```
+
+
+
+```{ojs}
+
+map = {
+  // Make a container in the Observable DOM to hold the map
+  let parent = DOM.element('div', { style: `width:${width}px; height:600px` });
+  // Make sure Observable renders the parent container so Leaflet can figure out its size
+  yield parent;
+  
+  let map = L.map(parent)
+      .setView([54.3, -3.5], 6); // uk+ire // higher numbers are more zoomed in
+  
+  let osmTileLayer = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 16,
+      minZoom: 5
+  })
+  .addTo(map);
+  
+/*
+  const key = 'Qm3IHfglBpG81gp4ZK4G';
+  let mtTileLayer = L.tileLayer(`https://api.maptiler.com/maps/base-v4/{z}/{x}/{y}.png?key=${key}`,{ //style URL
+    tileSize: 512,
+    zoomOffset: -1,
+    minZoom: 4,
+    attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
+    crossOrigin: true
+}).addTo(map);
+  */
+
+
+
+  const geojsonData = createRVGeoData(ojsCdrvGeo);
+  
+  const mcg = markerCluster({
+            spiderfyDistanceMultiplier: 1.8,
+            maxClusterRadius: 50
+            })
+            .addTo(map);
+	
+	// single markers with a simple popup for testing. is L.geoJson the same as L.geoJSON ? seems to be
+  let markers = L.geoJSON(null, {
+  
+  
+    onEachFeature: function (feature, layer) {
+    
+      const data = feature.properties;
+      const tip = `<div class="popup">${data.removed}: ${data.place} (${data.year})</div>`; // + `<br/>${data.place}, ${data.county} (${data.year})</div>`;
+      
+      layer.bindPopup(tip); // click.
+      //layer.bindTooltip(tip, {sticky: true}); // hover. 
+ 
+    },
+    
+    pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 6, 
+				fillColor: "#CC6000", // a bit darker than "#ff7800" 
+				color: "#000",
+				weight: 1, // width of the circle border.
+				opacity: 1,
+				fillOpacity: 1
+			});
+     }
+  }) ;  
+  
+// Once you have populated your Leaflet GeoJSON Layer Group (typically with geojsonLayer.addData(geoJsonObject), then instead of adding that group to your map, simply add it into your MarkerClusterGroup:
+  markers.addData(geojsonData).addTo(mcg);
+
+  // This is to make these variables accessible in other Observable cells.
+  // It is not necessary for regular HTML web pages.
+  
+  // AHHHHHHH you need to take map out of here and use mcg *instead*
+  mutable mapVariables = [mcg, markers];
+}
+
+```
+
+
+
+```{ojs}
+
+mapFilters = {
+  // This handles the changes 
+  // In normal HTML environment, this would be inside the slider event handling function.
+
+//       
+
+  mapVariables[1].eachLayer(l => {
+    if( 
+        filtersRV["hasExam"].includes(l.feature.properties.has_exam) 
+        && filtersRV["isVagrant"].includes(l.feature.properties.vagrant)
+        )  
+    {
+      l.addTo(mapVariables[0]);
+    } else {
+      l.removeFrom(mapVariables[0]);
+    }
+  })
+
+  return 'howdy'; // do i need this return line at all? probably not...
+}
+```
+
+```{ojs}
+mutable mapVariables = null;
+```
+
+
+```{ojs}
+markerCluster = L, require('leaflet.markercluster@1.1.0').catch(() => L.markerClusterGroup)
+```
+
+
+```{ojs}
+markerClusterCSS = html`<link href='${resolve('leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css')}' rel='stylesheet' />`
+```
+
+
+
+
+## Resources
+
+Leaflet:
+
+- [Leaflet](https://leafletjs.com/) 
+- [Leaflet.markercluster plugin](https://github.com/Leaflet/Leaflet.markercluster)
+
+Observable:
+
+- [Learning Leaflet](https://observablehq.com/@rahulbot/learning-leaflet) (Observable Notebook)
+- [Leaflet with Online GeoJSON and Slider](https://observablehq.com/d/de61852a430b89e9) (Observable Notebook with filtering method)
+- [Chicago Homicides Leaflet Map](https://observablehq.com/@randomfractals/chicago-homicides-heatmap) (Observable Notebook with markerclusters)
+

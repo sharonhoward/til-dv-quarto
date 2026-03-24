@@ -973,39 +973,81 @@
     "text": "Example\n\n# get list of files \ndiv_csvs_files &lt;- \n  list.files(here::here(\"data/csv/\"), pattern = \"*.csv\", full.names = T) \n \n# use map() to read_csv a folder of CSV files (makes a list) \ndivs_list &lt;- \n  map(div_csvs_files, read_csv)  \n \n# nb this can be a bit slow. check if there are more efficient methods? \nbind_rows(divs_list) \n\n# A tibble: 338 × 5\n   book         div_id  div_sort div_txt                               title_txt\n   &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;                                 &lt;chr&gt;    \n 1 atb-book-one div-002        1 Bishop Hall's 'Observations' in His … Bishop H…\n 2 atb-book-one div-003        2 A Prayer O most great and gracious G… A Prayer \n 3 atb-book-one div-004        3 The Dedication I'll dedicate my soul… The Dedi…\n 4 atb-book-one div-005        4 Alice Wandesford, the fifth child of… &lt;NA&gt;     \n 5 atb-book-one div-006        5 Proverbs The fear of the Lord is the… Proverbs \n 6 atb-book-one div-007        6 A Preface to the Book For as much as… A Prefac…\n 7 atb-book-one div-008        7 (Remember to put the relation of my … &lt;NA&gt;     \n 8 atb-book-one div-009        8 The first deliverance of that kind w… &lt;NA&gt;     \n 9 atb-book-one div-010        9 A Preservation in the Smallpox, 1631… A Preser…\n10 atb-book-one div-011       10 London, 1631. The First Dawning of G… London, …\n# ℹ 328 more rows"
   },
   {
-    "objectID": "dv/accessibility.html",
-    "href": "dv/accessibility.html",
-    "title": "Accessibility",
+    "objectID": "data/ll/removal_orders/readme.html",
+    "href": "data/ll/removal_orders/readme.html",
+    "title": "London Lives: St Clement Danes Removal Orders",
     "section": "",
-    "text": "a new list of resources about visual accessibility (apart from colour blindness) - something I’d like to work on improving in future."
+    "text": "This is a dataset of 3180 names of paupers and vagrants ordered to be removed from the parish of St Clement Danes between 1752 and 1793. The data has been created from London Lives XML data for the Register of Paupers Removed from the Parish (RV) (see the link for a full description of the source).\nThe dataset is intended to complement the London Lives Pauper Examinations data.\nA caveat: not all names mentioned in the original orders appear in this dataset, because they were not all captured by the London Lives name tagging. (This tends to be particularly the case with dependant children and with wives.) A very small number of untagged names (where they were principal names in the order) has been added to the data. So, this dataset would not be suitable if you wanted to (let’s say) count the average number of people per order, without further work to rectify the omissions. The rekeyed text of the order is included in the data in part to enable such omissions to be identified. It should also be borne in mind that the rekeying method is not as accurate as academic researchers might wish and for absolute certainty it may be necessary to refer to the images at the London Lives website.\nThis data is released under a Creative Commons Attribution-ShareAlike 4.0 International Licence.\n\n\n\nLicense: CC BY-SA 4.0\n\n\n\n\nThis is version 2 of the data (May 2017)\nChanges from version 1:\n\nadded a new summary table for orders, containing links to other orders, examinations and petitions\nminor corrections to a number of errors in the names data\naddition of removal area (city/county/country) to data\n\ncd_removal_orders_v2_orders.tsv\n\n\n\nField label\nDescription\n\n\n\n\nuid\nunique identifier for dataset\n\n\norder_id\nremoval order ID\n\n\nimg\nLondon Lives image ID\n\n\ndoc_date\ndate of removal order YYYY-MM-DD\n\n\norder_txt\nrekeyed text of the order\n\n\nto_place\nplace to be sent\n\n\nto_area\ncity/county/country\n\n\nvagrant\n‘v’ = vagrant removal order\n\n\nlink_exam_id\nLLEP examination ID(s) linked to the order\n\n\nlink_petition_id\nLLPP petition image ID(s) linked to the order\n\n\nlink_rv_id\nother orders linked to the order\n\n\n\ncd_removal_orders_v2_names.tsv\n\n\n\nField label\nDescription\n\n\n\n\nuid\nunique identifier for dataset\n\n\nname_id\nLondon Lives name ID\n\n\norder_id\nremoval order ID\n\n\nimg\nLondon Lives image ID\n\n\ndoc_date\ndate of removal order YYYY-MM-DD\n\n\nname\nname as rekeyed\n\n\ngiven\ngiven name (as rekeyed)\n\n\nstdgiv\nstandardised version of given name\n\n\nsurname\nsurname\n\n\naltname\naliases, spelling variants, etc\n\n\ngender\ngender (derived from given name)\n\n\nname_add\nfurther information about the name\n\n\nremoved_to\nplace to be sent\n\n\nremoved_area\ncity/county/country of removal place\n\n\nvagrant\n‘v’ = removed as a vagrant\n\n\norder_txt\nrekeyed text of the order\n\n\n\nNotes: * there is some repetition between the two tables * the tables are linked on the order_id field * added names not tagged in the LL data have the text string ‘nkid’ in the name_id * the order_id is designed to enable grouping together of names in the same order * a few document dates are approximate dates (year and month only); a very few orders did not have dates at all and month-year has been inferred from context in the volume (assuming that orders were always recorded chronologically) * name_add is used mainly for two kinds of information: a) the name is of a child; b) in square brackets, to indicate a person who is mentioned but is not actually an object of the order. In most cases, this is a husband; it can generally be inferred that the husband is absent or dead, but I have also added this piece of information if the order explicitly states it. (I may remove these names entirely in a future version of this dataset.) * to_place/removed_to is usually a parish; in most cases this is the text as rekeyed; there has been no attempt to standardise place names for georeferencing. * to_area/removed_area is either a city, county or country\nTo link to the version on the London Lives website, you will need the img identifier. You can either paste it into the Reference search at the website or construct the page URL as follows:\nhttps://www.londonlives.org/browse.jsp?div={img}"
   },
   {
-    "objectID": "dv/accessibility.html#general",
-    "href": "dv/accessibility.html#general",
-    "title": "Accessibility",
-    "section": "General",
-    "text": "General\ndata.europa.eu data visualisation guide has a fantastic section on accessibility"
+    "objectID": "data/ll/removal_orders/readme.html#data-tables",
+    "href": "data/ll/removal_orders/readme.html#data-tables",
+    "title": "London Lives: St Clement Danes Removal Orders",
+    "section": "",
+    "text": "This is version 2 of the data (May 2017)\nChanges from version 1:\n\nadded a new summary table for orders, containing links to other orders, examinations and petitions\nminor corrections to a number of errors in the names data\naddition of removal area (city/county/country) to data\n\ncd_removal_orders_v2_orders.tsv\n\n\n\nField label\nDescription\n\n\n\n\nuid\nunique identifier for dataset\n\n\norder_id\nremoval order ID\n\n\nimg\nLondon Lives image ID\n\n\ndoc_date\ndate of removal order YYYY-MM-DD\n\n\norder_txt\nrekeyed text of the order\n\n\nto_place\nplace to be sent\n\n\nto_area\ncity/county/country\n\n\nvagrant\n‘v’ = vagrant removal order\n\n\nlink_exam_id\nLLEP examination ID(s) linked to the order\n\n\nlink_petition_id\nLLPP petition image ID(s) linked to the order\n\n\nlink_rv_id\nother orders linked to the order\n\n\n\ncd_removal_orders_v2_names.tsv\n\n\n\nField label\nDescription\n\n\n\n\nuid\nunique identifier for dataset\n\n\nname_id\nLondon Lives name ID\n\n\norder_id\nremoval order ID\n\n\nimg\nLondon Lives image ID\n\n\ndoc_date\ndate of removal order YYYY-MM-DD\n\n\nname\nname as rekeyed\n\n\ngiven\ngiven name (as rekeyed)\n\n\nstdgiv\nstandardised version of given name\n\n\nsurname\nsurname\n\n\naltname\naliases, spelling variants, etc\n\n\ngender\ngender (derived from given name)\n\n\nname_add\nfurther information about the name\n\n\nremoved_to\nplace to be sent\n\n\nremoved_area\ncity/county/country of removal place\n\n\nvagrant\n‘v’ = removed as a vagrant\n\n\norder_txt\nrekeyed text of the order\n\n\n\nNotes: * there is some repetition between the two tables * the tables are linked on the order_id field * added names not tagged in the LL data have the text string ‘nkid’ in the name_id * the order_id is designed to enable grouping together of names in the same order * a few document dates are approximate dates (year and month only); a very few orders did not have dates at all and month-year has been inferred from context in the volume (assuming that orders were always recorded chronologically) * name_add is used mainly for two kinds of information: a) the name is of a child; b) in square brackets, to indicate a person who is mentioned but is not actually an object of the order. In most cases, this is a husband; it can generally be inferred that the husband is absent or dead, but I have also added this piece of information if the order explicitly states it. (I may remove these names entirely in a future version of this dataset.) * to_place/removed_to is usually a parish; in most cases this is the text as rekeyed; there has been no attempt to standardise place names for georeferencing. * to_area/removed_area is either a city, county or country\nTo link to the version on the London Lives website, you will need the img identifier. You can either paste it into the Reference search at the website or construct the page URL as follows:\nhttps://www.londonlives.org/browse.jsp?div={img}"
   },
   {
-    "objectID": "dv/accessibility.html#alt-text",
-    "href": "dv/accessibility.html#alt-text",
-    "title": "Accessibility",
-    "section": "Alt text",
-    "text": "Alt text\n\nWriting alt text (data.europa.eu) - a really useful guide\nWriting alt text for data visualization (Amy Cesal) - a helpful formula particularly for writing short alt text summaries\nWriting Meaningful Alt Texts for Data Visualizations in R (Liz Hare) - detailed slides\nAlt Text in R: Plots, Reports, and Shiny (Nicola Rennie)"
+    "objectID": "dv/resources.html",
+    "href": "dv/resources.html",
+    "title": "DV Resources",
+    "section": "",
+    "text": "(unsystematic; adding links as and when I find something or remember)"
   },
   {
-    "objectID": "dv/accessibility.html#describing-visualisations",
-    "href": "dv/accessibility.html#describing-visualisations",
-    "title": "Accessibility",
-    "section": "Describing Visualisations",
-    "text": "Describing Visualisations\nAccessible Visualization via Natural Language Descriptions: A Four-Level Model of Semantic Content - theory/evaluation of written descriptions of dataviz"
+    "objectID": "dv/resources.html#general-inspiration",
+    "href": "dv/resources.html#general-inspiration",
+    "title": "DV Resources",
+    "section": "General inspiration",
+    "text": "General inspiration\n\nData Visualisation Guide (data.europa.eu) a massive resource\nFrom Data To Viz\nR Graph Gallery\nFundamentals of Data Visualization\nVizdex - list of dataviz blogs\nDataviz resources"
   },
   {
-    "objectID": "dv/accessibility.html#statistical-software-for-blind-users",
-    "href": "dv/accessibility.html#statistical-software-for-blind-users",
-    "title": "Accessibility",
-    "section": "Statistical software for blind users",
-    "text": "Statistical software for blind users\nJonathan Godfrey’s work:\n\nBrailleR [R package]\nStatistical software and blind users [resource]"
+    "objectID": "dv/resources.html#charts-i-really-want-to-make",
+    "href": "dv/resources.html#charts-i-really-want-to-make",
+    "title": "DV Resources",
+    "section": "Charts I really want to make",
+    "text": "Charts I really want to make\n\nBraided ribbons"
+  },
+  {
+    "objectID": "dv/resources.html#packages-and-tools",
+    "href": "dv/resources.html#packages-and-tools",
+    "title": "DV Resources",
+    "section": "Packages and tools",
+    "text": "Packages and tools\n\nggplot\n\ndocs\nextensions\n\nwaffle\nggbeeswarm\n\n(not tried yet)\n\nggcorrheatmap\nggplayfair"
+  },
+  {
+    "objectID": "dv/resources.html#other-stuff",
+    "href": "dv/resources.html#other-stuff",
+    "title": "DV Resources",
+    "section": "Other stuff",
+    "text": "Other stuff\n\nblog posts and articles\n(a few particularly good ones)\n\nSaloni’s guide to data visualization"
+  },
+  {
+    "objectID": "dv/leaflet.html",
+    "href": "dv/leaflet.html",
+    "title": "Leaflet and OJS: notes and queries",
+    "section": "",
+    "text": "an example of a Leaflet map in OJS, using filters and the markerclusters plugin.\ntesting OpenStreetMap basemap to see if I need to change any leaflet settings to avoid Blocked warnings.\nlist of resources\n\n\nojsCdrvGeo = transpose(ojs_cdrv_geo)\n\n\n\n\n\n\n\nfunction createRVGeoData(data) {\n  const geoData = {\n    type: 'FeatureCollection',\n    crs: {type: 'name', properties: {name: 'urn:ogc:def:crs:EPSG::27700'}},\n    features: []\n  };\n  data.map(h =&gt; {\n    geoData.features.push({\n      type: 'Feature',\n      properties: {\n        id: h.order_id,\n        place: h.to_place,\n        county: h.to_county,\n        removed: h.removed,\n        vagrant: h.vagrant, // yes/no for display\n        date: h.nice_date,\n        year: h.doc_year,\n        order_url: h.order_url,\n        has_exam: h.has_exam // \"yes\"/\"no\"\n      },\n      geometry: {\n        type: 'Point',\n        coordinates: [h.lng, h.lat]\n      }\n    });\n  });\n  return geoData;\n}"
+  },
+  {
+    "objectID": "dv/leaflet.html#notes",
+    "href": "dv/leaflet.html#notes",
+    "title": "Leaflet and OJS: notes and queries",
+    "section": "",
+    "text": "an example of a Leaflet map in OJS, using filters and the markerclusters plugin.\ntesting OpenStreetMap basemap to see if I need to change any leaflet settings to avoid Blocked warnings.\nlist of resources\n\n\nojsCdrvGeo = transpose(ojs_cdrv_geo)\n\n\n\n\n\n\n\nfunction createRVGeoData(data) {\n  const geoData = {\n    type: 'FeatureCollection',\n    crs: {type: 'name', properties: {name: 'urn:ogc:def:crs:EPSG::27700'}},\n    features: []\n  };\n  data.map(h =&gt; {\n    geoData.features.push({\n      type: 'Feature',\n      properties: {\n        id: h.order_id,\n        place: h.to_place,\n        county: h.to_county,\n        removed: h.removed,\n        vagrant: h.vagrant, // yes/no for display\n        date: h.nice_date,\n        year: h.doc_year,\n        order_url: h.order_url,\n        has_exam: h.has_exam // \"yes\"/\"no\"\n      },\n      geometry: {\n        type: 'Point',\n        coordinates: [h.lng, h.lat]\n      }\n    });\n  });\n  return geoData;\n}"
+  },
+  {
+    "objectID": "dv/leaflet.html#the-map",
+    "href": "dv/leaflet.html#the-map",
+    "title": "Leaflet and OJS: notes and queries",
+    "section": "The Map",
+    "text": "The Map\n\nviewof filtersRV = Inputs.form({\n// linked exams (most)\n  hasExam: Inputs.checkbox([\"yes\", \"no\"], {label: \"Linked exam(s)\", value: [\"yes\", \"no\"]}) ,\n  // a vagrant?\n  isVagrant: Inputs.checkbox([\"yes\", \"no\"], {label: \"Vagrant\", value: [\"yes\", \"no\"]}) \n}\n,\n// https://observablehq.com/@tophtucker/use-inputs-form-with-a-template\n// https://developer.mozilla.org/en-US/docs/Web/CSS/How_to/Layout_cookbook/Column_layouts\n  {\n    template: (inputs) =&gt; htl.html`&lt;div style=\"display: flex; flex-wrap: wrap;\" class=\"styled\"&gt;\n    &lt;style&gt;\n  div.styled { border: 1px solid #d3d3d3; background-color: #f5f5f5; margin: 5px; padding: 5px; font-size: 80%; }\n  div.styled form {border: 1px solid white;}\n  div.styled form&gt;label { width: 130px; padding:5px; }\n&lt;/style&gt;\n  ${Object.values(inputs)}\n&lt;/div&gt;`\n  }\n)\n\n\n\n\n\n\n\nmap = {\n  // Make a container in the Observable DOM to hold the map\n  let parent = DOM.element('div', { style: `width:${width}px; height:600px` });\n  // Make sure Observable renders the parent container so Leaflet can figure out its size\n  yield parent;\n  \n  let map = L.map(parent)\n      .setView([54.3, -3.5], 6); // uk+ire // higher numbers are more zoomed in\n  \n  let osmTileLayer = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {\n      attribution: '&copy; &lt;a href=\"https://www.openstreetmap.org/copyright\"&gt;OpenStreetMap&lt;/a&gt;',\n      maxZoom: 16,\n      minZoom: 5\n  })\n  .addTo(map);\n  \n/*\n  const key = 'Qm3IHfglBpG81gp4ZK4G';\n  let mtTileLayer = L.tileLayer(`https://api.maptiler.com/maps/base-v4/{z}/{x}/{y}.png?key=${key}`,{ //style URL\n    tileSize: 512,\n    zoomOffset: -1,\n    minZoom: 4,\n    attribution: \"\\u003ca href=\\\"https://www.maptiler.com/copyright/\\\" target=\\\"_blank\\\"\\u003e\\u0026copy; MapTiler\\u003c/a\\u003e \\u003ca href=\\\"https://www.openstreetmap.org/copyright\\\" target=\\\"_blank\\\"\\u003e\\u0026copy; OpenStreetMap contributors\\u003c/a\\u003e\",\n    crossOrigin: true\n}).addTo(map);\n  */\n\n\n\n  const geojsonData = createRVGeoData(ojsCdrvGeo);\n  \n  const mcg = markerCluster({\n            spiderfyDistanceMultiplier: 1.8,\n            maxClusterRadius: 50\n            })\n            .addTo(map);\n    \n    // single markers with a simple popup for testing. is L.geoJson the same as L.geoJSON ? seems to be\n  let markers = L.geoJSON(null, {\n  \n  \n    onEachFeature: function (feature, layer) {\n    \n      const data = feature.properties;\n      const tip = `&lt;div class=\"popup\"&gt;${data.removed}: ${data.place} (${data.year})&lt;/div&gt;`; // + `&lt;br/&gt;${data.place}, ${data.county} (${data.year})&lt;/div&gt;`;\n      \n      layer.bindPopup(tip); // click.\n      //layer.bindTooltip(tip, {sticky: true}); // hover. \n \n    },\n    \n    pointToLayer: function (feature, latlng) {\n            return L.circleMarker(latlng, {\n                radius: 6, \n                fillColor: \"#CC6000\", // a bit darker than \"#ff7800\" \n                color: \"#000\",\n                weight: 1, // width of the circle border.\n                opacity: 1,\n                fillOpacity: 1\n            });\n     }\n  }) ;  \n  \n// Once you have populated your Leaflet GeoJSON Layer Group (typically with geojsonLayer.addData(geoJsonObject), then instead of adding that group to your map, simply add it into your MarkerClusterGroup:\n  markers.addData(geojsonData).addTo(mcg);\n\n  // This is to make these variables accessible in other Observable cells.\n  // It is not necessary for regular HTML web pages.\n  \n  // AHHHHHHH you need to take map out of here and use mcg *instead*\n  mutable mapVariables = [mcg, markers];\n}\n\n\n\n\n\n\n\nmapFilters = {\n  // This handles the changes \n  // In normal HTML environment, this would be inside the slider event handling function.\n\n//       \n\n  mapVariables[1].eachLayer(l =&gt; {\n    if( \n        filtersRV[\"hasExam\"].includes(l.feature.properties.has_exam) \n        && filtersRV[\"isVagrant\"].includes(l.feature.properties.vagrant)\n        )  \n    {\n      l.addTo(mapVariables[0]);\n    } else {\n      l.removeFrom(mapVariables[0]);\n    }\n  })\n\n  return 'howdy'; // do i need this return line at all? probably not...\n}\n\n\n\n\n\n\n\nmutable mapVariables = null;\n\n\n\n\n\n\n\nmarkerCluster = L, require('leaflet.markercluster@1.1.0').catch(() =&gt; L.markerClusterGroup)\n\n\n\n\n\n\n\nmarkerClusterCSS = html`&lt;link href='${resolve('leaflet.markercluster@1.1.0/dist/MarkerCluster.Default.css')}' rel='stylesheet' /&gt;`"
+  },
+  {
+    "objectID": "dv/leaflet.html#resources",
+    "href": "dv/leaflet.html#resources",
+    "title": "Leaflet and OJS: notes and queries",
+    "section": "Resources",
+    "text": "Resources\nLeaflet:\n\nLeaflet\nLeaflet.markercluster plugin\n\nObservable:\n\nLearning Leaflet (Observable Notebook)\nLeaflet with Online GeoJSON and Slider (Observable Notebook with filtering method)\nChicago Homicides Leaflet Map (Observable Notebook with markerclusters)"
   },
   {
     "objectID": "dv/dv-til/til-nocode-ggplot-labs-repeat-20250630.html",
@@ -1708,39 +1750,39 @@
     "text": "resources\n\nR for Data Science\nggplot doc for geom_count()"
   },
   {
-    "objectID": "dv/resources.html",
-    "href": "dv/resources.html",
-    "title": "DV Resources",
+    "objectID": "dv/accessibility.html",
+    "href": "dv/accessibility.html",
+    "title": "Accessibility",
     "section": "",
-    "text": "(unsystematic; adding links as and when I find something or remember)"
+    "text": "a new list of resources about visual accessibility (apart from colour blindness) - something I’d like to work on improving in future."
   },
   {
-    "objectID": "dv/resources.html#general-inspiration",
-    "href": "dv/resources.html#general-inspiration",
-    "title": "DV Resources",
-    "section": "General inspiration",
-    "text": "General inspiration\n\nData Visualisation Guide (data.europa.eu) a massive resource\nFrom Data To Viz\nR Graph Gallery\nFundamentals of Data Visualization\nVizdex - list of dataviz blogs\nDataviz resources"
+    "objectID": "dv/accessibility.html#general",
+    "href": "dv/accessibility.html#general",
+    "title": "Accessibility",
+    "section": "General",
+    "text": "General\ndata.europa.eu data visualisation guide has a fantastic section on accessibility"
   },
   {
-    "objectID": "dv/resources.html#charts-i-really-want-to-make",
-    "href": "dv/resources.html#charts-i-really-want-to-make",
-    "title": "DV Resources",
-    "section": "Charts I really want to make",
-    "text": "Charts I really want to make\n\nBraided ribbons"
+    "objectID": "dv/accessibility.html#alt-text",
+    "href": "dv/accessibility.html#alt-text",
+    "title": "Accessibility",
+    "section": "Alt text",
+    "text": "Alt text\n\nWriting alt text (data.europa.eu) - a really useful guide\nWriting alt text for data visualization (Amy Cesal) - a helpful formula particularly for writing short alt text summaries\nWriting Meaningful Alt Texts for Data Visualizations in R (Liz Hare) - detailed slides\nAlt Text in R: Plots, Reports, and Shiny (Nicola Rennie)"
   },
   {
-    "objectID": "dv/resources.html#packages-and-tools",
-    "href": "dv/resources.html#packages-and-tools",
-    "title": "DV Resources",
-    "section": "Packages and tools",
-    "text": "Packages and tools\n\nggplot\n\ndocs\nextensions\n\nwaffle\nggbeeswarm\n\n(not tried yet)\n\nggcorrheatmap\nggplayfair"
+    "objectID": "dv/accessibility.html#describing-visualisations",
+    "href": "dv/accessibility.html#describing-visualisations",
+    "title": "Accessibility",
+    "section": "Describing Visualisations",
+    "text": "Describing Visualisations\nAccessible Visualization via Natural Language Descriptions: A Four-Level Model of Semantic Content - theory/evaluation of written descriptions of dataviz"
   },
   {
-    "objectID": "dv/resources.html#other-stuff",
-    "href": "dv/resources.html#other-stuff",
-    "title": "DV Resources",
-    "section": "Other stuff",
-    "text": "Other stuff\n\nblog posts and articles\n(a few particularly good ones)\n\nSaloni’s guide to data visualization"
+    "objectID": "dv/accessibility.html#statistical-software-for-blind-users",
+    "href": "dv/accessibility.html#statistical-software-for-blind-users",
+    "title": "Accessibility",
+    "section": "Statistical software for blind users",
+    "text": "Statistical software for blind users\nJonathan Godfrey’s work:\n\nBrailleR [R package]\nStatistical software and blind users [resource]"
   },
   {
     "objectID": "tils/t-scales-pretty-numbers-20250901.html",
