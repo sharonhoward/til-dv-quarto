@@ -215,14 +215,14 @@ map = {
       .setView([54.3, -3.5], 6); // uk+ire // higher numbers are more zoomed in
   
   // from osmwiki: any of no-referrer-when-downgrade, origin, origin-when-cross-origin, strict-origin, or strict-origin-when-cross-origin
-  // does not work: strict-origin-when-cross-origin, no-referrer-when-downgrade
+  // does not work: strict-origin-when-cross-origin, no-referrer-when-downgrade, 
   // osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib, maxZoom: 19, referrerPolicy: '...'});
   
   let osmTileLayer = L.tileLayer( 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 16,
       minZoom: 5,
-      referrerPolicy: 'origin-when-cross-origin'
+      referrerPolicy: 'strict-origin-when-cross-origin' 
   })
   .addTo(map);
   
@@ -327,7 +327,7 @@ markerClusterCSS = html`<link href='${resolve('leaflet.markercluster@1.1.0/dist/
 
 ## OpenStreetMap problem
 
-ongoing problem
+ongoing problem seeing the 403r Access Blocked message (but only partially)
 
 BUT
 
@@ -346,11 +346,6 @@ BUT
 
 but doesn't mention why it would vary between browsers...
 
-doesn't work:
-
-- referrerPolicy: 'strict-origin-when-cross-origin'
-- no-referrer-when-downgrade
-
 OSM forum discussions focusing on Leaflet
 
 - [possible solution but might not still be working](https://community.openstreetmap.org/t/access-blocked-on-osm-org/141419/27)
@@ -360,6 +355,26 @@ Other resources/examples
 
 - [OSM github pr](https://github.com/openstreetmap/leaflet-osm/pull/51/changes)
 - [mdn referrerPolicy property](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy)
+- [mdn img referrerPolicy meanings](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img#referrerpolicy)
+
+
+don't work:
+
+- referrerPolicy: 'strict-origin-when-cross-origin'
+- no-referrer-when-downgrade
+- origin-when-cross-origin
+
+not much point in continuing to try them out!
+
+Checked browser developer tools and see this warning:
+
+- Referrer Policy: Ignoring the less restricted referrer policy “origin-when-cross-origin” for the cross-site request: http://b.tile.openstreetmap.org/10/485/329.png 329.png
+
+can't see that in Chrome. i see the same warning message in FF on localhost, but there it doesn't show the blocked warning.
+
+So the referrerPolicy option in leaflet is working... but not?
+
+I think I'll reset to strict-origin option which is supposedly the default anyway... the message goes away in localhost.
 
 
 ## Resources
