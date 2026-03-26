@@ -13,7 +13,7 @@ execute:
 ## Notes
 
 1. an example of a Leaflet map in OJS, using filters and the markerclusters plugin.
-2. testing OpenStreetMap basemap to see if I need to change any leaflet settings to avoid Blocked warnings.
+2. testing OpenStreetMap basemap to see if I can change leaflet settings to get rid of Blocked messages
 3. list of resources
 
 
@@ -175,7 +175,6 @@ function createRVGeoData(data) {
 ## The Map
 
 
-
 ```{ojs}
 
 viewof filtersRV = Inputs.form({
@@ -327,6 +326,8 @@ markerClusterCSS = html`<link href='${resolve('leaflet.markercluster@1.1.0/dist/
 
 ## OpenStreetMap problem
 
+done some updates including Quarto; maybe it's worth refreshing this, just in case.
+
 ongoing problem seeing the 403r Access Blocked message (but only partially)
 
 BUT
@@ -364,17 +365,25 @@ don't work:
 - no-referrer-when-downgrade
 - origin-when-cross-origin
 
-not much point in continuing to try them out!
+doesn't seem much point in continuing to try them out!
 
-Checked browser developer tools and see this warning:
+with origin-when-cross-origin I checked browser developer tools and see this warning:
 
 - Referrer Policy: Ignoring the less restricted referrer policy “origin-when-cross-origin” for the cross-site request: http://b.tile.openstreetmap.org/10/485/329.png 329.png
 
-can't see that in Chrome. i see the same warning message in FF on localhost, but there it doesn't show the blocked warning.
+reset to strict-origin option which is supposedly the default anyway... the "ignoring" message goes away.
 
-So the referrerPolicy option in leaflet is working... but not?
+But the Blocked issue doesn't go away and I don't fully understand the osm forum discussion about the causes - I don't know where the problem comes from. I think all I can do is use a different source of map tiles. 
 
-I think I'll reset to strict-origin option which is supposedly the default anyway... the message goes away in localhost.
+On Observable now, some Notebooks seem ok but not others?
+
+- [Learning Leaflet tutorial: Blocked](https://observablehq.com/@rahulbot/learning-leaflet)
+- [Hello Leaflet: not Blocked](https://observablehq.com/@observablehq/hello-leaflet)
+
+what's the difference between them??? no idea. slightly different v of Leaflet and code for stylesheet is a bit different but the map code looks essentially the same.
+
+
+
 
 
 ## Resources

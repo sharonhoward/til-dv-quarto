@@ -8,4 +8,6 @@
 /_stuff/
 
 /.quarto/
-/_freeze/ 
+/_freeze/
+
+**/*.quarto_ipynb
